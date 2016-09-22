@@ -2,9 +2,6 @@ body {
     margin: 60px auto;
     width: 70%;
 }
-h1 {
-    font-size: 3em;
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
 ul {
     list-style-type: none;
     margin: 0;
@@ -29,7 +26,9 @@ li a {
 li a:hover {
     background-color: #111;
 }
-
+h1 {
+    font-size: 3em;
+    font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 p {
     font-size: 1.5em;
