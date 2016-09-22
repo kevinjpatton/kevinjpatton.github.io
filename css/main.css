@@ -1,22 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {margin: 0;}
-
-ul.topnav {
+body {
+    margin: 60px auto;
+    width: 70%;
+    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+}
+ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #333;
-font-family:'Helvetica', 'Arial', 'Sans-Serif'; 
+    font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 
-ul.topnav li {float: left;}
+li {
+    float: left;
+}
 
-ul.topnav li a {
+li a {
     display: block;
     color: white;
     text-align: center;
@@ -24,29 +24,28 @@ ul.topnav li a {
     text-decoration: none;
 }
 
-ul.topnav li a:hover:not(.active) {background-color: #111;}
-
-ul.topnav li a.active {background-color: #6cabb4;}
-
-ul.topnav li.right {float: right;}
-
-@media screen and (max-width: 600px){
-    ul.topnav li.right,
-    ul.topnav li {float: none;}
+li a:hover {
+    background-color: #6cabb4;
 }
-</style>
-</head>
-<body>
+h1 {
+    font-size: 3em;
+    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+}
+p {
+    font-size: 1.5em;
+    line-height: 1.4em;
+    color: #333;
+}
+footer {
+    border-top: 1px solid #d5d5d5;
+    font-size: .8em;
+}
 
-<ul class="topnav">
-  <li><a class="active" href="#home">Home</a></li>
-  <li><a href="#news">About</a></li>
-  <li><a href="#contact">CV</a></li>
-  <li><a href="#contact">Publications</a></li>
-  <li class="right"><a href="#about">Contact</a></li>
-</ul>
+ul.posts { 
+    margin: 20px auto 40px; 
+    font-size: 1.5em;
+}
 
-
-</body>
-</html>
-
+ul.posts li {
+    list-style: none;
+}
