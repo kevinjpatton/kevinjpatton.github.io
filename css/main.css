@@ -3,18 +3,20 @@ body {
     width: 70%;
     font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
-ul.topnav {
+ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #333;
-font-family:'Helvetica', 'Arial', 'Sans-Serif'; 
+    font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 
-ul.topnav li {float: left;}
+li {
+    float: left;
+}
 
-ul.topnav li a {
+li a {
     display: block;
     color: white;
     text-align: center;
@@ -22,28 +24,9 @@ ul.topnav li a {
     text-decoration: none;
 }
 
-ul.topnav li a:hover:not(.active) {background-color: #111;}
-
-ul.topnav li a.active {background-color: #6cabb4;}
-
-ul.topnav li.right {float: right;}
-
-@media screen and (max-width: 600px){
-    ul.topnav li.right,
-    ul.topnav li {float: none;}
+li a:hover {
+    background-color: #6cabb4;
 }
-</style>
-</head>
-<body>
-
-<ul class="topnav">
-  <li><a class="active" href="#home">Home</a></li>
-  <li><a href="#news">About</a></li>
-  <li><a href="#contact">CV</a></li>
-  <li><a href="#contact">Publications</a></li>
-  <li class="right"><a href="#about">Contact</a></li>
-</ul>
-]
 h1 {
     font-size: 3em;
     font-family:'Helvetica', 'Arial', 'Sans-Serif';
