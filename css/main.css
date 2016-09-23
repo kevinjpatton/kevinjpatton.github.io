@@ -1,9 +1,6 @@
-body {
-    margin: 0px auto;
-    width: 70%;
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
-}
-ul {
+body {margin: 0;}
+
+ul.topnav {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -12,11 +9,9 @@ ul {
     font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 
-li {
-    float: left;
-}
+ul.topnav li {float: left;}
 
-li a {
+ul.topnav li a {
     display: block;
     color: white;
     text-align: center;
@@ -24,28 +19,31 @@ li a {
     text-decoration: none;
 }
 
-li a:hover {
-    background-color: #6cabb4;
-}
-h1 {
-    font-size: 3em;
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
-}
-p {
-    font-size: 1.5em;
-    line-height: 1.4em;
-    color: #333;
-}
-footer {
-    border-top: 1px solid #d5d5d5;
-    font-size: .8em;
-}
+ul.topnav li a:hover:not(.active) {background-color: #111;}
 
-ul.posts { 
-    margin: 20px auto 40px; 
-    font-size: 1.5em;
-}
+ul.topnav li a.active {background-color: #6cabb4;}
 
-ul.posts li {
-    list-style: none;
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 600px){
+    ul.topnav li.right,
+    ul.topnav li {float: none;}
 }
+</style>
+</head>
+<body>
+
+<ul class="topnav">
+  <li><a class="active" href="/">Home</a></li>
+  <li><a href="/cv">CV</a></li>
+  <li><a href="/pubs">Publications</a></li>
+  <li class="right"><a href="/about">About</a></li>
+  <li><a href="/teaching">Classes</a></li>
+</ul>
+
+<div style="padding:0 16px;">
+  <h2>Menu Test</h2>
+  <p>Test.</h4>
+</div>
+
+</body>
