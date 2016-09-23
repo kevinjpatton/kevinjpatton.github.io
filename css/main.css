@@ -31,9 +31,6 @@ ul.topnav li.right {float: right;}
     ul.topnav li.right,
     ul.topnav li {float: none;}
 }
-</style>
-</head>
-<body>
 
 <ul class="topnav">
   <li><a class="active" href="/">Home</a></li>
