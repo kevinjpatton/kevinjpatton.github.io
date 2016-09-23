@@ -1,3 +1,7 @@
+body {
+    margin: 60px auto;
+    width: 70%;
+}
 ul.topnav {
     list-style-type: none;
     margin: 0;
