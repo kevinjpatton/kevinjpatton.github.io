@@ -2,6 +2,18 @@ body {
     margin: 60px auto;
     width: 70%;
 }
+<ul class="topnav">
+  <li><a class="active" href="/">Home</a></li>
+  <li><a href="/cv">CV</a></li>
+  <li><a href="/pubs">Publications</a></li>
+  <li class="right"><a href="/about">About</a></li>
+  <li><a href="/teaching">Classes</a></li>
+</ul>
+
+<div style="padding:0 16px;">
+  <h2>Menu Test</h2>
+  <p>Test.</h4>
+</div>
 ul.topnav {
     list-style-type: none;
     margin: 0;
@@ -31,17 +43,4 @@ ul.topnav li.right {float: right;}
     ul.topnav li.right,
     ul.topnav li {float: none;}
 }
-
-<ul class="topnav">
-  <li><a class="active" href="/">Home</a></li>
-  <li><a href="/cv">CV</a></li>
-  <li><a href="/pubs">Publications</a></li>
-  <li class="right"><a href="/about">About</a></li>
-  <li><a href="/teaching">Classes</a></li>
-</ul>
-
-<div style="padding:0 16px;">
-  <h2>Menu Test</h2>
-  <p>Test.</h4>
-</div>
 
