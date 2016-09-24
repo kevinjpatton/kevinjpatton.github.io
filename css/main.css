@@ -22,6 +22,7 @@ ul.topnav li a {
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+    font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 
 ul.topnav li a:hover:not(.active) {background-color: #111;}
@@ -45,11 +46,6 @@ ul.topnav li.right {float: right;}
   <li class="right"><a href="/about">About</a></li>
   <li><a href="/teaching">Classes</a></li>
 </ul>
-
-<div style="padding:0 16px;">
-  <h2>Menu Test</h2>
-  <p>Test.</h4>
-</div>
 
 </body>
 </html>
