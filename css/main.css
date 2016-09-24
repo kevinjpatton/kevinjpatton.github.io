@@ -4,10 +4,11 @@ ul {
     padding: 0;
     overflow: hidden;
     background-color: #333;
+    font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 
 li {
-    float: left;
+    float: center;
 }
 
 li a {
