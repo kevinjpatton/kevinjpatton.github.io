@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body {margin: 60px auto; width: 70%;
+body {margin: 0;
 }
 
 ul.topnav {
@@ -38,10 +38,14 @@ ul.topnav li.right {float: right;}
 }
 
 h1 {
+    margin: 60px auto;
+    width: 70%;
     font-size: 2em;
     font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 p {
+    margin: 60px auto;
+    width: 70%;
     font-size: 1em;
     line-height: 1.4em;
     color: #333;
