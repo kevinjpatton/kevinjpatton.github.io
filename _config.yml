@@ -1,2 +1,4 @@
 name: Kevin Patton, Philosopher
 markdown: kevinpatton
+gems:
+  - jekyll-seo-tag
