@@ -50,6 +50,7 @@ p {
     line-height: 0.0em;
     color: #333;
     font-family:'Helvetica', 'Arial', 'Sans-Serif';
+    word-wrap: break-word;
 }
 footer {
     text-align: center;
