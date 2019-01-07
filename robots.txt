@@ -1,4 +1,3 @@
-﻿# Rule 1
-User-Agent: *
-Disallow: 
-Disallow: /teaching/phil_3050/index.html
+User-agent: *
+Disallow: /
+Disallow: /cgi-bin/
