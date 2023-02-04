@@ -37,6 +37,15 @@ ul.topnav li.right {float: right;}
     ul.topnav li {float: none;}
 }
 
+.menu-highlight
+{
+ background: #d3d3d3;
+ border-radius: 35px;
+ padding: 0px 20px;
+ line-height: 50px !important;
+ margin: auto;
+}
+
 h1 {
     margin: 60px auto;
     width: 70%;
