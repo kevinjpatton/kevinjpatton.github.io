@@ -70,14 +70,13 @@ footer {
 <body>
 
 <ul class="topnav">
-  <li><a class="active" href="/">Home</a></li>
-  <li><a href="/cv">CV</a></li>
-  <li><a href="/pubs">Publications</a></li>
-  <li><a href="/about">About</a></li>
-  <li><a href="/teaching">Classes</a></li>
+  <li {% if page.url == "/" %}class="active"{% endif %}><a href="/">Home</a></li>
+  <li {% if page.url == "/cv" %}class="active"{% endif %}><a href="/cv">CV</a></li>
+  <li {% if page.url == "/pubs" %}class="active"{% endif %}><a href="/pubs">Publications</a></li>
+  <li {% if page.url == "/about" %}class="active"{% endif %}><a href="/about">About</a></li>
+  <li {% if page.url == "/teaching" %}class="active"{% endif %}><a href="/teaching">Classes</a></li>
 </ul>
 
 
 </body>
 </html>
-
