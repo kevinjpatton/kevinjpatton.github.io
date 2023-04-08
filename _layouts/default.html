@@ -3,28 +3,24 @@
   <head>
     <title>{{ page.title }}</title>
     <!-- link to main stylesheet -->
-    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
     <head>
-      <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" type="image/png" href="/favicon.ico">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style>
-        body {
-          margin: 0;
-        }
-
+        body {margin: 0;}
+        
         ul.topnav {
           list-style-type: none;
           margin: 0;
           padding: 0;
           overflow: hidden;
           background-color: #333;
-          font-family: "Helvetica", "Arial", "Sans-Serif";
+          font-family:'Helvetica', 'Arial', 'Sans-Serif';
         }
-
-        ul.topnav li {
-          float: left;
-        }
-
+        
+        ul.topnav li {float: left;}
+        
         ul.topnav li a {
           display: block;
           color: white;
@@ -32,61 +28,33 @@
           padding: 14px 16px;
           text-decoration: none;
         }
-
-        ul.topnav li a:hover:not(.active) {
-          background-color: #111;
-        }
-
-        ul.topnav li a.active {
-          background-color: #6cabb4;
-        }
-
-        ul.topnav li.right {
-          float: right;
-        }
-
-        @media screen and (max-width: 600px) {
+        
+        ul.topnav li a:hover:not(.active) {background-color: #111;}
+        
+        ul.topnav li a.active {background-color: #6cabb4;}
+        
+        ul.topnav li.right {float: right;}
+        
+        @media screen and (max-width: 600px){
           ul.topnav li.right,
-          ul.topnav li {
-            float: none;
-          }
+          ul.topnav li {float: none;}
         }
       </style>
     </head>
-  <body>
-    <ul class="topnav">
-      <li {% if page.url == '/' %}class="active"{% endif %}>
-        <a href="/">Kevin Patton</a>
-      </li>
-      <li {% if page.url == '/cv' %}class="active"{% endif %}>
-        <a href="/cv">CV</a>
-      </li>
-      <li {% if page.url == '/pubs' %}class="active"{% endif %}>
-        <a href="/pubs">Publications</a>
-      </li>
-      <li {% if page.url == '/teaching' %}class="active"{% endif %}>
-        <a href="/teaching">Teaching</a>
-      </li>
-      <li {% if page.url == '/contact' %}class="active"{% endif %}>
-        <a href="/contact">Contact</a>
-      </li>
-      <li class="right {% if page.url == '/resources' %}active{% endif %}">
-        <a href="/resources">Resources</a>
-      </li>
-    </ul>
-
-    <div class="container">
-
-      {{ content }}
-
-    </div><!-- /.container -->
-
-    <footer>
-      <p>
-        <strong>&copy Kevin Patton
-        <script type="text/javascript">document.write( new Date().getFullYear() );</script></strong>
-      </p>
-    </footer>
-
-  </body>
+    <body>
+      <ul class="topnav">
+        <li{% if page.url == '/' %} class="active"{% endif %}><a href="/">Kevin Patton</a></li>
+        <li{% if page.url == '/cv' %} class="active"{% endif %}><a href="/cv">CV</a></li>
+        <li{% if page.url == '/pubs' %} class="active"{% endif %}><a href="/pubs">Publications</a></li>
+        <li{% if page.url == '/teaching' %} class="active"{% endif %}><a href="/teaching">Teaching</a></li>
+        <li{% if page.url == '/contact' %} class="active"{% endif %}><a href="/contact">Contact</a></li>
+        <li class="right{% if page.url == '/resources' %} active{% endif %}"><a href="/resources">Resources</a></li>
+      </ul>
+      <div class="container">
+        {{ content }}
+      </div><!-- /.container -->
+      <footer>
+        <p><strong>&copy Kevin Patton <script type="text/javascript">document.write( new Date().getFullYear() );</script></strong></p>
+      </footer>
+    </body>
 </html>
