@@ -77,23 +77,5 @@ footer {
   <li {% if page.url == "/teaching" %}class="active"{% endif %}><a href="/teaching">Classes</a></li>
 </ul>
 
-<script>
-  // Get the current URL path and split it into an array of segments
-  var pathArray = window.location.pathname.split('/');
-
-  // Get the last segment of the URL path (the current page)
-  var currentPage = pathArray.pop() || 'index.html';
-
-  // Loop through each link in the navigation and add the "active" class to the link
-  // whose href attribute matches the current page
-  var links = document.getElementsByTagName("a");
-  for (var i = 0; i < links.length; i++) {
-    var link = links[i];
-    if (link.getAttribute("href") == currentPage) {
-      link.className += " active";
-    }
-  }
-</script>
-
 </body>
 </html>
