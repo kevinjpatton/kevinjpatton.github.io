@@ -1,66 +1,62 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>{{ page.title }}</title>
     <!-- link to main stylesheet -->
     <link rel="stylesheet" type="text/css" href="/css/main.css">
-    <head>
-      <link rel="shortcut icon" type="image/png" href="/favicon.ico">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
         body {margin: 0;}
         
-       ul.topnav {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
-}
+        ul.topnav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            font-family: 'Helvetica', 'Arial', 'Sans-Serif';
+        }
 
-ul.topnav li {
-    float: left;
-}
+        ul.topnav li {
+            float: left;
+        }
 
-ul.topnav li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
+        ul.topnav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
 
-ul.topnav li a.active,
-ul.topnav li a:hover:not(.active) {
-    background-color: #6cabb4;
-  
-}
-       
+        ul.topnav li a.active,
+        ul.topnav li a:hover:not(.active) {
+            background-color: #6cabb4;
+        }
 
-@media screen and (max-width: 600px) {
-    ul.topnav li.right,
-    ul.topnav li {
-        float: none;
-    }
-}
-
-      </style>
-    </head>
-    <body>
-      <ul class="topnav">
-    <li><a class="{{ '/' == page.url ? 'active' : '' }}" href="/">Home</a></li>
-    <li><a class="{{ '/cv' in page.url ? 'active' : '' }}" href="/cv">CV</a></li>
-    <li><a class="{{ '/pubs' in page.url ? 'active' : '' }}" href="/pubs">Publications</a></li>
-    <li><a class="{{ '/teaching' in page.url ? 'active' : '' }}" href="/teaching">Teaching</a></li>
-    <li><a class="{{ '/contact' in page.url ? 'active' : '' }}" href="/contact">Contact</a></li>
-    <li class="right"><a class="{{ '/resources' in page.url ? 'active' : '' }}" href="/resources">Resources</a></li>
-</ul>
-      <div class="container">
+        @media screen and (max-width: 600px) {
+            ul.topnav li.right,
+            ul.topnav li {
+                float: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <ul class="topnav">
+        <li><a class="{{ '/' == page.url ? 'active' : '' }}" href="/">Home</a></li>
+        <li><a class="{{ '/cv' in page.url ? 'active' : '' }}" href="/cv">CV</a></li>
+        <li><a class="{{ '/pubs' in page.url ? 'active' : '' }}" href="/pubs">Publications</a></li>
+        <li><a class="{{ '/teaching' in page.url ? 'active' : '' }}" href="/teaching">Teaching</a></li>
+        <li><a class="{{ '/contact' in page.url ? 'active' : '' }}" href="/contact">Contact</a></li>
+        <li class="right"><a class="{{ '/resources' in page.url ? 'active' : '' }}" href="/resources">Resources</a></li>
+    </ul>
+    <div class="container">
         {{ content }}
-      </div><!-- /.container -->
-      <footer>
-        <p><strong>&copy Kevin Patton <script type="text/javascript">document.write( new Date().getFullYear() );</script></strong></p>
-      </footer>
-    </body>
+    </div><!-- /.container -->
+    <footer>
+        <p><strong>&copy; Kevin Patton <script type="text/javascript">document.write(new Date().getFullYear());</script></strong></p>
+    </footer>
+</body>
 </html>
