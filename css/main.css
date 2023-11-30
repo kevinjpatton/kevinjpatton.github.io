@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {margin: 0;
+/* main.css */
+
+body {
+    margin: 0;
 }
 
 ul.topnav {
@@ -12,10 +10,12 @@ ul.topnav {
     padding: 0;
     overflow: hidden;
     background-color: #333;
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
 }
 
-ul.topnav li {float: left;}
+ul.topnav li {
+    float: left;
+}
 
 ul.topnav li a {
     display: block;
@@ -23,59 +23,54 @@ ul.topnav li a {
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
 }
 
-ul.topnav li a:hover:not(.active) {background-color: #111;}
+ul.topnav li a:hover:not(.active) {
+    background-color: #111;
+}
 
-ul.topnav li a.active {background-color: #6cabb4;}
+ul.topnav li a.active {
+    background-color: #6cabb4;
+}
 
-ul.topnav li.right {float: right;}
+ul.topnav li.right {
+    float: right;
+}
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
     ul.topnav li.right,
-    ul.topnav li {float: none;}
+    ul.topnav li {
+        float: none;
+    }
 }
 
 h1 {
     margin: 60px auto;
     width: 70%;
     font-size: 2.5em;
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
 }
+
 h2 {
     margin: 60px auto;
     width: 70%;
     font-size: 1.5em;
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
 }
+
 p {
     margin: 60px auto;
     width: 70%;
     font-size: 1em;
     line-height: 2.0em;
     color: #333;
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
     word-wrap: break-word;
 }
+
 footer {
     text-align: center;
     border-top: 1px solid #d5d5d5;
     font-size: .8em;
 }
-
-</style>
-</head>
-
-<body>
-
-<ul class="topnav">
-  <li {% if page.url == "/" %}class="active"{% endif %}><a href="/">Home</a></li>
-  <li {% if page.url == "/cv" %}class="active"{% endif %}><a href="/cv">CV</a></li>
-  <li {% if page.url == "/pubs" %}class="active"{% endif %}><a href="/pubs">Publications</a></li>
-  <li {% if page.url == "/about" %}class="active"{% endif %}><a href="/about">About</a></li>
-  <li {% if page.url == "/teaching" %}class="active"{% endif %}><a href="/teaching">Classes</a></li>
-</ul>
-
-</body>
-</html>
