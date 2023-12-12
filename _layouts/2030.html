@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ page.title }}</title>
+    <!-- link to main stylesheet -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {margin: 0;}
+        
+        ul.topnav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            font-family: 'Helvetica', 'Arial', 'Sans-Serif';
+        }
+
+        ul.topnav li {
+            float: left;
+        }
+
+        ul.topnav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        ul.topnav li a.active,
+        ul.topnav li a:hover:not(.active) {
+            background-color: #6cabb4;
+        }
+
+        @media screen and (max-width: 600px) {
+            ul.topnav li.right,
+            ul.topnav li {
+                float: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <ul class="topnav">
+        <li><a class="active" href="/teaching/phil_2030/index.html">2030</a></li>
+        <li><a href="/teaching/phil_2030/syllabus">Syllabus</a></li>
+        <li><a href="/teaching/phil_2030/readings">Publications</a></li>
+        <li><a href="/teaching/phil_2030/assignments">Teaching</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li class="right"><a href="/resources">Resources</a></li>
+    </ul>
+    <div class="container">
+        {{ content }}
+    </div><!-- /.container -->
+    <footer>
+        <p><strong>&copy; Kevin Patton <script type="text/javascript">document.write(new Date().getFullYear());</script></strong></p>
+    </footer>
+</body>
+</html>
