@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ page.title }}</title>
+    <!-- link to main stylesheet -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {margin: 0;}
+        
+        ul.topnav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            font-family: 'Helvetica', 'Arial', 'Sans-Serif';
+        }
+
+        ul.topnav li {
+            float: left;
+        }
+
+        ul.topnav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        ul.topnav li a.active,
+        ul.topnav li a:hover:not(.active) {
+            background-color: #8B2FB9;
+        }
+
+        @media screen and (max-width: 600px) {
+            ul.topnav li.right,
+            ul.topnav li {
+                float: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <ul class="topnav">
+        <li><a class="active" href="/teaching/phil_1010/index.html">PHIL1010</a></li>
+        <li><a href="/teaching/phil_1010/syllabus">Syllabus</a></li>
+        <li><a href="/teaching/phil_1010/readings">Readings</a></li>
+        <li><a href="/teaching/phil_1010/exams">Exam Reviews</a></li>
+        <li><a href="/teaching/phil_1010/assignments">Assignments</a></li>
+        <li><a href="/teaching/phil_1010/ec/index">Extra Credit</a></li>
+        <li><a href="/teaching/phil_1010/contact">Contact</a></li>
+        <li class="right"><a href="/teaching/phil_1010/resources">Resources</a></li>
+    </ul>
+    <div class="container">
+        {{ content }}
+    </div><!-- /.container -->
+    <footer>
+        <p><strong>&copy; Kevin Patton <script type="text/javascript">document.write(new Date().getFullYear());</script></strong></p>
+    </footer>
+</body>
+</html>
