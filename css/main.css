@@ -40,7 +40,7 @@ ul.topnav li.right {
 
 /* Style the search box inside the navigation bar */
 .topnav input[type=text] {
-  float: left;
+  float: right;
   padding: 6px;
   border: none;
   margin-top: 8px;
