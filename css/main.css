@@ -38,6 +38,16 @@ ul.topnav li.right {
     float: right;
 }
 
+/* Style the search box inside the navigation bar */
+.topnav input[type=text] {
+  float: right;
+  padding: 6px;
+  border: none;
+  margin-top: 8px;
+  margin-right: 16px;
+  font-size: 17px;
+}
+
 @media screen and (max-width: 600px) {
     ul.topnav li.right,
     ul.topnav li {
