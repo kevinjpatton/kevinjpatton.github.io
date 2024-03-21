@@ -104,7 +104,7 @@ table, th, td {  /* This will apply the font to the entire table */
   font-family: 'Helvetica', 'Arial', 'Sans-Serif'; /* Replace with your desired font */
 } 
 
-.course-list { /* Styles applied to lists with the class 'course-list' */
+.standard-list { /* Styles applied to lists with the class 'standard-list' */
     list-style-type: disc;
     margin: 60px auto;
     width: 65%;
