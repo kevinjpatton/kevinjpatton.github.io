@@ -105,5 +105,15 @@ table, th, td {  /* This will apply the font to the entire table */
 } 
 
 .course-list { /* Styles applied to lists with the class 'course-list' */
-    list-style-type: square; 
+    list-style-type: circle;
+    margin-left: 60px;
+    font-family: 'Helvetica', 'Arial', 'Sans-Serif'; /* Example: Use a different font */
+}
+
+.course-list li {
+    margin-bottom: 8px;
+}
+
+
+ 
 }
