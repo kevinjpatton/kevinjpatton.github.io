@@ -86,7 +86,7 @@ footer {
 /* Table Styles */
 table {
   border-collapse: collapse; /* Make table borders touch */
-  width: 70%;                /* Set table width */
+  width: 50%;                /* Set table width */
   margin: 60px auto;         /* Center the table */
 }
 
@@ -99,3 +99,7 @@ th, td {
 th {
   background-color: #f0f0f0; /* Light gray header background */
 }
+
+table, th, td {  /* This will apply the font to the entire table */
+  font-family: 'Helvetica', 'Arial', 'Sans-Serif'; /* Replace with your desired font */
+} 
