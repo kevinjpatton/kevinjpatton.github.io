@@ -86,8 +86,8 @@ footer {
 /* Table Styles */
 table {
   border-collapse: collapse; /* Make table borders touch */
-  width: 80%;                /* Set table width */
-  margin: 20px auto;         /* Center the table */
+  width: 70%;                /* Set table width */
+  margin: 60px auto;         /* Center the table */
 }
 
 th, td {
