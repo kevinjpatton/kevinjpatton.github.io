@@ -82,3 +82,20 @@ footer {
     border-top: 1px solid #d5d5d5;
     font-size: .8em;
 }
+
+/* Table Styles */
+table {
+  border-collapse: collapse; /* Make table borders touch */
+  width: 80%;                /* Set table width */
+  margin: 20px auto;         /* Center the table */
+}
+
+th, td {
+  border: 1px solid #ddd;   /* Light gray cell borders */
+  text-align: left;         
+  padding: 12px;            
+}
+
+th {
+  background-color: #f0f0f0; /* Light gray header background */
+}
