@@ -86,7 +86,7 @@ footer {
 /* Table Styles */
 table {
   border-collapse: collapse; /* Make table borders touch */
-  width: 50%;                /* Set table width */
+  width: 60%;                /* Set table width */
   margin: 60px auto;         /* Center the table */
 }
 
@@ -107,7 +107,7 @@ table, th, td {  /* This will apply the font to the entire table */
 .course-list { /* Styles applied to lists with the class 'course-list' */
     list-style-type: circle;
     margin: 60px auto;
-    width: 55%;
+    width: 60%;
     font-family: 'Helvetica', 'Arial', 'Sans-Serif'; /* Example: Use a different font */
 }
 
