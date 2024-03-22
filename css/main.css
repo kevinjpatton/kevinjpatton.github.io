@@ -111,7 +111,7 @@ table, th, td {  /* This will apply the font to the entire table */
     font-family: 'Helvetica', 'Arial', 'Sans-Serif'; /* Example: Use a different font */
 }
 
-.course-list li {
+.standard-list li {
     margin-bottom: 15px;
 }
 
