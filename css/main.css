@@ -83,6 +83,15 @@ footer {
     font-size: .8em;
 }
 
+img {
+    margin: 60px auto
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /* Important for maintaining aspect ratio */
+    border-radius: 10px; /* Creates slightly rounded corners */
+    border-radius: 50%;  /* Creates a circular image */
+}
+
 /* Table Styles */
 table {
   border-collapse: collapse; /* Make table borders touch */
@@ -113,17 +122,5 @@ table, th, td {  /* This will apply the font to the entire table */
 
 .standard-list li {
     margin-bottom: 15px;
-}
-
-
- 
-}
-img {
-    margin: 60px auto
-    width: 100px;
-    height: 100px;
-    object-fit: cover; /* Important for maintaining aspect ratio */
-    border-radius: 10px; /* Creates slightly rounded corners */
-    border-radius: 50%;  /* Creates a circular image */
 }
 
