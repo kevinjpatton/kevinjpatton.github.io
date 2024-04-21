@@ -119,7 +119,7 @@ table, th, td {  /* This will apply the font to the entire table */
 .standard-image {
   /* Set width, height, margins, etc. for all images */
   width: 300px; /* Adjust as needed */
-  margin: 10px;
+  margin: 60px;
 }
 
 .image-left {
