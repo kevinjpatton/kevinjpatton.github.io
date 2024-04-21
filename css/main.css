@@ -116,9 +116,10 @@ table, th, td {  /* This will apply the font to the entire table */
     margin-bottom: 15px;
 }
 
-img { /* This will apply to all images */
-    width: 100%; /* Make the image stretch to the container's width */
-    height: auto;  /* Maintain the aspect ratio */
-    max-width: 500px; /* Limit the image size if needed */
+img {
+    max-width: 100%; /* Scale responsively */
+    height: auto;    /* Maintain aspect ratio */
+    display: block;  /* Make it a block-level element */
+    margin-left: auto; 
+    margin-right: auto; /* Center the image */
 }
-
