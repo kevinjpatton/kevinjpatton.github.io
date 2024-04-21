@@ -127,7 +127,7 @@ img {
 
 .standard-image {
   /* Set width, height, margins, etc. for all images */
-  width: 300px; /* Adjust as needed */
+  max-width: 70%; /* Adjust as needed */
   margin: 60px;
 }
 
