@@ -124,12 +124,12 @@ table, th, td {  /* This will apply the font to the entire table */
 
 .image-left {
   float: left;
-  margin-right: 15px; /* Adjust spacing between image and text */
+  margin-right: 60px; /* Adjust spacing between image and text */
 }
 
 .image-right {
   float: right;
-  margin-left: 15px; /* Adjust spacing between image and text */
+  margin-left: 60px; /* Adjust spacing between image and text */
 }
 
 .image-container:after {
