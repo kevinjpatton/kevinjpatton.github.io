@@ -117,9 +117,9 @@ table, th, td {  /* This will apply the font to the entire table */
 }
 
 img {
+    margin: 60px auto;
     width: 70%; /* Scale responsively */
     height: auto;    /* Maintain aspect ratio */
     display: block;  /* Make it a block-level element */
-    margin-left: 60px; 
-    margin-right: 60px; /* Center the image */
+
 }
