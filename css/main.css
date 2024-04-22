@@ -123,26 +123,3 @@ img {
     margin-left: 60px; 
     margin-right: 60px; /* Center the image */
 }
-
-
-.standard-image {
-  /* Set width, height, margins, etc. for all images */
-  max-width: 70%; /* Adjust as needed */
-  margin: 60px;
-}
-
-.image-left {
-  margin-right: 60px; /* Adjust spacing between image and text */
-}
-
-.image-right {
-  float: right;
-  margin-left: 60px; /* Adjust spacing between image and text */
-}
-
-.image-container:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
