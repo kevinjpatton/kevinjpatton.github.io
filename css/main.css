@@ -119,11 +119,10 @@ table, th, td {  /* This will apply the font to the entire table */
 .standard-image {
   /* Set width, height, margins, etc. for all images */
   width: 300px; /* Adjust as needed 300px originally */
-  margin: 10px;
+  margin: 60px;
 }
 
 .image-container {
-    width: 50%;
   display: inline; /* Enable flexbox layout */
   align-items: center; /* Vertically center content */
   margin: 60px; /* Horizontally center content */  
