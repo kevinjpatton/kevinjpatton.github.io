@@ -122,20 +122,16 @@ table, th, td {  /* This will apply the font to the entire table */
   margin: 10px;
 }
 
+.image-container {
+  display: flex; /* Enable flexbox layout */
+  align-items: center; /* Vertically center content */
+}
+
 .image-left {
-  float: left;
-    margin: 0 0 10px 0; /*  Margins: top, right, bottom, left */
+  order: 1; /* Display image first in the flexbox order (optional) */
   margin-right: 15px; /* Adjust spacing between image and text */
-    
 }
 
 .image-right {
-  float: right;
-  margin-left: 15px; /* Adjust spacing between image and text */
-}
-
-.image-container:after {
-  content: "";
-  display: table;
-  clear: both;
+  margin-left: auto; /* Margin to push image right */
 }
