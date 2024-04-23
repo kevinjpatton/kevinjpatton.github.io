@@ -118,7 +118,7 @@ table, th, td {  /* This will apply the font to the entire table */
 
 .standard-image {
   /* Set width, height, margins, etc. for all images */
-  width: 70%; /* Adjust as needed 300px originally */
+  width: 300px; /* Adjust as needed 300px originally */
   margin: 10px;
 }
 
