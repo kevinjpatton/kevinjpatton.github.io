@@ -129,9 +129,9 @@ table, th, td {  /* This will apply the font to the entire table */
 
 .image-left {
   order: 1; /* Display image first in the flexbox order (optional) */
-  margin-right: 15px; /* Adjust spacing between image and text */
+  margin-left: 15px; /* Adjust spacing between image and text */
 }
 
 .image-right {
-  margin-left: auto; /* Margin to push image right */
+  margin-right: auto; /* Margin to push image right */
 }
