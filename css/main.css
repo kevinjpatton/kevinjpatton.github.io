@@ -117,9 +117,31 @@ table, th, td {  /* This will apply the font to the entire table */
 }
 
 img {
-    margin: 60px auto;
+    margin: 30px auto;
     width: 10%; /* Scale responsively */
     height: auto;    /* Maintain aspect ratio */
     display: block;  /* Make it a block-level element */
 
+}
+
+.standard-image {
+  /* Set width, height, margins, etc. for all images */
+  width: 300px; /* Adjust as needed */
+  margin: 10px;
+}
+
+.image-left {
+  float: left;
+  margin-right: 15px; /* Adjust spacing between image and text */
+}
+
+.image-right {
+  float: right;
+  margin-left: 15px; /* Adjust spacing between image and text */
+}
+
+.image-container:after {
+  content: "";
+  display: table;
+  clear: both;
 }
