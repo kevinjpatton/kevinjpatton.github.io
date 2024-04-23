@@ -116,14 +116,6 @@ table, th, td {  /* This will apply the font to the entire table */
     margin-bottom: 15px;
 }
 
-img {
-    margin: 30px auto;
-    width: 10%; /* Scale responsively */
-    height: auto;    /* Maintain aspect ratio */
-    display: block;  /* Make it a block-level element */
-
-}
-
 .standard-image {
   /* Set width, height, margins, etc. for all images */
   width: 300px; /* Adjust as needed */
@@ -132,7 +124,7 @@ img {
 
 .image-left {
   float: left;
-    margin: 0 0 10px 500px; /*  Margins: top, right, bottom, left */
+    margin: 0 0 10px 0; /*  Margins: top, right, bottom, left */
   margin-right: 15px; /* Adjust spacing between image and text */
     
 }
