@@ -132,7 +132,7 @@ img {
 
 .image-left {
   float: left;
-    margin: 0 20px 10px 60px; /*  Margins: top, right, bottom, left */
+    margin: 0 0 10px 100px; /*  Margins: top, right, bottom, left */
   margin-right: 15px; /* Adjust spacing between image and text */
     
 }
