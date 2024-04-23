@@ -118,7 +118,7 @@ table, th, td {  /* This will apply the font to the entire table */
 
 .standard-image {
   /* Set width, height, margins, etc. for all images */
-  width: 300px; /* Adjust as needed */
+  width: 70%; /* Adjust as needed 300px originally */
   margin: 10px;
 }
 
@@ -130,7 +130,7 @@ table, th, td {  /* This will apply the font to the entire table */
 
 .image-left {
   order: 1; /* Display image first in the flexbox order (optional) */
-  margin-left: 15px; /* Adjust spacing between image and text */
+  margin-left: 0px; /* Adjust spacing between image and text */
 }
 
 .image-right {
