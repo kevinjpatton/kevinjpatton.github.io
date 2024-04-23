@@ -123,7 +123,7 @@ table, th, td {  /* This will apply the font to the entire table */
 }
 
 .image-container {
-  display: flex; /* Enable flexbox layout */
+  display: inline; /* Enable flexbox layout */
   align-items: center; /* Vertically center content */
   margin: 60px; /* Horizontally center content */  
 }
