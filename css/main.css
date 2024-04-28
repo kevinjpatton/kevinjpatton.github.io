@@ -143,7 +143,7 @@ table, th, td {  /* This will apply the font to the entire table */
   float: left;
   width: 25%;
   margin-bottom: 16px;
-  padding: 10px;
+  padding: 0px;
 }
 
 /* Display the columns below each other instead of side by side on small screens */
