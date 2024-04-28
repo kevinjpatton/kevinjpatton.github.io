@@ -199,7 +199,7 @@ a {
 }
 
 a:hover {
-  background-color: #333;
+  background-color: #345e65;
   color: black;
 }
 
@@ -209,7 +209,7 @@ a:hover {
 }
 
 .next {
-  background-color: #345e65;
+  background-color: #6cabb4;
   color: white;
 }
 
