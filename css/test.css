@@ -31,3 +31,34 @@
 .topnav .icon {
   display: none;
 }
+/* Table Styles */
+table {
+  border-collapse: collapse; /* Make table borders touch */
+  width: 60%;                /* Set table width */
+  margin: 60px auto;         /* Center the table */
+}
+
+th, td {
+  border: 1px solid #ddd;   /* Light gray cell borders */
+  text-align: left;         
+  padding: 12px;            
+}
+
+th {
+  background-color: #f0f0f0; /* Light gray header background */
+}
+
+table, th, td {  /* This will apply the font to the entire table */
+  font-family: 'Helvetica', 'Arial', 'Sans-Serif'; /* Replace with your desired font */
+} 
+
+.standard-list { /* Styles applied to lists with the class 'standard-list' */
+    list-style-type: disc;
+    margin: 60px auto;
+    width: 65%;
+    font-family: 'Helvetica', 'Arial', 'Sans-Serif'; /* Example: Use a different font */
+}
+
+.standard-list li {
+    margin-bottom: 15px;
+}
