@@ -44,17 +44,18 @@
     </style>
 </head>
 <body>
-    <ul class="topnav">
-        <li><a class="active" href="/teaching/phil_1010/index.html">PHIL1010</a></li>
-        <li><a href="/teaching/phil_1010/syllabus">Syllabus</a></li>
-        <li><a href="/teaching/phil_1010/readings">Readings & Handouts</a></li>
-        <li><a href="/teaching/phil_1010/exams">Exam Reviews</a></li>
-        <li><a href="/teaching/phil_1010/assignments">Assignments</a></li>
-        <li><a href="/teaching/phil_1010/finalproject">Final Project</a></li>
-        <li><a href="/teaching/phil_1010/ec/index">Extra Credit</a></li>
-        <li><a href="/teaching/phil_1010/contact">Contact</a></li>
-        <li class="right"><a href="/teaching/phil_1010/resources">Resources</a></li>
-    </ul>
+    <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="topnav" id="myTopnav">
+  <a href="#home" class="active">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <a href="#about">About</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
     <div class="container">
         {{ content }}
     </div><!-- /.container -->
