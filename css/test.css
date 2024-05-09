@@ -8,7 +8,7 @@ body, html {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://kevinjpatton.com/cave_heroimage_joshuasortino.jpg");
 
   /* Set a specific height */
-  height: 50%;
+  height: 25%;
 
   /* Position and center the image to scale nicely on all screens */
   background-position: center;
