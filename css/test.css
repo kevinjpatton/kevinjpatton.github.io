@@ -41,7 +41,7 @@
 }
 
 .hero-image {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/images/cave_heroimage_joshuasortino.jpg");
+  background-image: url("/images/cave_heroimage_joshuasortino.jpg");
   height: 25%;
   background-position: center;
   background-repeat: no-repeat;
