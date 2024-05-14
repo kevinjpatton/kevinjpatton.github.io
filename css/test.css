@@ -120,9 +120,12 @@ table, th, td {  /* This will apply the font to the entire table */
 }
 
 .hero-text {
-  display: flex; /* Enable flexbox */
-  align-items: center; /* Vertically align items */
-  justify-content: center; /* Horizontally align items */
+  display: flex;          /* Enable flexbox for alignment */
+  flex-direction: column; /* Arrange items vertically */
+  align-items: center;    /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  text-align: center;     /* Center text within each element */
+  color: white;           /* Set text color to white */
 }
 
 /* Page-Specific Hero Image Styles */
