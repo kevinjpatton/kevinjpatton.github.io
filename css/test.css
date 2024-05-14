@@ -130,9 +130,25 @@ table, th, td {  /* This will apply the font to the entire table */
 
 /* Page-Specific Hero Image Styles */
 .home-page {
-  background-image: url("/images/cave_heroimage_joshuasortino.jpg");
+  background-image: url("/images/heroimage_home.jpg");
 }
 
-.about-page {
-  background-image: url("path/to/about-image.jpg");
+.cv-page {
+  background-image: url("/images/heroimage_cv.jpg");
+}
+
+.research-page {
+  background-image: url("/images/heroimage_research.jpg");
+}
+
+.teaching-page {
+  background-image: url("/images/heroimage_teaching.jpg");
+}
+
+.contact-page {
+  background-image: url("/images/heroimage_contact.jpg");
+}
+
+.resources-page {
+  background-image: url("/images/heroimage_resources.jpg");
 }
