@@ -126,6 +126,7 @@ table, th, td {  /* This will apply the font to the entire table */
   justify-content: center; /* Center items vertically */
   text-align: center;     /* Center text within each element */
   color: white;           /* Set text color to white */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);  /* Shadow properties */
 }
 
 /* Page-Specific Hero Image Styles */
