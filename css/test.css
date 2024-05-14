@@ -112,7 +112,7 @@ table, th, td {  /* This will apply the font to the entire table */
 
 /* General Hero Image Styles */
 .hero-image {
-  height: 500px; /* Adjust as needed */
+  height: 400px; /* Adjust as needed */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -130,7 +130,7 @@ table, th, td {  /* This will apply the font to the entire table */
 
 /* Page-Specific Hero Image Styles */
 .home-page {
-  background-image: url("/teaching/Under_Construction.jpg");
+  background-image: url("/teaching/phil_1010/Phil_1010.jpg");
 }
 
 .about-page {
