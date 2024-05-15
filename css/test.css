@@ -135,21 +135,21 @@ table, th, td {  /* This will apply the font to the entire table */
 }
 
 .cv-page {
-  background-image: url("/images/heroimage_cv.jpg");
+  background-image: url("/images/heroimage-cv-jonathan-kemper-.jpg");
 }
 
 .research-page {
-  background-image: url("/images/heroimage_research.jpg");
+  background-image: url("/images/heroimage-research-annie-spratt.jpg");
 }
 
 .teaching-page {
-  background-image: url("/images/heroimage_teaching.jpg");
+  background-image: url("/images/heroimage-teaching-nathan-dumlao.jpg");
 }
 
 .contact-page {
-  background-image: url("/images/hereoimage-contact-me-sue-hughes.jpg");
+  background-image: url("/images/heroimage-contact-me-sue-hughes.jpg");
 }
 
 .resources-page {
-  background-image: url("/images/heroimage_resources.jpg");
+  background-image: url("/images/heroimage-resources-desola-lanre-ologun.jpg");
 }
