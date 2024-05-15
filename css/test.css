@@ -112,7 +112,7 @@ table, th, td {  /* This will apply the font to the entire table */
 
 /* General Hero Image Styles */
 .hero-image {
-  height: 400px; /* Adjust as needed */
+  height: 300px; /* Adjust as needed */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
