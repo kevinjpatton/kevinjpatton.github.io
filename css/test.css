@@ -169,3 +169,7 @@ table, th, td {  /* This will apply the font to the entire table */
 .pastcourses-page {
   background-image: url("/teaching/pastcourses/heroimage-pastcourses-towfiqu-barbhuiya.jpg");
 }
+
+.teachingtheory-page {
+  background-image: url("/teaching/pedagogy/heroimage-teachingtheory-alexander-grey.jpg");
+}
