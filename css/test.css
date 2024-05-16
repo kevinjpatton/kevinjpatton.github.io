@@ -173,3 +173,16 @@ table, th, td {  /* This will apply the font to the entire table */
 .teachingtheory-page {
   background-image: url("/teaching/pedagogy/heroimage-teachingtheory-alexander-grey.jpg");
 }
+
+/* Content Image */
+.content-image {
+  width: 800px; 
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Thumbnail Image */
+.thumbnail {
+  width: 200px;
+  height: 200px;
+  object-fit: cover; /* Crop to fit the square container */
+}
