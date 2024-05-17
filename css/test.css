@@ -192,9 +192,8 @@ table, th, td {  /* This will apply the font to the entire table */
 }
 
 .thumbnail-container {
-  display: grid;
-  grid-template-columns: auto 1fr; /* Auto for image, 1fr for remaining space */
-  gap: 10px; /* Optional: add spacing between image and text */
+  display: flex; /* Enable flexbox */
+  align-items: flex-start; /* Align items to the top of the container */
 }
 
 .thumbnail-text {
