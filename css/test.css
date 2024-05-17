@@ -182,8 +182,8 @@ table, th, td {  /* This will apply the font to the entire table */
 
 /* Thumbnail Image */
 .thumbnail {
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  height: 400px;
   object-fit: cover; /* Crop to fit the square container */
 }
 
