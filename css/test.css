@@ -201,13 +201,3 @@ img.thumbnail {
   align-self: flex-end; /* Align the text to the bottom of itself (top right of the image) */
   margin-left: auto; /* Push the text to the right */
 }
-
-/* Odd-numbered thumbnails */
-img.thumbnail:nth-child(odd) {
-    float: left;
-}
-
-/* Even-numbered thumbnails */
-img.thumbnail:nth-child(even) {
-    float: right;
-}
