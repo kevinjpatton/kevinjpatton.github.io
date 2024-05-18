@@ -181,15 +181,10 @@ table, th, td {  /* This will apply the font to the entire table */
 }
 
 /* Thumbnail Image */
-.thumbnail {
-  width: 200px;
-  height: 200px;
-  object-fit: cover; /* Crop to fit the square container */
-}
-
 img.thumbnail {
-    width: 20%; /* Adjust this percentage as needed */
+    width: 50%; /* Adjust this percentage as needed */
     height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Crop to fit the square container */
 }
 
 .text-block { /* Or the class of your text container */
