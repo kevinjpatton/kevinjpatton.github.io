@@ -187,6 +187,11 @@ table, th, td {  /* This will apply the font to the entire table */
   object-fit: cover; /* Crop to fit the square container */
 }
 
+img.thumbnail {
+    width: 20%; /* Adjust this percentage as needed */
+    height: auto; /* Maintain aspect ratio */
+}
+
 .text-block { /* Or the class of your text container */
   text-align: center;
 }
