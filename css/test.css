@@ -182,7 +182,7 @@ table, th, td {  /* This will apply the font to the entire table */
 
 /* Thumbnail Image */
 img.thumbnail {
-    width: 25%; /* Adjust this percentage as needed */
+    width: 35%; /* Adjust this percentage as needed */
     max-width: 400px; /* Adjust this to your desired maximum width */
     height: auto; /* Maintain aspect ratio */
     object-fit: cover; /* Crop to fit the square container */
