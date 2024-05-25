@@ -214,3 +214,7 @@ footer {
   margin: 0 auto; /* Top/bottom margin 0, left/right margin auto */
   width: 80%; /* Adjust width as needed */
 }
+
+p span[onclick]:hover {
+  text-decoration: underline; /* or other hover styles */
+}
