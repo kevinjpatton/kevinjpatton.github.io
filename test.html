@@ -2,4 +2,12 @@
 layout: default
 title: Test
 ---
-<p>If you want to go back to the previous page, you can click <a href="javascript:history.back
+<p>
+  This is some paragraph text. 
+  <span role="link" tabindex="0" onclick="history.back()">Go Back</span> to the previous page.
+</p>
+<style>
+  span[onclick] {
+    cursor: pointer;
+  }
+</style>
