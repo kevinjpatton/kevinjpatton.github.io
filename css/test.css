@@ -181,26 +181,3 @@ p span[onclick]:hover {
   text-decoration: underline; /* or other hover styles */
 }
 
-.container {
-    display: flex; /* Arrange cards horizontally */
-    flex-wrap: wrap; /* Allow cards to wrap to the next line */
-    justify-content: center; /* Center the cards horizontally */
-    gap: 20px; /* Add space between cards */
-}
-
-.card {
-    width: 300px; /* Adjust the card width as needed */
-    border: 1px solid #ccc;
-    padding: 20px;
-    text-align: center;
-}
-
-.card img {
-    width: 100%;
-    height: auto; /* Maintain aspect ratio */
-    margin-bottom: 10px;
-}
-
-.card p, .card h2 {
-    line-height: 1.2; /* Or another value that looks visually balanced */
-}
