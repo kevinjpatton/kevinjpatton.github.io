@@ -200,3 +200,7 @@ p span[onclick]:hover {
     height: auto; /* Maintain aspect ratio */
     margin-bottom: 10px;
 }
+
+.card p, .card h2 {
+    line-height: 1.2; /* Or another value that looks visually balanced */
+}
