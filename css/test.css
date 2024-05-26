@@ -232,7 +232,9 @@ p span[onclick]:hover {
   border-radius: 5px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 300px; /* Adjust the width as needed */
+  width: 000px; /* Adjust the width as needed */
+  max-height: 200px; /* Limit card height to avoid excessive vertical space */
+  text-align: left; /* Align text to the left */
 }
 
 .card img {
@@ -243,12 +245,3 @@ p span[onclick]:hover {
 
 .card h2 {
   margin-bottom: 5px;
-
-.card-content {
-    display: flex; /* Enable flexbox layout */
-    align-items: center; /* Vertically align items (image and text) to the center */
-}
-
-.card-text {
-    margin-left: 20px; /* Add spacing between the image and text */
-}
