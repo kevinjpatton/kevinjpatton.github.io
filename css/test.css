@@ -218,3 +218,31 @@ footer {
 p span[onclick]:hover {
   text-decoration: underline; /* or other hover styles */
 }
+
+.container {
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap onto multiple lines */
+  justify-content: center; /* Center the cards horizontally */
+  gap: 20px; /* Add space between cards */
+}
+
+.card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 300px; /* Adjust the width as needed */
+}
+
+.card img {
+  max-width: 100%; /* Ensure images don't overflow the card */
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.card h2 {
+  margin-bottom: 5px;
+}
+
+.
