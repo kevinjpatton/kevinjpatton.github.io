@@ -188,7 +188,7 @@ p span[onclick]:hover {
 }
 
 .course {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 0px solid #ccc;
     padding: 20px 0;
 }
 
