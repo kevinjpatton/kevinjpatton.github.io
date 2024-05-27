@@ -180,4 +180,40 @@ footer {
 p span[onclick]:hover {
   text-decoration: underline; /* or other hover styles */
 }
+/* new code */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
 
+.course {
+    border-bottom: 1px solid #ccc;
+    padding: 20px 0;
+}
+
+.course img {
+    float: left;
+    margin-right: 20px;
+    max-width: 150px;
+}
+
+.course h2 {
+    color: #333;
+}
+
+.course p {
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.course a {
+    display: block;
+    margin-top: 10px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.course a:hover {
+    text-decoration: underline;
+}
