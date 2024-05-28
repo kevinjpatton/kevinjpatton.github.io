@@ -184,7 +184,7 @@ p span[onclick]:hover {
 .container {
     width: 70%;
     margin: 0 auto;
-    padding: 20px;
+    padding: 0px;
 }
 
 .course {
