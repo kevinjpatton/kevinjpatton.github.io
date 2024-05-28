@@ -184,12 +184,12 @@ p span[onclick]:hover {
 .container {
     width: 70%;
     margin: 0 auto;
-    padding: 0px;
+    padding: 20px;
 }
 
 .course {
     border-bottom: 1px solid #ccc;
-    padding: 0px 0;
+    padding: 20px 0;
 }
 
 .course img {
