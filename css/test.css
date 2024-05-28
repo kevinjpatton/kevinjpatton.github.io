@@ -203,7 +203,7 @@ p span[onclick]:hover {
 }
 
 .course p {
-  float: lef;
+  float: left;
     font-size: 1em;
     line-height: 1.5;
 }
