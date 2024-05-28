@@ -183,8 +183,8 @@ p span[onclick]:hover {
 /* new code */
 .container {
     width: 70%;
-    margin: 0 auto;
-    padding: 20px;
+    margin: 60 auto;
+    padding: 0px;
 }
 
 .course {
@@ -193,8 +193,8 @@ p span[onclick]:hover {
 }
 
 .course img {
-    float: right;
-    margin-left: 20px;
+    float: left;
+    margin-right: 20px;
     max-width: 150px;
 }
 
@@ -203,7 +203,7 @@ p span[onclick]:hover {
 }
 
 .course p {
-  float: left;
+  float: right;
     font-size: 1em;
     line-height: 1.5;
 }
