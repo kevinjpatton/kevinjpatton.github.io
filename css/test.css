@@ -183,8 +183,8 @@ p span[onclick]:hover {
 /* new code */
 .container {
     width: 70%;
-    margin: 60 auto;
-    padding: 0px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .course {
