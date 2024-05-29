@@ -86,7 +86,7 @@ table, th, td {  /* This will apply the font to the entire table */
 .standard-list { /* Styles applied to lists with the class 'standard-list' */
     list-style-type: disc;
     margin: 60px auto;
-    width: 65%;
+    width: 90%;
     font-family: 'Helvetica', 'Arial', 'Sans-Serif'; /* Example: Use a different font */
 }
 .standard-list li {
