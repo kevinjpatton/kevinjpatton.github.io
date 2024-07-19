@@ -219,6 +219,13 @@ p span[onclick]:hover {
     text-decoration: underline;
 }
 
+/* new code */
+.container_blurb {
+    width: 70%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
 .text_blurb {
     border-bottom: 1px solid #ccc;
     padding: 0px 0;
