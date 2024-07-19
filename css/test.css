@@ -218,3 +218,34 @@ p span[onclick]:hover {
 .course a:hover {
     text-decoration: underline;
 }
+
+.text_blurb {
+    border-bottom: 1px solid #ccc;
+    padding: 0px 0;
+}
+
+.text_blurb img {
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    max-width: 200px;
+}
+
+.text_blurb h2 {
+    color: #333;
+}
+
+.text_blurb p {
+    font-size: 1em;
+}
+
+.text_blurb a {
+    display: block;
+    margin-top: 10px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.text_blurb a:hover {
+    text-decoration: underline;
+}
