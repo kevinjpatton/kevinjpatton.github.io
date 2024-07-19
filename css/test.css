@@ -227,7 +227,7 @@ p span[onclick]:hover {
 }
 
 .text_blurb {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 0px solid #ccc;
     padding: 0px 0;
 }
 
