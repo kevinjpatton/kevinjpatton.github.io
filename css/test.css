@@ -149,6 +149,9 @@ table, th, td {  /* This will apply the font to the entire table */
 .pedagogy-page {
   background-image: url("/pedagogy/heroimage-teachingtheory-alexander-grey.jpg");
 }
+.dissertation-page {
+  background-image: url("/images/heroimage-dissertation-crystal-jo.jpg");
+}
 /* Content Image */
 .content-image {
   width: 800px; 
