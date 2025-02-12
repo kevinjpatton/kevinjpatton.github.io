@@ -152,6 +152,9 @@ table, th, td {  /* This will apply the font to the entire table */
 .dissertation-page {
   background-image: url("/images/heroimage-dissertation-crystal-jo.jpg");
 }
+.podcasts-page {
+  background-image: url("/images/heroimage-podcasts-szabo-viktor.jpg");
+}
 /* Content Image */
 .content-image {
   width: 800px; 
