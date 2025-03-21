@@ -155,6 +155,9 @@ table, th, td {  /* This will apply the font to the entire table */
 .podcasts-page {
   background-image: url("/images/heroimage-podcasts-szabo-viktor.jpg");
 }
+.phil_3700-page {
+  background-image: url("/teaching/phil_3700/heroimage-phil_3700-daniele-levis-pelusi.jpg");
+}
 /* Content Image */
 .content-image {
   width: 800px; 
