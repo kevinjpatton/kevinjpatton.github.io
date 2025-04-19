@@ -158,6 +158,11 @@ table, th, td {  /* This will apply the font to the entire table */
 .phil_3700-page {
   background-image: url("/teaching/phil_3700/heroimage-phil_3700-daniele-levis-pelusi.jpg");
 }
+
+.bookclub-page {
+ background-image: url("/teaching/bookclub/heroimage-bookclub-s-o-c-i-a-l-c-u-t.jpg");
+}
+  
 /* Content Image */
 .content-image {
   width: 800px; 
