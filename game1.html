@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Ethics - Impact Categories</title>
+    <style>
+        body {
+            background-color: #E6EEF5;
+            color: #2A3B4C;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        #main-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            max-width: 900px;
+            width: 90%;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        h1 {
+            color: #1A73E8;
+            font-size: 2.5em;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        p.subtitle {
+            font-size: 1.2em;
+            color: #5F6368;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* --- PIE CHART VIEW --- */
+        #chart-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .svg-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        svg {
+            transform: rotate(-90deg); /* Starts the first slice at 12 o'clock */
+            width: 100%;
+            height: 100%;
+            drop-shadow: 0px 10px 20px rgba(0,0,0,0.1);
+        }
+
+        path {
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            transform-origin: center;
+        }
+
+        path:hover {
+            opacity: 0.85;
+            transform: scale(1.03); /* Pops the slice out slightly when hovered/tapped */
+        }
+
+        /* Center Hole for Donut Chart Look */
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 50%;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.5em;
+            color: #2A3B4C;
+            box-shadow: inset 0px 4px 10px rgba(0,0,0,0.1);
+            pointer-events: none; /* Lets clicks pass through to the SVG if needed */
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            margin-right: 8px;
+        }
+
+        /* --- DETAIL VIEW --- */
+        #detail-view {
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 0.4s ease;
+        }
+
+        #detail-header {
+            width: 100%;
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        #detail-title {
+            font-size: 2.8em;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .detail-content {
+            font-size: 1.3em;
+            line-height: 1.6;
+            color: #3C4043;
+            padding: 0 20px;
+        }
+
+        .detail-content ul {
+            margin-top: 20px;
+        }
+
+        .detail-content li {
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            background-color: #2A3B4C;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: auto;
+            align-self: flex-start;
+            transition: background-color 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: #1A252F;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<div id="main-container">
+    
+    <div id="chart-view">
+        <h1>Explore the Impact</h1>
+        <p class="subtitle">Tap a category on the wheel to discover how AI is changing our world.</p>
+        
+        <div class="svg-container">
+            <svg viewBox="0 0 100 100" id="pie-svg"></svg>
+            <div class="center-circle">AI<br>ETHICS</div>
+        </div>
+
+        <div class="legend" id="legend-container"></div>
+    </div>
+
+    <div id="detail-view">
+        <div id="detail-header">
+            <h1 id="detail-title">Category Title</h1>
+        </div>
+        <div class="detail-content" id="detail-text">
+            </div>
+        <button class="back-btn" onclick="showChart()">&#8592; Back to the Wheel</button>
+    </div>
+
+</div>
+
+<script>
+    // The 7 Impact Categories Data
+    const impactData = [
+        {
+            title: "Environmental Impact",
+            color: "#34A853", // Bright Green
+            description: "The physical cost of running the cloud and powering artificial intelligence.",
+            points: [
+                "<strong>Electricity Consumption:</strong> Training large AI models requires massive amounts of power, often straining local energy grids.",
+                "<strong>Water Usage:</strong> Millions of gallons of fresh water are used to cool the giant server farms that process AI requests.",
+                "<strong>E-Waste:</strong> The constant demand for faster, newer computer chips creates a massive global footprint of electronic waste."
+            ]
+        },
+        {
+            title: "Economic Impact",
+            color: "#FBBC04", // Bright Yellow/Gold
+            description: "The shift in how humanity works, creates value, and distributes wealth.",
+            points: [
+                "<strong>Job Automation:</strong> AI is displacing jobs across both blue-collar manufacturing and white-collar office work.",
+                "<strong>Tech Monopolies:</strong> The extreme cost of building AI concentrates enormous wealth and power into just a few massive corporations.",
+                "<strong>The Ghost Workforce:</strong> Many AI systems rely on underpaid, overseas gig-workers to manually label data behind the scenes."
+            ]
+        },
+        {
+            title: "Educational Impact",
+            color: "#FA7B17", // Orange
+            description: "The disruption of how we learn, study, and evaluate human knowledge.",
+            points: [
+                "<strong>The End of the Essay:</strong> Chatbots make traditional writing assignments difficult to grade and easy to fake.",
+                "<strong>Cognitive Atrophy:</strong> If we outsource our critical thinking and problem-solving to machines, do we lose those skills ourselves?",
+                "<strong>Mentorship vs. Optimization:</strong> Highly personalized AI tutors are efficient, but lack the genuine care and moral guidance of a human teacher."
+            ]
+        },
+        {
+            title: "Entertainment & Gaming",
+            color: "#A142F4", // Purple
+            description: "The changing landscape of digital media, art, and play.",
+            points: [
+                "<strong>Copyright & Creation:</strong> Tech companies are training AI on the copyrighted paintings, books, and code of human artists without permission.",
+                "<strong>Generative Media:</strong> The use of AI to write film scripts, compose music, and generate deepfake actors changes the definition of an 'artist.'",
+                "<strong>Infinite Worlds:</strong> Video games are shifting toward procedurally generated worlds and highly adaptive, AI-driven characters."
+            ]
+        },
+        {
+            title: "Social & Relationship",
+            color: "#F50057", // Pink/Magenta
+            description: "How technology alters human connection and societal trust.",
+            points: [
+                "<strong>AI Companions:</strong> The emotional risks of humans bonding with robotic pets or chatbots instead of navigating real, messy human relationships.",
+                "<strong>Algorithmic Feeds:</strong> Social media algorithms designed to hijack our attention, often provoking outrage to keep us scrolling.",
+                "<strong>The Death of Evidence:</strong> The epidemic of deepfake audio and video is eroding our ability to trust what we see with our own eyes."
+            ]
+        },
+        {
+            title: "Healthcare & Safety",
+            color: "#24C1E0", // Cyan/Teal
+            description: "The physical and medical risks of relying on algorithms.",
+            points: [
+                "<strong>The Black Box of Medicine:</strong> If a machine makes a life-or-death medical diagnosis but cannot explain its reasoning, should a doctor trust it?",
+                "<strong>Embedded Bias:</strong> AI learns from historical data. If past medical data contains racial or gender biases, the AI will repeat those prejudices.",
+                "<strong>Autonomous Harm:</strong> The physical safety risks of allowing autonomous machines, like self-driving cars, to operate in human spaces."
+            ]
+        },
+        {
+            title: "Legal & Privacy",
+            color: "#1A73E8", // Deep Blue
+            description: "The battle over data ownership, surveillance, and accountability.",
+            points: [
+                "<strong>Surveillance State:</strong> The rapid expansion of AI facial recognition software in public spaces without citizen consent.",
+                "<strong>Data Scraping:</strong> Tech companies harvesting massive amounts of personal internet data to teach their machines how to talk.",
+                "<strong>The Liability Gap:</strong> When an AI makes a mistake that harms someone, who gets sued? The programmer, the CEO, or the machine itself?"
+            ]
+        }
+    ];
+
+    // SVG Math to generate equal pie slices
+    const svgEl = document.getElementById('pie-svg');
+    const legendEl = document.getElementById('legend-container');
+    let cumulativePercent = 0;
+
+    function getCoordinatesForPercent(percent) {
+        const x = Math.cos(2 * Math.PI * percent) * 50 + 50;
+        const y = Math.sin(2 * Math.PI * percent) * 50 + 50;
+        return [x, y];
+    }
+
+    // Build the Chart and Legend
+    impactData.forEach((category, index) => {
+        const slicePercent = 1 / impactData.length;
+        
+        // Calculate SVG Path
+        const [startX, startY] = getCoordinatesForPercent(cumulativePercent);
+        cumulativePercent += slicePercent;
+        const [endX, endY] = getCoordinatesForPercent(cumulativePercent);
+        
+        // Create Path element
+        const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const largeArcFlag = slicePercent > 0.5 ? 1 : 0;
+        const pathData = [
+            `M 50 50`, // Move to center
+            `L ${startX} ${startY}`, // Line to start of arc
+            `A 50 50 0 ${largeArcFlag} 1 ${endX} ${endY}`, // Arc
+            `Z` // Close path
+        ].join(' ');
+        
+        pathEl.setAttribute('d', pathData);
+        pathEl.setAttribute('fill', category.color);
+        
+        // Add click event to open detail
+        pathEl.addEventListener('click', () => showDetail(index));
+        svgEl.appendChild(pathEl);
+
+        // Build Legend Item
+        const legendItem = document.createElement('div');
+        legendItem.className = 'legend-item';
+        legendItem.innerHTML = `<div class="legend-color" style="background-color: ${category.color}"></div> ${category.title}`;
+        legendItem.addEventListener('click', () => showDetail(index));
+        legendEl.appendChild(legendItem);
+    });
+
+    // Navigation Functions
+    function showDetail(index) {
+        const category = impactData[index];
+        
+        // Populate Data
+        document.getElementById('detail-title').innerText = category.title;
+        document.getElementById('detail-header').style.backgroundColor = category.color;
+        
+        // Change overall background to a very light tint of the category color
+        document.body.style.backgroundColor = category.color + "22"; // 22 is hex for low opacity
+        
+        let contentHTML = `<p><strong>${category.description}</strong></p><ul>`;
+        category.points.forEach(point => {
+            contentHTML += `<li>${point}</li>`;
+        });
+        contentHTML += `</ul>`;
+        document.getElementById('detail-text').innerHTML = contentHTML;
+
+        // Toggle Views
+        document.getElementById('chart-view').classList.add('hidden');
+        document.getElementById('detail-view').style.display = 'flex';
+    }
+
+    function showChart() {
+        // Reset background
+        document.body.style.backgroundColor = "#E6EEF5";
+        
+        // Toggle Views
+        document.getElementById('detail-view').style.display = 'none';
+        document.getElementById('chart-view').classList.remove('hidden');
+    }
+</script>
+
+</body>
+</html>
