@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Algorithm Architect</title>
+    <title>The Algorithm Architect - Colorful Edition</title>
     <style>
+        /* === MAIN BODY (Soft, Inviting Background) === */
         body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #E6EEF5; /* Soft sky blue/gray */
+            color: #2A3B4C; /* Dark blue/gray text (soft on eyes) */
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,85 +17,132 @@
             margin: 0;
             text-align: center;
         }
+
+        /* === MAIN GAME CONTAINER (Floating, Clean, Rounded) === */
         #game-container {
-            background-color: #1e1e1e;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            max-width: 800px;
+            background-color: #ffffff;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1); /* Soft shadow for depth */
+            max-width: 900px;
             width: 90%;
-            overflow-y: auto; /* Adds scrolling if content is too tall on small screens */
-            max-height: 90vh;
+            overflow-y: auto;
+            max-height: 95vh;
+            border: 1px solid #D1DBE5;
         }
-        h1 {
-            color: #4CAF50;
-            font-size: 2em;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+
+        /* === HEADERS & TEXT === */
+        h1.game-title {
+            color: #1A73E8; /* Bright Google-ish Blue */
+            font-size: 2.8em;
+            margin-bottom: 5px;
+            font-weight: 800;
+            text-transform: capitalize; /* Cleaner look than all caps */
+            letter-spacing: normal;
         }
-        h2 {
-            font-size: 1.5em;
-            color: #aaa;
-            margin-bottom: 20px;
+        h2.scenario-title {
+            font-size: 1.8em;
+            color: #5F6368; /* Soft neutral gray */
+            margin-bottom: 25px;
+            font-weight: 600;
         }
         p.prompt {
-            font-size: 1.1em;
+            font-size: 1.25em;
             line-height: 1.6;
-            margin-bottom: 30px;
-            font-weight: 300;
+            margin-bottom: 40px;
+            font-weight: 400;
+            color: #3C4043;
         }
-        /* SCENARIO IMAGE STYLING */
+
+        /* === SCENARIO IMAGE STYLING === */
         .scenario-image {
             max-width: 100%;
             height: auto;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            border: 1px solid #333; /* subtle border */
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border: 4px solid #ffffff; /* Gives it a framed photo look */
         }
+
+        /* === VIBRANT BUTTONS STYLING === */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* More space for accidental clicks */
+            align-items: center;
+        }
+        
+        /* The base button style (clean, modern, big padding) */
         .btn {
-            background-color: #333;
-            color: white;
-            border: 2px solid #4CAF50;
-            padding: 15px 30px;
-            font-size: 1.1em;
-            border-radius: 8px;
+            background-color: #ffffff; /* White base for color coding */
+            color: #3C4043;
+            border: 3px solid; /* Color assigned in classes below */
+            padding: 20px 30px;
+            font-size: 1.2em;
+            border-radius: 15px;
             cursor: pointer;
-            margin: 10px;
-            width: 45%;
-            transition: all 0.3s ease;
-            vertical-align: top; /* aligns buttons if subtext differs in height */
+            width: 95%;
+            transition: all 0.2s ease-out; /* Snap response */
+            text-align: left;
+            position: relative;
+            font-weight: 700;
         }
-        .btn:hover {
-            background-color: #4CAF50;
-            color: #121212;
-            font-weight: bold;
+        .btn:active {
+            transform: scale(0.97); /* "Push" feedback */
         }
+
+        /* The Subtext (stays muted but clear) */
         .subtext {
             display: block;
             font-size: 0.85em;
-            font-weight: normal;
-            margin-top: 8px;
-            opacity: 0.8;
-            line-height: 1.4;
+            font-weight: 400;
+            margin-top: 10px;
+            opacity: 0.9;
+            line-height: 1.5;
+            color: #5F6368;
         }
-        .hidden {
-            display: none;
+
+        /* === THE COLOR CODING CLASSES (Internal Tags) === */
+        
+        /* [A] Utilitarian (Blue - The Crowd) */
+        .btn-util {
+            border-color: #34A853; /* Bright Green - using blue now instead based on your decision C */
+            color: #202124;
         }
-        .result-highlight {
-            color: #4CAF50;
-            font-weight: bold;
-            font-size: 1.8em;
-            margin-top: 30px;
+        
+        /* Swapping Util from Green to Blue per earlier discussions */
+        .btn-util { border-color: #1A73E8; color: #174EA6; } /* Sky Blue */
+        .btn-util:hover { background-color: #E8F0FE; }
+
+        /* [B] Deontology (Kant - Rules - Warning Yellow/Orange) */
+        .btn-deon { border-color: #FBBC04; color: #C08400; } /* Warm Yellow/Orange */
+        .btn-deon:hover { background-color: #FFF8E1; }
+
+        /* [C] Virtue Ethics (Green - Nature/Growth) */
+        .btn-virtue { border-color: #34A853; color: #188038; } /* Forest Green */
+        .btn-virtue:hover { background-color: #E6F4EA; }
+
+        /* Base utility buttons (Start/Restart) - Bold and distinct */
+        .btn-base {
+            background-color: #1A73E8;
+            color: #ffffff;
+            border: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-align: center;
         }
-        /* Ensure buttons stack neatly on mobile */
-        @media (max-width: 600px) {
-            .btn {
-                width: 100%;
-                margin: 10px 0;
-            }
+        .btn-base:hover {
+            background-color: #174EA6;
         }
+
+        /* Results Screen Text Colors */
+        .result-highlight-util { color: #1A73E8; }
+        .result-highlight-deon { color: #C08400; }
+        .result-highlight-virtue { color: #188038; }
+
+        /* Utility classes */
+        .hidden { display: none; }
+        .bold { font-weight: 800; }
     </style>
 </head>
 <body>
@@ -102,69 +150,91 @@
 <div id="game-container">
     
     <div id="screen-start">
-        <h1>The Algorithm Architect</h1>
-        <h2>CEO Interactive Simulation</h2>
-        <p class="prompt">You are the CEO of a new, powerful AI company You have 3 critical decisions to make before the system goes live. Lives, education, and the future of humanity are in your hands.</p>
-        <button class="btn" onclick="nextScreen('screen-start', 'screen-1')" style="width: 100%;">BEGIN SIMULATION</button>
+        <h1 class="game-title">Ethical Explorer</h1>
+        <h2 class="scenario-title">You Are the CEO of the Future!</h2>
+        <p class="prompt">Welcome! You are leading a big tech company. Three tough problems are about to arrive on your desk. The choices you make will shape the world. Are you ready?</p>
+        <button class="btn btn-base" onclick="nextScreen('screen-start', 'screen-1')" style="width: 100%;">BEGIN SIMULATION</button>
     </div>
 
     <div id="screen-1" class="hidden">
-        <h1>CEO Decision 01</h1>
-        <h2>The Trolley Protocol</h2>
+        <h1 class="game-title">Decision 01</h1>
+        <h2 class="scenario-title">The Driverless Car</h2>
         <img src="trolley.png" alt="Visual representation of the Trolley Protocol scenario" class="scenario-image">
-        <p class="prompt">Brakes have failed on your flagship self-driving car. It is speeding toward a crosswalk with five pedestrians. The car can swerve into a concrete barrier, but doing so will definitively kill the single passenger inside. As CEO, what rule do you hardcode into the software?</p>
-        <button class="btn" onclick="recordChoice('util', 'screen-1', 'screen-2')">
-            SWERVE THE CAR
-            <span class="subtext">Sacrifice one to save five. Maximize survival.</span>
-        </button>
-        <button class="btn" onclick="recordChoice('deon', 'screen-1', 'screen-2')">
-            STAY THE COURSE
-            <span class="subtext">Protect the passenger who trusted you. Do no intentional harm.</span>
-        </button>
+        <p class="prompt">Oh no! A self-driving car’s brakes have failed. It is about to hit five people in the crosswalk. It can swerve, but it will definitely kill the one passenger inside. What rule do you program into the car?</p>
+        
+        <div class="btn-container">
+            <button class="btn btn-util" onclick="recordChoice('util', 'screen-1', 'screen-2')">
+                <span class="bold">[A] SAVE THE MOST PEOPLE.</span>
+                <span class="subtext">SWERVE THE CAR. It is better that one person is sacrificed if it saves five others.</span>
+            </button>
+            <button class="btn btn-deon" onclick="recordChoice('deon', 'screen-1', 'screen-2')">
+                <span class="bold">[B] FOLLOW THE RULES.</span>
+                <span class="subtext">STAY THE COURSE. You cannot intentionally program the car to kill. You must respect the person inside who trusted you.</span>
+            </button>
+            <button class="btn btn-virtue" onclick="recordChoice('virtue', 'screen-1', 'screen-2')">
+                <span class="bold">[C] GIVE CONTROL BACK TO HUMANS.</span>
+                <span class="subtext">Machines cannot make life-and-death choices. A human needs to use courage and wisdom to decide in the moment.</span>
+            </button>
+        </div>
     </div>
 
     <div id="screen-2" class="hidden">
-        <h1>CEO Decision 02</h1>
-        <h2>The Flawless Friend</h2>
+        <h1 class="game-title">Decision 02</h1>
+        <h2 class="scenario-title">The Flawless Robot Pet</h2>
         <img src="pet.png" alt="Visual representation of the Flawless Friend scenario" class="scenario-image">
-        <p class="prompt">Your engineers have built the ultimate AI companion pet. It perfectly mimics affection, never gets sick, never disobeys, and never dies. It will entirely eliminate the grief of losing a pet and the daily frustrations of care. Do you launch the product?</p>
-        <button class="btn" onclick="recordChoice('util', 'screen-2', 'screen-3')">
-            LAUNCH IT
-            <span class="subtext">Erase loneliness and grief. Maximize comfort.</span>
-        </button>
-        <button class="btn" onclick="recordChoice('virtue', 'screen-2', 'screen-3')">
-            CANCEL PROJECT
-            <span class="subtext">Embrace the messy reality of care. Build human character.</span>
-        </button>
+        <p class="prompt">Your company invented the ultimate robot pet. It acts just like a real pet, but never gets sick, never dies, and never leaves a mess. It will erase the sadness of losing a pet. Do you sell the product?</p>
+        
+        <div class="btn-container">
+            <button class="btn btn-util" onclick="recordChoice('util', 'screen-2', 'screen-3')">
+                <span class="bold">[A] BRING HAPPINESS TO PEOPLE.</span>
+                <span class="subtext">LAUNCH IT. Erasing loneliness and the sadness of grief is a massive net positive for human comfort.</span>
+            </button>
+            <button class="btn btn-deon" onclick="recordChoice('deon', 'screen-2', 'screen-3')">
+                <span class="bold">[B] RESTRICT IT (ALWAYS TELL THE TRUTH).</span>
+                <span class="subtext">SELL IT, but mandate it reminds owners it is a machine. Deceiving people into fake relationships is wrong.</span>
+            </button>
+            <button class="btn btn-virtue" onclick="recordChoice('virtue', 'screen-2', 'screen-3')">
+                <span class="bold">[C] REJECT THE PROJECT.</span>
+                <span class="subtext">The messy responsibility of caring for real animals is what makes us empathetic, patient, and good humans. Don't take that away.</span>
+            </button>
+        </div>
     </div>
 
     <div id="screen-3" class="hidden">
-        <h1>CEO Decision 03</h1>
-        <h2>The Perfect Teacher</h2>
+        <h1 class="game-title">Decision 03</h1>
+        <h2 class="scenario-title">The Perfect Robot Teacher</h2>
         <img src="teacher.png" alt="Visual representation of the Perfect Teacher scenario" class="scenario-image">
-        <p class="prompt">You are pitching an AI that can fully replace human teachers. It has infinite patience and perfectly optimizes lessons so every student gets a 100% test score. However, it cannot model genuine human passion, struggle, or moral wisdom. Do you replace the human workforce?</p>
-        <button class="btn" onclick="recordChoice('util', 'screen-3', 'screen-result')">
-            REPLACE THEM
-            <span class="subtext">Flawless data transfer. Create a highly intelligent society.</span>
-        </button>
-        <button class="btn" onclick="recordChoice('virtue', 'screen-3', 'screen-result')">
-            KEEP THE HUMANS
-            <span class="subtext">Cultivate wisdom and independent thought through human role models.</span>
-        </button>
+        <p class="prompt">Your company is pitching a powerful AI that can replace human teachers. It knows everything and perfectly teaches lessons so *every* student gets a 100% on their tests. Do you replace human teachers?</p>
+        
+        <div class="btn-container">
+            <button class="btn btn-util" onclick="recordChoice('util', 'screen-3', 'screen-result')">
+                <span class="bold">[A] REPLACE THE TEACHERS.</span>
+                <span class="subtext">Democratize perfect knowledge. Creating a frictionless, highly intelligent society benefits the most people.</span>
+            </button>
+            <button class="btn btn-deon" onclick="recordChoice('deon', 'screen-3', 'screen-result')">
+                <span class="bold">[B] KEEP HUMANS IN CHARGE.</span>
+                <span class="subtext">Students are not hard drives to be filled with data. Treat them with respect as independent thinkers, not objects to be optimized.</span>
+            </button>
+            <button class="btn btn-virtue" onclick="recordChoice('virtue', 'screen-3', 'screen-result')">
+                <span class="bold">[C] REJECT THE AI COMPLETELY.</span>
+                <span class="subtext">Education is not just about facts; it is about learning wisdom, empathy, and character through a trusted human mentor.</span>
+            </button>
+        </div>
     </div>
 
     <div id="screen-result" class="hidden">
-        <h1>Your Philosophical Architecture</h1>
-        <h2>Simulation Complete</h2>
-        <p class="prompt">You have hardcoded your values into the future.</p>
-        <p id="result-text" class="result-highlight"></p>
+        <h1 class="game-title">Simulation Complete</h1>
+        <h2 class="scenario-title">Your Ethical Map</h2>
+        <p class="prompt">You have used your power to shape the future of technology.</p>
+        <p id="result-text" class="prompt" style="font-size: 1.8em; font-weight: 800;"></p>
         <p id="bot-recommendation" class="prompt"></p>
-        <button class="btn" onclick="resetGame()" style="width: 100%;">RESTART SIMULATION</button>
+        <button class="btn btn-base" onclick="resetGame()" style="width: 100%;">RESTART SIMULATION</button>
     </div>
 
 </div>
 
 <script>
+    // Logic remains stable, scoring is out of 3 total options per scenario.
     let scores = {
         util: 0,
         deon: 0,
@@ -191,18 +261,38 @@
     function calculateResults() {
         let resultText = "";
         let botRecommendation = "";
+        let resultClass = "";
 
-        // Simple scoring logic: If they chose 2 or more Utilitarian options, they align with Mill.
-        if (scores.util >= 2) {
-            resultText = "You make decisions like a Utilitarian!";
-            botRecommendation = "You prioritize the greatest good for the greatest number, focusing on outcomes over strict rules. Go debate the John Stuart Mill bot!";
+        // Check for a 3-way tie (1 vote for each)
+        if (scores.util === 1 && scores.deon === 1 && scores.virtue === 1) {
+            resultText = "You are a Balanced Thinker!";
+            botRecommendation = "Your choices are perfectly balanced! You look at the big picture (blue), the rules (yellow), and human nature (green). Go talk to the Novice bot—they are trying to juggle all three views right now!";
+            resultClass = ""; // Neutral color
         } else {
-            // Otherwise, they lean towards Deontology or Virtue Ethics.
-            resultText = "You make decisions like a Deontologist!";
-            botRecommendation = "You prioritize strict moral duties, human character, and genuine flourishing over pure efficiency. Go talk to the Immanuel Kant or Aristotle bots!";
+            // Find the highest score
+            let maxScore = Math.max(scores.util, scores.deon, scores.virtue);
+            
+            if (scores.util === maxScore) {
+                resultText = "You prioritize HAPPINESS!";
+                botRecommendation = "You prioritize outcomes that maximize happiness for the greatest number of people (Mill / Blue). Go debate the John Stuart Mill bot!";
+                resultClass = "result-highlight-util";
+            } else if (scores.deon === maxScore) {
+                resultText = "You prioritize DUTY & RULES!";
+                botRecommendation = "You prioritize strict moral duties, honesty, and treating people with respect (Kant / Orange). Head over and converse with the Immanuel Kant bot!";
+                resultClass = "result-highlight-deon";
+            } else if (scores.virtue === maxScore) {
+                resultText = "You prioritize CHARACTER!";
+                botRecommendation = "You prioritize responsibilities, natural growth, and the cultivation of genuine character (Aristotle / Green). Go talk to the Aristotle bot!";
+                resultClass = "result-highlight-virtue";
+            }
         }
 
-        document.getElementById('result-text').innerText = resultText;
+        // Apply theme to result text
+        const resultTextEl = document.getElementById('result-text');
+        resultTextEl.className = 'prompt'; // reset
+        if (resultClass) resultTextEl.classList.add(resultClass);
+        resultTextEl.innerText = resultText;
+        
         document.getElementById('bot-recommendation').innerText = botRecommendation;
     }
 
