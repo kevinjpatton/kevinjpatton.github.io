@@ -104,7 +104,7 @@
     <div id="screen-start">
         <h1>The Algorithm Architect</h1>
         <h2>CEO Interactive Simulation</h2>
-        <p class="prompt">You are the Lead Developer for a new, powerful AI system. You have 3 critical decisions to make before the system goes live. Lives, privacy, and the future of humanity are in your hands.</p>
+        <p class="prompt">You are the CEO of a new, powerful AI company You have 3 critical decisions to make before the system goes live. Lives, education, and the future of humanity are in your hands.</p>
         <button class="btn" onclick="nextScreen('screen-start', 'screen-1')" style="width: 100%;">BEGIN SIMULATION</button>
     </div>
 
@@ -194,11 +194,11 @@
 
         // Simple scoring logic: If they chose 2 or more Utilitarian options, they align with Mill.
         if (scores.util >= 2) {
-            resultText = "You code like a Utilitarian!";
+            resultText = "You make decisions like a Utilitarian!";
             botRecommendation = "You prioritize the greatest good for the greatest number, focusing on outcomes over strict rules. Go debate the John Stuart Mill bot!";
         } else {
             // Otherwise, they lean towards Deontology or Virtue Ethics.
-            resultText = "You code like a Traditionalist!";
+            resultText = "You make decisions like a Deontologist!";
             botRecommendation = "You prioritize strict moral duties, human character, and genuine flourishing over pure efficiency. Go talk to the Immanuel Kant or Aristotle bots!";
         }
 
