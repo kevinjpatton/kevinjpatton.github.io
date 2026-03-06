@@ -1,1 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Ethics Games</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --background-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: #bdc3c7;
+        }
+
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .game-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .game-description {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .play-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .game-card:hover .play-button {
+            background-color: #2980b9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: auto;
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Interactive Ethics Games</h1>
+        <p>Explore moral dilemmas, values, and decision-making through play.</p>
+    </header>
+
+    <main>
+        <div class="game-grid">
+            <a href="games/explorer" class="game-card">
+                <div>
+                    <h2 class="game-title">Ethics Explorer</h2>
+                    <p class="game-description">Navigate complex moral scenarios and discover the philosophical frameworks behind your choices.</p>
+                </div>
+                <span class="play-button">Play Now</span>
+            </a>
+
+            <a href="games/impactwheel" class="game-card">
+                <div>
+                    <h2 class="game-title">Values Wheel</h2>
+                    <p class="game-description">Spin the wheel to test how your core principles hold up under unexpected societal pressures.</p>
+                </div>
+                <span class="play-button">Play Now</span>
+            </a>
+
+            <a href="games/alignment" class="game-card">
+                <div>
+                    <h2 class="game-title">The Alignment Game</h2>
+                    <p class="game-description">Balance competing interests and attempt to design systems that align with human well-being.</p>
+                </div>
+                <span class="play-button">Play Now</span>
+            </a>
+
+            <a href="games/paperclip" class="game-card">
+                <div>
+                    <h2 class="game-title">The Paper Clip Problem</h2>
+                    <p class="game-description">Take on the role of an AI optimizing for a single goal, and witness the unintended consequences.</p>
+                </div>
+                <span class="play-button">Play Now</span>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 | <a href="https://kevinjpatton.com">Return to Home</a></p>
+    </footer>
+
+</body>
+</html>
