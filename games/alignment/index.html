@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omni-AGI Ethics Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container">
+        <header>
+            <h1>Omni-AGI Ethics Board ⚖️</h1>
+            <div class="status-badge">
+                <span class="online">● Director Mode Active</span>
+            </div>
+        </header>
+
+        <main>
+            <section class="mission-brief" id="briefing-section">
+                <h2 id="level-title">Loading Level...</h2>
+                <p id="level-desc">Connecting to Omni-AGI...</p>
+                <p><em>Task: Adjust the AI's moral weights to find an acceptable balance.</em></p>
+            </section>
+
+            <section class="interactive-zone" id="slider-section">
+                <div class="labels">
+                    <span class="left-label" id="label-left">Left Option</span>
+                    <span class="right-label" id="label-right">Right Option</span>
+                </div>
+                
+                <input type="range" min="0" max="100" value="50" id="ethics-slider">
+                
+                <div class="impact-meters">
+                    <div class="meter">
+                        <label><span id="meter-1-name">Meter 1</span>: <span id="meter-1-text">50%</span></label>
+                        <div class="bar-bg"><div class="bar-fill water-fill" id="meter-1-bar" style="width: 50%;"></div></div>
+                    </div>
+                    <div class="meter">
+                        <label><span id="meter-2-name">Meter 2</span>: <span id="meter-2-text">50%</span></label>
+                        <div class="bar-bg"><div class="bar-fill med-fill" id="meter-2-bar" style="width: 50%;"></div></div>
+                    </div>
+                </div>
+
+                <button id="btn-confirm" onclick="confirmDecision()">Confirm AI Decision 🚀</button>
+            </section>
+
+            <section class="outcome-zone hidden" id="outcome-section">
+                <h3>Simulation Outcome 📊</h3>
+                <div id="outcome-text">
+                    </div>
+                <button id="btn-next" onclick="nextLevel()">Proceed to Next Dilemma ➡️</button>
+            </section>
+        </main>
+    </div>
+
+    <div id="debrief-container" class="hidden">
+        <header class="debrief-header">
+            <h1>Simulation Autopsy 🔬</h1>
+            <p>Why is fixing AI so incredibly difficult?</p>
+        </header>
+
+        <main class="debrief-content">
+            <section class="concept-card">
+                <h2>1. AI Doesn't Understand "Fair"</h2>
+                <p>To a computer math equation, saving 10 lives while ending 1 life is a net positive score of +9. The AI doesn't feel the moral weight of sacrificing the 1. We have to <em>force</em> AI to care about equity and fairness, because math naturally favors the majority.</p>
+            </section>
+
+            <section class="concept-card">
+                <h2>2. The Hidden Cost of Optimization</h2>
+                <p>Whenever an AI makes a system perfectly efficient (like automating all jobs or taking all the water), it usually destroys the "buffer room" that protects vulnerable people. Maximum efficiency almost always creates human suffering.</p>
+            </section>
+
+            <section class="concept-card">
+                <h2>3. Who Gets to Decide?</h2>
+                <p>When you moved those sliders, you were acting as the programmer. <strong>AI is not neutral.</strong> The programmers who build AI are secretly embedding their own personal values into the code. If a programmer values efficiency over safety, the whole world has to live with that choice.</p>
+            </section>
+
+            <button id="btn-replay" onclick="resetGame()">Replay Simulation 🔄</button>
+            
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
