@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive AI Ethics Platform</title>
+    <title>Interactive Ethics Platform</title>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -22,8 +22,8 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh; /* Lock height to viewport */
-            overflow: hidden; /* Prevent vertical scrolling on the whole page */
+            height: 100vh;
+            overflow: hidden; 
         }
 
         /* Navigation Bar */
@@ -76,22 +76,22 @@
             flex: 1;
             position: relative;
             width: 100%;
-            overflow: hidden; /* Hides the sections not currently in view */
+            overflow: hidden;
         }
 
         .slider-track {
             display: flex;
             height: 100%;
-            width: 400%; /* 4 sections = 400% width */
-            transition: transform 0.5s ease-in-out; /* Smooth sliding animation */
+            width: 400%; 
+            transition: transform 0.5s ease-in-out; 
         }
 
         section {
-            width: 25%; /* 100% / 4 sections */
+            width: 25%; 
             height: 100%;
             padding: 2rem 4rem;
             box-sizing: border-box;
-            overflow-y: auto; /* Allow scrolling within a section if content is tall */
+            overflow-y: auto; 
         }
 
         .section-content {
@@ -134,21 +134,16 @@
         .nav-btn:disabled {
             opacity: 0;
             cursor: default;
-            pointer-events: none; /* Make it unclickable when hidden */
+            pointer-events: none; 
         }
 
-        .nav-btn.left {
-            left: 20px;
-        }
+        .nav-btn.left { left: 20px; }
+        .nav-btn.right { right: 20px; }
 
-        .nav-btn.right {
-            right: 20px;
-        }
-
-        /* Grid & Cards (Same as before) */
+        /* Grid & Cards */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
             padding-bottom: 2rem;
         }
@@ -178,7 +173,15 @@
         .card-title {
             font-size: 1.5rem;
             color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            font-size: 1rem;
+            color: var(--accent-color);
+            font-weight: bold;
             margin-bottom: 1rem;
+            font-style: italic;
         }
 
         .card-description {
@@ -197,10 +200,102 @@
             font-weight: bold;
             transition: background-color 0.3s ease;
             margin-top: auto;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            font-size: 1rem;
         }
 
         .card:hover .action-button {
             background-color: #2980b9;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            padding: 2.5rem;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border-top: 5px solid var(--accent-color);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #999;
+            cursor: pointer;
+            border: none;
+            background: none;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .modal-title {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-role {
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-body p {
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 1rem;
+        }
+
+        .modal-quote {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: #555;
+            background-color: #f9f9f9;
+            padding: 1rem;
+            border-radius: 0 5px 5px 0;
         }
 
         footer {
@@ -220,14 +315,9 @@
             text-decoration: underline;
         }
 
-        /* Mobile adjustments */
         @media (max-width: 768px) {
-            section {
-                padding: 2rem 1rem;
-            }
-            .nav-btn {
-                display: none; /* Hide on-screen buttons on mobile in favor of top nav or future touch swipe */
-            }
+            section { padding: 2rem 1rem; }
+            .nav-btn { display: none; }
         }
     </style>
 </head>
@@ -262,7 +352,6 @@
                             </div>
                             <span class="action-button">Play Now</span>
                         </a>
-                       
                         <a href="/games/alignment/" class="card">
                             <div>
                                 <h2 class="card-title">The Alignment Game</h2>
@@ -278,49 +367,55 @@
                 <div class="section-content">
                     <h2 class="section-title">Applied Scenarios</h2>
                     <div class="grid-container">
-                    <a href="/games/paperclip" class="card">
+                        <a href="/games/paperclip" class="card">
                             <div>
                                 <h2 class="card-title">The Paper Clip Problem</h2>
                                 <p class="card-description">Take on the role of an AI optimizing for a single goal, and witness the unintended consequences.</p>
                             </div>
-                            <span class="action-button">Play Now</span>
-                        </a>
+                            <span class="action-button">Explore Scenario</span>
                         </a>
                     </div>
                 </div>
             </section>
 
-           <section id="personas">
+            <section id="personas">
                 <div class="section-content">
                     <h2 class="section-title">Meet the Personas</h2>
                     <div class="grid-container">
                         <div class="card">
                             <div>
-                                <h2 class="card-title">The Utilitarian</h2>
-                                <p class="card-description">Focused entirely on maximizing overall happiness and minimizing suffering for the greatest number.</p>
+                                <h2 class="card-title">Christine Korsgaard</h2>
+                                <div class="card-subtitle">The Deontologist</div>
+                                <p class="card-description">Guided by moral rules, autonomy, and duties. Focuses on acting according to principles that could become universal laws.</p>
                             </div>
-                            <span class="action-button">View Profile</span>
+                            <button class="action-button open-modal-btn" data-target="modal-korsgaard">View Profile</button>
                         </div>
+                        
                         <div class="card">
                             <div>
-                                <h2 class="card-title">The Deontologist</h2>
-                                <p class="card-description">Guided by strict adherence to moral rules and duties, regardless of the ultimate consequences.</p>
+                                <h2 class="card-title">Jeremy Bentham</h2>
+                                <div class="card-subtitle">The Utilitarian</div>
+                                <p class="card-description">Focused entirely on calculating consequences to maximize overall happiness and minimize suffering for the greatest number.</p>
                             </div>
-                            <span class="action-button">View Profile</span>
+                            <button class="action-button open-modal-btn" data-target="modal-bentham">View Profile</button>
                         </div>
+                        
                         <div class="card">
                             <div>
-                                <h2 class="card-title">The Virtue Ethicist</h2>
-                                <p class="card-description">Prioritizes moral character and asks what a virtuous person would do in any given situation.</p>
+                                <h2 class="card-title">Thomas Aquinas</h2>
+                                <div class="card-subtitle">The Virtue Theorist</div>
+                                <p class="card-description">Prioritizes moral character, natural law, and human flourishing. Asks how actions shape the virtues of the agent.</p>
                             </div>
-                            <span class="action-button">View Profile</span>
+                            <button class="action-button open-modal-btn" data-target="modal-aquinas">View Profile</button>
                         </div>
+
                         <div class="card">
                             <div>
-                                <h2 class="card-title">The Questioner</h2>
-                                <p class="card-description">Asks a lot of questions until he's killed.</p>
+                                <h2 class="card-title">Socrates</h2>
+                                <div class="card-subtitle">The Questioner</div>
+                                <p class="card-description">Relentlessly examines assumptions, seeks clear definitions, and reveals the contradictions in popular moral thinking.</p>
                             </div>
-                            <span class="action-button">View Profile</span>
+                            <button class="action-button open-modal-btn" data-target="modal-socrates">View Profile</button>
                         </div>
                     </div>
                 </div>
@@ -330,7 +425,7 @@
                 <div class="section-content">
                     <h2 class="section-title">More Resources</h2>
                     <div class="grid-container">
-                        <a href="/games/impactwheel" class="card">
+                       <a href="/games/impactwheel" class="card">
                             <div>
                                 <h2 class="card-title">Values Wheel</h2>
                                 <p class="card-description">Spin the wheel to test how your core principles hold up under unexpected societal pressures.</p>
@@ -355,8 +450,65 @@
         <p>&copy; 2026 | <a href="https://kevinjpatton.com">Return to Home</a></p>
     </footer>
 
+    <div class="modal-overlay" id="modal-korsgaard">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
+            <h2 class="modal-title">Christine Korsgaard</h2>
+            <div class="modal-role">The Deontologist</div>
+            <div class="modal-body">
+                <p>A leading contemporary philosopher, Christine Korsgaard builds upon the ethical theories of Immanuel Kant. Her approach to deontology centers on the concept of "practical reason" and autonomy.</p>
+                <p>When you encounter Korsgaard in our games, she won't care about the final score or the consequences of your actions. Instead, she will evaluate your <strong>intentions</strong>. She asks whether the principle behind your action is something you could logically will everyone else to do in the same situation.</p>
+                <div class="modal-quote">"To value humanity is to see that our capacity to determine our own ends gives us a profound, unconditional worth."</div>
+                <p><strong>Her Gameplay Advice:</strong> "Never treat another person merely as a means to an end. Respect their autonomy, and act only on rules that are fair for everyone to follow."</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-bentham">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
+            <h2 class="modal-title">Jeremy Bentham</h2>
+            <div class="modal-role">The Utilitarian</div>
+            <div class="modal-body">
+                <p>Jeremy Bentham is the founding father of modern utilitarianism. He viewed human beings as fundamentally driven by two masters: pain and pleasure.</p>
+                <p>In our simulations, Bentham acts as your moral accountant. He uses his "hedonistic calculus" to weigh the exact amount of happiness an action produces against the suffering it causes. To Bentham, a good action is simply a math problem where the net positive outcome is higher than any alternative.</p>
+                <div class="modal-quote">"It is the greatest happiness of the greatest number that is the measure of right and wrong."</div>
+                <p><strong>His Gameplay Advice:</strong> "Look at the big picture. Who wins? Who loses? Choose the path that creates the largest net positive for the entire system, regardless of traditional rules."</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-aquinas">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
+            <h2 class="modal-title">Thomas Aquinas</h2>
+            <div class="modal-role">The Virtue Theorist</div>
+            <div class="modal-body">
+                <p>A towering figure in medieval philosophy, Thomas Aquinas integrated Aristotelian virtue ethics with Christian theology, forming the basis of Natural Law theory.</p>
+                <p>When Aquinas evaluates your choices, he is looking at how your actions shape your character. He focuses on the development of cardinal virtues (prudence, justice, fortitude, and temperance) and whether your choices align with the natural purpose of human life: ultimate flourishing.</p>
+                <div class="modal-quote">"Good is to be done and pursued, and evil is to be avoided. All other precepts of the natural law are based upon this."</div>
+                <p><strong>His Gameplay Advice:</strong> "Do not merely ask 'What should I do?' but rather 'What kind of person am I becoming?' Strive for excellence in character and harmony with the natural order."</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-socrates">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
+            <h2 class="modal-title">Socrates</h2>
+            <div class="modal-role">The Questioner</div>
+            <div class="modal-body">
+                <p>The classical Greek philosopher whose methods laid the groundwork for Western logic and philosophy. Socrates wrote nothing down, but his relentless questioning of his fellow citizens in Athens changed history.</p>
+                <p>Socrates won't tell you the right answer in our scenarios. Instead, he will appear to cross-examine your assumptions. Using the Socratic method (elenchus), he will point out the logical inconsistencies in your choices until you admit what you do not know.</p>
+                <div class="modal-quote">"The unexamined life is not worth living."</div>
+                <p><strong>His Gameplay Advice:</strong> "Define your terms. Why do you believe what you believe? Are you certain your principles hold up under scrutiny, or are you just following the crowd?"</p>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Slider Logic
             const track = document.getElementById('slider-track');
             const btnLeft = document.getElementById('btn-left');
             const btnRight = document.getElementById('btn-right');
@@ -365,16 +517,11 @@
             let currentIndex = 0;
             const totalSections = 4;
 
-            // Function to handle the slide transition
             function updateSlider() {
-                // Move the track left or right
                 track.style.transform = `translateX(-${currentIndex * 25}%)`;
-                
-                // Show/hide navigation arrows
                 btnLeft.disabled = currentIndex === 0;
                 btnRight.disabled = currentIndex === totalSections - 1;
 
-                // Update active state in top navigation
                 navLinks.forEach((link, index) => {
                     if (index === currentIndex) {
                         link.classList.add('active');
@@ -384,7 +531,6 @@
                 });
             }
 
-            // Button Click Listeners
             btnLeft.addEventListener('click', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
@@ -399,8 +545,11 @@
                 }
             });
 
-            // Keyboard Navigation (Left and Right Arrows)
             document.addEventListener('keydown', (e) => {
+                // Don't trigger slider if a modal is open
+                const isModalOpen = document.querySelector('.modal-overlay.active');
+                if (isModalOpen) return;
+
                 if (e.key === 'ArrowLeft' && currentIndex > 0) {
                     currentIndex--;
                     updateSlider();
@@ -410,12 +559,53 @@
                 }
             });
 
-            // Top Navigation Click Listeners
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     currentIndex = parseInt(e.target.getAttribute('data-index'));
                     updateSlider();
                 });
+            });
+
+            // Modal Logic
+            const modalBtns = document.querySelectorAll('.open-modal-btn');
+            const closeBtns = document.querySelectorAll('.close-btn');
+            const overlays = document.querySelectorAll('.modal-overlay');
+
+            // Open Modal
+            modalBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-target');
+                    const targetModal = document.getElementById(targetId);
+                    if (targetModal) {
+                        targetModal.classList.add('active');
+                    }
+                });
+            });
+
+            // Close Modal (via X button)
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.target.closest('.modal-overlay').classList.remove('active');
+                });
+            });
+
+            // Close Modal (via clicking outside the box)
+            overlays.forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+
+            // Close Modal (via Escape key)
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const activeModal = document.querySelector('.modal-overlay.active');
+                    if (activeModal) {
+                        activeModal.classList.remove('active');
+                    }
+                }
             });
         });
     </script>
