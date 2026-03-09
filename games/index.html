@@ -587,7 +587,7 @@
             splashScreen.addEventListener('click', hideSplash);
             splashScreen.addEventListener('touchstart', hideSplash, {passive: false});
 
-            // Optional: Reset back to splash screen after 3 minutes of inactivity
+            // Optional: Reset back to splash screen after 15 seconds of inactivity
             let timeout;
             const resetTimer = () => {
                 clearTimeout(timeout);
@@ -596,7 +596,7 @@
                     // Also reset the slider back to the first page
                     currentIndex = 0;
                     updateSlider();
-                }, 180000); // 180,000 milliseconds = 3 minutes
+                }, 15000); // 150000 milliseconds = 15 seconds
             };
 
             // Listen for any interaction to reset the inactivity timer
