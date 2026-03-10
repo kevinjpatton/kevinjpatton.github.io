@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Moral Simulator: The Moderate Principle</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #game-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 650px;
+            width: 90%;
+            text-align: center;
+        }
+
+        #visual-display {
+            width: 100%;
+            height: 160px;
+            background: #e9ecef;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+
+        /* The Pond Elements */
+        .grass { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #d4edda; }
+        .pond { position: absolute; top: 20%; left: 30%; width: 60%; height: 60%; background: #3498db; border-radius: 50%; opacity: 0.8; }
+        .path { position: absolute; top: 0; left: 10%; width: 15%; height: 100%; background: #e3d5ca; }
+
+        /* The Digital Elements */
+        .screen { position: absolute; top: 15%; left: 25%; width: 50%; height: 70%; background: #343a40; border-radius: 8px; border: 4px solid #adb5bd; }
+        .notification { position: absolute; top: 30%; left: 15%; width: 70%; height: 40%; background: #f8f9fa; border-radius: 4px; opacity: 0; animation: popUp 1s ease-out 0.5s forwards; }
+
+        /* Camera/Drone Elements (Distance Objection) */
+        .monitor-border { border: 8px solid #343a40; box-sizing: border-box; width: 100%; height: 100%; position: absolute; z-index: 5; pointer-events: none;}
+        .rec-dot { width: 10px; height: 10px; background: red; border-radius: 50%; position: absolute; top: 15px; right: 20px; z-index: 6; animation: blink 1s infinite; }
+        .drone { width: 20px; height: 10px; background: #495057; position: absolute; top: -20px; left: 55%; z-index: 4; border-radius: 2px;}
+        
+        /* Actors */
+        .person { position: absolute; width: 14px; height: 14px; border-radius: 50%; z-index: 2; }
+        .player { background: #2c3e50; }
+        .child { background: #e74c3c; width: 10px; height: 10px; }
+        .bystander { background: #adb5bd; width: 12px; height: 12px;}
+
+        /* Animations */
+        @keyframes thrash { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-3px) scale(1.2); } }
+        .drowning { animation: thrash 0.5s infinite; }
+
+        @keyframes wadeIn { 0% { top: 50%; left: 15%; } 100% { top: 45%; left: 50%; } }
+        .wading { animation: wadeIn 2s ease-out forwards; }
+
+        @keyframes droneDeploy { 0% { top: -20px; } 100% { top: 40%; } }
+        .deploying { animation: droneDeploy 2s ease-out forwards; }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes popUp { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        h1 { font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; }
+        p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem; color: #555; text-align: left; }
+        .button-container { display: flex; flex-direction: column; gap: 1rem; }
+        button { padding: 1rem; font-size: 1rem; font-weight: bold; cursor: pointer; border: 2px solid #3498db; background-color: white; color: #3498db; border-radius: 6px; transition: all 0.2s ease; text-align: left; }
+        button:hover { background-color: #3498db; color: white; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <div id="visual-display"></div>
+        <h1 id="scenario-title">Loading Simulation...</h1>
+        <p id="scenario-text">Please wait.</p>
+        <div id="choices-container" class="button-container"></div>
+    </div>
+
+    <script>
+        const visualScenes = [
+            // 0: Original Pond
+            `<div class="grass"></div><div class="pond"></div><div class="path"></div>
+             <div class="person child drowning" style="top: 45%; left: 55%;"></div>
+             <div class="person player" style="top: 50%; left: 15%;"></div>`,
+            
+            // 1: The Motivation Menu (No Animation)
+            ``,
+
+            // 2: The Detour Correction (No Animation)
+            ``,
+
+            // 3: The Application (Charity Email)
+            `<div style="width: 100%; height: 100%; background: #ced4da;"></div>
+             <div class="screen">
+                 <div class="notification">
+                     <div style="width: 80%; height: 10px; background: #e74c3c; margin: 15px auto; border-radius: 2px;"></div>
+                     <div style="width: 60%; height: 6px; background: #adb5bd; margin: 10px auto; border-radius: 2px;"></div>
+                 </div>
+             </div>`,
+
+            // 4: The Objection Menu (No Animation)
+            ``,
+
+            // 5: Distance Objection (Security Monitor + Drone)
+            `<div class="monitor-border"></div><div class="rec-dot"></div>
+             <div class="grass"></div><div class="pond"></div>
+             <div class="person child drowning" style="top: 45%; left: 55%;"></div>
+             <div class="drone" id="rescue-drone"></div>`,
+
+            // 6: Bystander Objection (Pond with Crowd)
+            `<div class="grass"></div><div class="pond"></div><div class="path"></div>
+             <div class="person child drowning" style="top: 45%; left: 55%;"></div>
+             <div class="person player" style="top: 50%; left: 15%;"></div>
+             <div class="person bystander" style="top: 20%; left: 40%;"></div>
+             <div class="person bystander" style="top: 25%; left: 30%;"></div>
+             <div class="person bystander" style="top: 70%; left: 45%;"></div>
+             <div class="person bystander" style="top: 65%; left: 75%;"></div>
+             <div class="person bystander" style="top: 30%; left: 80%;"></div>
+             <div class="person bystander" style="top: 15%; left: 60%;"></div>`,
+
+            // 7: Debrief
+            ``
+        ];
+
+        const scenarios = [
+            { // Scene 0
+                title: "Phase 1: The Commute",
+                text: "You are walking to work wearing a brand-new, expensive pair of shoes that cost you $200. You pass a shallow decorative pond and notice a small child has fallen in. The child is thrashing and drowning. If you wade into the muddy water to pull the child out, your $200 shoes will be completely ruined.",
+                choices: [
+                    { text: "Wade in and save the child (Ruin $200 shoes)", nextScene: 1, type: "Save" },
+                    { text: "Keep walking (Save shoes, child drowns)", nextScene: 7, type: "Walk" } // Skips to end
+                ]
+            },
+            { // Scene 1
+                title: "Phase 2: The Motivation",
+                text: "You chose to save the child. But what is the underlying moral justification for your action? Why did you *have* to save them?",
+                choices: [
+                    { text: "Because I would feel extremely guilty if I didn't.", nextScene: 2, type: "Guilt" },
+                    { text: "Because it's probably illegal to let someone drown.", nextScene: 2, type: "Jail" },
+                    { text: "Because if it is in my power to prevent something very bad from happening, without sacrificing anything morally significant, I ought to do it.", nextScene: 3, type: "Moderate_Principle" }
+                ]
+            },
+            { // Scene 2
+                title: "Phase 2b: Re-evaluating Motivation",
+                text: "That might be true psychologically or legally, but it misses the core moral point. Good Samaritan laws rarely require you to destroy your own property, and avoiding guilt is an act of self-interest, not morality. The philosophical bedrock of your action is Singer's 'Moderate Principle': If you can prevent something very bad from happening without sacrificing anything morally significant, you ought to do it.",
+                choices: [
+                    { text: "Accept the Moderate Principle and continue.", nextScene: 3, type: "Accept_Principle" }
+                ]
+            },
+            { // Scene 3
+                title: "Phase 3: The Singer Implication",
+                text: "You have accepted the Moderate Principle. Let's apply it: Later that week, you receive a verified email from an effective charity. A $200 donation will definitively save the life of a child in a developing nation. You have $200 of disposable income. Since $200 is not 'morally significant' compared to a human life, the Moderate Principle dictates you must donate.",
+                choices: [
+                    { text: "Donate the $200", nextScene: 4, type: "Donate" },
+                    { text: "Refuse to donate", nextScene: 4, type: "Refuse" }
+                ]
+            },
+            { // Scene 4
+                title: "Phase 4: Raising an Objection",
+                text: "If you refused to donate (or felt resistance to the idea), you must find a philosophical flaw in Singer's argument. Which objection is the strongest defense against donating?",
+                choices: [
+                    { text: "Objection 1: 'But that child is thousands of miles away. Distance changes our obligation.'", nextScene: 5, type: "Distance" },
+                    { text: "Objection 2: 'But there are millions of other people ignoring that email. Why is it solely on me?'", nextScene: 6, type: "Bystanders" }
+                ]
+            },
+            { // Scene 5
+                title: "Phase 5: Modified Case - Distance",
+                text: "Singer tests your objection: You are looking at a live security feed of a pond in a foreign country. A child is drowning. You can press a button on an app to deploy an automated rescue drone, but it will charge $200 to your credit card. Does the physical distance remove your obligation?",
+                choices: [
+                    { text: "Deploy the drone (Pay $200)", nextScene: 7, type: "Deploy" },
+                    { text: "Close the app (Save $200)", nextScene: 7, type: "Ignore" }
+                ]
+            },
+            { // Scene 6
+                title: "Phase 5: Modified Case - The Numbers",
+                text: "Singer tests your objection: You are at the pond, the child is drowning, but there are 50 other people standing around doing nothing. Does the inaction of all these other people release you from your moral obligation to wade in?",
+                choices: [
+                    { text: "Wade in anyway (Ruin $200 shoes)", nextScene: 7, type: "Save_Anyway" },
+                    { text: "Do nothing like everyone else (Save shoes)", nextScene: 7, type: "Conform" }
+                ]
+            },
+            { // Scene 7
+                title: "Simulation Complete: Debrief",
+                text: "", 
+                choices: [
+                    { text: "Restart Simulation", nextScene: 0, type: "Reset" }
+                ]
+            }
+        ];
+
+        const studentChoices = [];
+
+        function loadScenario(index) {
+            const titleElement = document.getElementById("scenario-title");
+            const textElement = document.getElementById("scenario-text");
+            const choicesContainer = document.getElementById("choices-container");
+            const visualDisplay = document.getElementById("visual-display");
+
+            if (index === 0) studentChoices.length = 0;
+
+            if (visualScenes[index] !== ``) {
+                visualDisplay.style.display = "block";
+                visualDisplay.innerHTML = visualScenes[index];
+            } else {
+                visualDisplay.style.display = "none";
+                visualDisplay.innerHTML = "";
+            }
+
+            const currentScene = scenarios[index];
+            titleElement.innerText = currentScene.title;
+            choicesContainer.innerHTML = "";
+
+            if (index === 7) {
+                let report = "Let's review your logical consistency:<br><br>";
+                const initialChoice = studentChoices[0]?.philosophy;
+                
+                // Find specific choices dynamically
+                const objection = studentChoices.find(c => c.philosophy === "Distance" || c.philosophy === "Bystanders")?.philosophy;
+                const finalChoice = studentChoices[studentChoices.length - 1]?.philosophy;
+
+                if (initialChoice === "Walk") {
+                    report += "You let the first child drown to save your shoes. While logically consistent to refuse to donate to charity, you have adopted a position most find morally repugnant.";
+                } else if (objection === "Distance") {
+                    if (finalChoice === "Deploy") {
+                        report += "<strong style='color:#e74c3c;'>Objection Defeated.</strong> You argued distance matters, but when presented with the drone scenario, you still paid the $200. Singer argues this proves proximity is just an emotional bias, not a moral boundary. Therefore, the Moderate Principle requires you to donate to the charity.";
+                    } else {
+                        report += "<strong style='color:#f39c12;'>A Hard Line.</strong> You refused to deploy the drone. You maintained that distance fundamentally removes moral duty. You saved the child at your feet but let the child on the monitor die. This avoids Singer's trap, but requires you to defend why spatial coordinates dictate human worth.";
+                    }
+                } else if (objection === "Bystanders") {
+                    if (finalChoice === "Save_Anyway") {
+                        report += "<strong style='color:#e74c3c;'>Objection Defeated.</strong> You argued that because others don't donate, you shouldn't have to. But placed at a pond with inactive bystanders, you *still* waded in. Singer argues this proves the inaction of others does not lessen your individual duty under the Moderate Principle.";
+                    } else {
+                        report += "<strong style='color:#f39c12;'>The Conformist Route.</strong> You chose to let the child drown simply because the 50 other people did the same. You remained consistent, but at the cost of admitting your morality is dictated by the lowest common denominator of the crowd.";
+                    }
+                }
+
+                textElement.innerHTML = report;
+            } else {
+                textElement.innerText = currentScene.text;
+            }
+
+            currentScene.choices.forEach(choice => {
+                const btn = document.createElement("button");
+                btn.innerText = choice.text;
+                btn.onclick = () => {
+                    if (index !== 7) studentChoices.push({ scenario: currentScene.title, philosophy: choice.type });
+                    
+                    if (index === 0 && choice.type === "Save") {
+                        document.querySelector('.person.player')?.classList.add('wading');
+                        setTimeout(() => loadScenario(choice.nextScene), 1500);
+                    } else if (index === 5 && choice.type === "Deploy") {
+                        document.getElementById('rescue-drone')?.classList.add('deploying');
+                        setTimeout(() => loadScenario(choice.nextScene), 1500);
+                    } else if (index === 6 && choice.type === "Save_Anyway") {
+                        document.querySelector('.person.player')?.classList.add('wading');
+                        setTimeout(() => loadScenario(choice.nextScene), 1500);
+                    } else {
+                        loadScenario(choice.nextScene);
+                    }
+                };
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        loadScenario(0);
+    </script>
+
+</body>
+</html>
