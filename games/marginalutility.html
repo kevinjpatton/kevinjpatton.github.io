@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Within You Power</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            overflow: hidden;
+        }
+
+        #game-container {
+            position: relative;
+            box-shadow: 0 10px 40px rgba(235, 91, 37, 0.4);
+            border: 6px solid #eb5b25; /* Nike Orange border */
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #1a1a1a; /* Sleek athletic court */
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            text-shadow: 2px 2px 0 #000;
+            font-size: 22px;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        .ui-center {
+            display: flex;
+            gap: 40px;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        /* OxMarket Shop UI */
+        #shop-overlay {
+            background: #111; /* Sleek black pop-up */
+            color: #fff;
+            padding: 30px 40px;
+            border: 6px solid #eb5b25;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 20;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+            font-family: 'Courier New', Courier, monospace;
+            width: 60%;
+        }
+
+        #shop-overlay h2 {
+            margin-top: 0;
+            color: #eb5b25;
+            font-size: 32px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .shop-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .shop-buttons button, .main-btn {
+            background: #eb5b25;
+            color: white;
+            border: 2px solid #fff;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: inherit;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+        }
+
+        .shop-buttons button:hover:not(:disabled), .main-btn:hover {
+            background: #fff;
+            color: #eb5b25;
+            transform: scale(1.05);
+        }
+
+        .shop-buttons button:disabled {
+            background: #222;
+            color: #555;
+            cursor: not-allowed;
+            border-color: #222;
+        }
+
+        .hidden { display: none !important; }
+
+        h1 { margin: 0 0 10px 0; font-size: 48px; color: #eb5b25; text-shadow: 3px 3px 0 #333; text-align: center; }
+        p { margin: 10px 0; font-size: 18px; text-align: center; max-width: 600px; line-height: 1.5;}
+        
+        .main-btn {
+            margin-top: 30px;
+            padding: 12px 24px;
+            font-size: 22px;
+            background-color: #eb5b25;
+            color: #fff;
+            border: 3px solid #fff;
+        }
+        
+        .main-btn:active { transform: scale(0.95); }
+
+        .controls-info {
+            margin-top: 15px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        /* Singer Transition Screen Styling */
+        .singer-container {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            background: #222;
+            padding: 30px;
+            border: 4px solid #555;
+            border-radius: 10px;
+            max-width: 700px;
+        }
+
+        .singer-portrait {
+            width: 120px;
+            height: 140px;
+            background: #ffcc99;
+            border-radius: 60px 60px 20px 20px;
+            position: relative;
+            flex-shrink: 0;
+            border: 4px solid #000;
+            box-shadow: inset -10px -10px 0 rgba(0,0,0,0.1);
+        }
+        
+        /* Sweater */
+        .singer-portrait::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 40px;
+            background: #708090; border-radius: 0 0 15px 15px; border-top: 4px solid #000;
+        }
+
+        /* Glasses */
+        .glasses {
+            position: absolute; top: 45px; left: 10px; width: 40px; height: 30px;
+            border: 4px solid #111; border-radius: 50%;
+        }
+        .glasses.right { left: 60px; }
+        .glasses-bridge {
+            position: absolute; top: 58px; left: 50px; width: 10px; height: 4px; background: #111;
+        }
+        /* Eyes */
+        .eye {
+            position: absolute; top: 55px; left: 25px; width: 6px; height: 6px; background: #000; border-radius: 50%;
+        }
+        .eye.right { left: 75px; }
+
+        .quote-box {
+            font-size: 20px;
+            color: #00ffcc;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        /* Touch controls for mobile */
+        #touch-controls {
+            display: none;
+            width: 800px;
+            max-width: 100%;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 850px) {
+            #game-container { width: 100%; border: none; border-radius: 0; }
+            canvas { width: 100%; height: auto; }
+            #touch-controls { display: flex; }
+            #shop-overlay { width: 85%; padding: 20px; }
+            .ui-center { gap: 15px; }
+            .singer-container { flex-direction: column; text-align: center; }
+        }
+        
+        .d-pad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 60px);
+            grid-template-rows: repeat(3, 60px);
+            gap: 5px;
+        }
+
+        .touch-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .touch-btn:active { background: rgba(255, 255, 255, 0.4); }
+        
+        #btn-up { grid-column: 2; grid-row: 1; }
+        #btn-left { grid-column: 1; grid-row: 2; }
+        #btn-right { grid-column: 3; grid-row: 2; }
+        #btn-down { grid-column: 2; grid-row: 3; }
+
+        .action-pad {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 20px;
+        }
+
+        #btn-attack {
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            font-size: 28px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="800" height="480"></canvas>
+        <div class="ui-layer">
+            <div>LEVEL <span id="level-display" style="color:#fff;">1</span><br><span id="karma-display" style="color:#00ffcc;">0/2 SAVED</span></div>
+            <div class="ui-center">
+                <div>WEALTH <br><span id="coin-display" style="color:#ffb300;">00</span></div>
+                <div>NETS <br><span id="net-display" style="color:#00ffff;">00</span></div>
+                <div>STYLE <br><span id="style-display" style="color:#eb5b25;">00</span></div>
+                <div>LOST <br><span id="lost-display" style="color:#ff4500;">00</span></div>
+            </div>
+            <div>MAP <br><span id="map-display" style="color:#7f8c8d;">1-1</span></div>
+        </div>
+        
+        <div id="message-overlay" class="overlay">
+            <h1 id="overlay-title">JUST SAVE THEM</h1>
+            <p id="overlay-desc">You are in a corporate athletic wasteland. Collect Wealth.<br><br>Find the <b>OxMarket Pop-up</b> and buy Nets for 10 Wealth. Use Nets (Spacebar) near drowning children in the neon energy-sludge to save them!<br><br>Beware the <b>Wooshies</b>! They roam the courts, stealing Wealth in exchange for superficial Style.</p>
+            <button id="start-btn" class="main-btn">ENTER THE COURT</button>
+        </div>
+
+        <div id="transition-overlay" class="overlay hidden">
+            <div class="singer-container">
+                <div class="singer-portrait">
+                    <div class="glasses"></div>
+                    <div class="glasses right"></div>
+                    <div class="glasses-bridge"></div>
+                    <div class="eye"></div>
+                    <div class="eye right"></div>
+                </div>
+                <div>
+                    <h2 style="margin-top:0; color:#ffb300;">Level Complete</h2>
+                    <div class="quote-box">"You successfully prevented bad things from happening without sacrificing anything of moral worth."</div>
+                </div>
+            </div>
+            <button id="continue-btn" class="main-btn">PROCEED TO NEXT AREA</button>
+        </div>
+
+        <div id="tutorial-overlay" class="overlay hidden">
+            <h1 id="tutorial-title" style="color:#00f3ff;">TUTORIAL</h1>
+            <p id="tutorial-desc">Tutorial text goes here.</p>
+            <button id="tutorial-btn" class="main-btn">UNDERSTOOD</button>
+        </div>
+
+        <div id="shop-overlay" class="hidden">
+            <h2>The OxMarket Pop-up</h2>
+            <p id="shop-msg">Welcome, un-styled traveler! What will you prioritize today?</p>
+            <div class="shop-buttons">
+                <button id="btn-buy-net">Buy Net (10 Wealth)</button>
+                <button id="btn-buy-shoes">Buy Shoes (10 Wealth)</button>
+                <button id="btn-leave">Leave Pop-up</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="touch-controls">
+        <div class="d-pad-grid">
+            <div class="touch-btn" id="btn-up">▲</div>
+            <div class="touch-btn" id="btn-left">◀</div>
+            <div class="touch-btn" id="btn-right">▶</div>
+            <div class="touch-btn" id="btn-down">▼</div>
+        </div>
+        <div class="action-pad">
+            <div class="touch-btn" id="btn-attack">⚔️</div>
+        </div>
+    </div>
+
+    <div class="controls-info">
+        Walk into the edges of the screen to explore new areas. Wealth respawns over time!
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const overlay = document.getElementById('message-overlay');
+        const transitionOverlay = document.getElementById('transition-overlay');
+        const shopOverlay = document.getElementById('shop-overlay');
+        const tutorialOverlay = document.getElementById('tutorial-overlay');
+        
+        const startBtn = document.getElementById('start-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        const tutorialBtn = document.getElementById('tutorial-btn');
+        const btnBuyNet = document.getElementById('btn-buy-net');
+        const btnBuyShoes = document.getElementById('btn-buy-shoes');
+        const btnLeave = document.getElementById('btn-leave');
+        
+        const overlayTitle = document.getElementById('overlay-title');
+        const overlayDesc = document.getElementById('overlay-desc');
+        const shopMsg = document.getElementById('shop-msg');
+        const tutorialTitle = document.getElementById('tutorial-title');
+        const tutorialDesc = document.getElementById('tutorial-desc');
+        
+        const levelDisplay = document.getElementById('level-display');
+        const karmaDisplay = document.getElementById('karma-display');
+        const coinDisplay = document.getElementById('coin-display');
+        const netDisplay = document.getElementById('net-display');
+        const styleDisplay = document.getElementById('style-display');
+        const lostDisplay = document.getElementById('lost-display');
+        const mapDisplay = document.getElementById('map-display');
+
+        // Game Constants
+        const TILE_SIZE = 40;
+        const DONATION_COST = 10;
+        const WOOSHIE_TAX = 5;
+        const TARGETS = [2, 4, 6]; // Targets for Level 1, 2, 3
+        const MAX_LEVELS = 3;
+        
+        // Game State
+        let gameState = 'START'; // START, PLAYING, SHOP, TRANSITION, WIN, TUTORIAL
+        let currentLevel = 1;
+        let karma = 0;
+        let coins = 0;
+        let nets = 0;
+        let style = 0;
+        let lostCount = 0;
+        let seenChildTutorial = false;
+        let seenWooshieTutorial = false;
+        let floatingTexts = [];
+        let enemiesList = [];
+        let childrenList = [];
+        let npcsList = [];
+        let cameraX = 0;
+        let cameraY = 480; 
+        let animationFrameId;
+        let time = 0;
+
+        // Player tunic colors based on style level
+        const styleColors = ['#556b2f', '#3e9c3e', '#1e90ff', '#ff1493', '#ffd700', '#eb5b25', '#ffffff'];
+
+        // Input tracking
+        const keys = { up: false, down: false, left: false, right: false, attack: false };
+
+        // --- Level Design (Wasteland 2x2 Grids) ---
+        // . = Ash, T = Shoebox Stack, W = Energy Sludge, C = Wealth, M = Glass Wall, O = Pop-up Door, N = Wooshie, S = Spawn, D = Drowning Child, P = NPC
+        
+        const level1Map = [ // 2 Children (No Wooshies)
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+            "T..C........T.......T........C.........T",
+            "T.....W.....T...C...T...MMMMM......C...T",
+            "T.T...W.................M...M..........T",
+            "T..C..WW................MMOMM......T...T",
+            "T.....DW.......C......P............T...T", // D 1
+            "T......W...............................T",
+            "T......W...C.................C.........T",
+            "T......W........T...T..C...........T...T",
+            "T..C...WW.......T...T..................T",
+            "T......DW.......T...T..............C...T", // D 2
+            "TTTTT.TTTTTTTTTTT...TTTTTTTTTTT.TTTTTTTT",
+            "TTTTT.TTTTTTTTTTT...TTTTTTTTTTT.TTTTTTTT",
+            "T...............T...T..C.......C.......T",
+            "T......S........T...T..................T",
+            "T...............T...T..............C...T",
+            "T...C.......C.......T...C..P...........T",
+            "T..........................TTT.........T",
+            "T........T..........C......T.T..C......T",
+            "T...C....T......C..........TTT.........T",
+            "T........T.................T.T.........T",
+            "T.......................C..TTT.........T",
+            "T...C.......C..............C.......C...T",
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT" 
+        ];
+
+        const level2Map = [ // 4 Children
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+            "T..C..W.....T.......T........C.........T",
+            "T.....W.....T...C...T...MMMMM......C...T",
+            "T.T...W.........N.......M...M..N.......T",
+            "T..C..WW............P...MMOMM......T...T",
+            "T.....DW.......C...................T...T", // D 1
+            "T..N...W...............................T",
+            "T......W...C.................C.........T",
+            "T.....DW........T...T..C...........T...T", // D 2
+            "T..C...WW.......T...T.........N........T",
+            "T.......W.......T...T..............C...T", 
+            "TTTTT.TTTTTTTTTTT...TTTTTTTTTTT.TTTTTTTT",
+            "TTTTT.TTTTTTTTTTT...TTTTTTTTTTT.TTTTTTTT",
+            "T.........P.....T...T..C.......C.......T",
+            "T......S........T...T......N...........T",
+            "T...............T...T..............C...T",
+            "T...C.......C.......T...C..............T",
+            "T..........................TTT.........T",
+            "T........T..........C...N..T.T..C..N...T",
+            "T...C....T......C...WWDWW..TTT.........T", // D 3
+            "T........T..........WWWWW..T.T.........T",
+            "T...................WWDWW..TTT.........T", // D 4
+            "T...C.......C......P.......C.......C...T",
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT" 
+        ];
+
+        const level3Map = [ // 6 Children
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+            "T..C........T.......T........C.........T",
+            "T.....W.....T...C...T...MMMMM......C...T",
+            "T.T..DW.........N.......M...M..N.......T", // D 1
+            "T..C..WW................MMOMM......T...T",
+            "T.....DW.......C......WWDW.........T...T", // D 2, D 3
+            "T..N...W......P.......WWWW.............T",
+            "T......W...C..........WWDWW..C.........T", // D 4
+            "T......W........T...T..C...........T...T", 
+            "T..C...WW.......T...T.........N........T",
+            "T.......W.......T...T..............C...T", 
+            "TTTTT.TTTTTTTTTTT...TTTTTTTTTTT.TTTTTTTT",
+            "TTTTT.TTTTTTTTTTT...TTTTTTTTTTT.TTTTTTTT",
+            "T...............T...T..C.......C.......T",
+            "T......S........T...T......N...P.......T",
+            "T...............T...T..............C...T",
+            "T...C.......C.......T...C..............T",
+            "T..........................TTT.........T",
+            "T........T..........C...N..T.T..C..N...T",
+            "T...C....T......C...WWDWW..TTT.........T", // D 5
+            "T........T..........WWWWW..T.T.........T",
+            "T.......P...........WWDWW..TTT.........T", // D 6
+            "T...C.......C..............C.......C...T",
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT" 
+        ];
+
+        let blocks = [];
+        let coinsList = [];
+
+        // --- Entities ---
+        class Entity {
+            constructor(x, y, width, height) {
+                this.x = x; this.y = y; this.width = width; this.height = height;
+            }
+            getBounds() {
+                return { left: this.x, right: this.x + this.width, top: this.y, bottom: this.y + this.height };
+            }
+            checkCollision(other) {
+                const b1 = this.getBounds(); const b2 = other.getBounds();
+                return b1.left < b2.right && b1.right > b2.left && b1.top < b2.bottom && b1.bottom > b2.top;
+            }
+        }
+
+        class Player extends Entity {
+            constructor(x, y) {
+                super(x, y, TILE_SIZE * 0.7, TILE_SIZE * 0.7);
+                this.speed = 4;
+                this.vx = 0; this.vy = 0;
+                this.facing = 'down'; 
+                this.walkCycle = 0;
+                this.invulnTimer = 0;
+                this.attackTimer = 0;
+                this.attackCooldown = 0;
+            }
+
+            getAttackBounds() {
+                let reach = 35;
+                let thick = 20; 
+                let b = { x: this.x, y: this.y, width: this.width, height: this.height };
+                
+                if (this.facing === 'up') { b.y -= reach; b.height = reach; b.x += this.width/2 - thick/2; b.width = thick; }
+                if (this.facing === 'down') { b.y += this.height; b.height = reach; b.x += this.width/2 - thick/2; b.width = thick; }
+                if (this.facing === 'left') { b.x -= reach; b.width = reach; b.y += this.height/2 - thick/2; b.height = thick; }
+                if (this.facing === 'right') { b.x += this.width; b.width = reach; b.y += this.height/2 - thick/2; b.height = thick; }
+                return b;
+            }
+
+            update(blocks, isCameraTransitioning, mapWidth, mapHeight) {
+                if (this.invulnTimer > 0) this.invulnTimer--;
+                if (this.attackTimer > 0) this.attackTimer--;
+                if (this.attackCooldown > 0) this.attackCooldown--;
+
+                if (isCameraTransitioning) {
+                    this.walkCycle += 0.1;
+                    return; 
+                }
+
+                if (keys.attack && this.attackCooldown <= 0 && this.attackTimer <= 0) {
+                    this.attackTimer = 15; 
+                    this.attackCooldown = 45; 
+                    this.hasSwung = true; 
+                }
+
+                this.vx = 0; this.vy = 0;
+
+                if (keys.up) { this.vy = -this.speed; this.facing = 'up'; }
+                if (keys.down) { this.vy = this.speed; this.facing = 'down'; }
+                if (keys.left) { this.vx = -this.speed; this.facing = 'left'; }
+                if (keys.right) { this.vx = this.speed; this.facing = 'right'; }
+
+                if (this.vx !== 0 && this.vy !== 0) {
+                    const factor = 1 / Math.sqrt(2);
+                    this.vx *= factor; this.vy *= factor;
+                }
+
+                if (this.vx !== 0 || this.vy !== 0) this.walkCycle += 0.2;
+                else this.walkCycle = 0;
+
+                this.x += this.vx;
+                this.handleCollisions(blocks, true);
+
+                this.y += this.vy;
+                this.handleCollisions(blocks, false);
+
+                if (this.x < 0) this.x = 0;
+                if (this.y < 0) this.y = 0;
+                if (this.x > mapWidth - this.width) this.x = mapWidth - this.width;
+                if (this.y > mapHeight - this.height) this.y = mapHeight - this.height;
+            }
+
+            handleCollisions(blocks, isX) {
+                for (let b of blocks) {
+                    if (b.solid && this.checkCollision(b)) {
+                        if (b.type === 'O') {
+                            if (isX) this.x -= this.vx; else this.y -= this.vy;
+                            if (gameState === 'PLAYING') openShop();
+                            return;
+                        }
+
+                        if (isX) {
+                            if (this.vx > 0) this.x = b.x - this.width;
+                            else if (this.vx < 0) this.x = b.x + b.width;
+                        } else {
+                            if (this.vy > 0) this.y = b.y - this.height;
+                            else if (this.vy < 0) this.y = b.y + b.height;
+                        }
+                    }
+                }
+            }
+
+            draw(ctx) {
+                ctx.save();
+                
+                if (this.invulnTimer > 0 && Math.floor(time * 15) % 2 === 0) {
+                    ctx.globalAlpha = 0.5; 
+                }
+
+                ctx.translate(this.x, this.y);
+                const bob = Math.abs(Math.sin(this.walkCycle)) * 4;
+                ctx.translate(0, -bob);
+
+                let colorIndex = Math.min(Math.floor(style / 2), styleColors.length - 1);
+                ctx.fillStyle = styleColors[colorIndex];
+                ctx.fillRect(0, 5, this.width, this.height - 5);
+
+                ctx.fillStyle = '#ffcc99'; 
+                ctx.fillRect(4, -5, this.width - 8, 14);
+
+                ctx.fillStyle = styleColors[colorIndex];
+                ctx.beginPath();
+                ctx.moveTo(-2, 2); ctx.lineTo(this.width/2, -12); ctx.lineTo(this.width + 2, 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#3a2618';
+                ctx.fillRect(0, this.height/2 + 2, this.width, 4);
+                ctx.fillStyle = '#8f9779'; // Dull buckle
+                ctx.fillRect(this.width/2 - 3, this.height/2 + 1, 6, 6);
+
+                ctx.fillStyle = '#000';
+                if (this.facing === 'down') {
+                    ctx.fillRect(8, 0, 3, 3); ctx.fillRect(this.width - 11, 0, 3, 3);
+                } else if (this.facing === 'right') {
+                    ctx.fillRect(this.width - 8, 0, 3, 3);
+                } else if (this.facing === 'left') {
+                    ctx.fillRect(5, 0, 3, 3);
+                } 
+
+                if (this.attackTimer > 0) {
+                    let reach = 35; let thick = 10;
+                    let ax = 0, ay = 0, aw = 0, ah = 0;
+                    if (this.facing === 'up') { ax = this.width/2 - thick/2; ay = -reach; aw = thick; ah = reach; }
+                    if (this.facing === 'down') { ax = this.width/2 - thick/2; ay = this.height; aw = thick; ah = reach; }
+                    if (this.facing === 'left') { ax = -reach; ay = this.height/2 - thick/2; aw = reach; ah = thick; }
+                    if (this.facing === 'right') { ax = this.width; ay = this.height/2 - thick/2; aw = reach; ah = thick; }
+                    
+                    if (nets > 0) {
+                        ctx.fillStyle = 'rgba(0, 255, 255, 0.7)'; // Cyan net
+                        ctx.strokeStyle = '#5c3a21'; 
+                        ctx.lineWidth = 4;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(this.width/2, this.height/2);
+                        ctx.lineTo(ax + aw/2, ay + ah/2);
+                        ctx.stroke();
+                        
+                        ctx.beginPath();
+                        ctx.arc(ax + aw/2, ay + ah/2, 15, 0, Math.PI*2);
+                        ctx.fill();
+                        ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
+                    } else {
+                        // Rolled up ethics paper
+                        ctx.fillStyle = '#d7ccc8'; 
+                        ctx.strokeStyle = '#3e2723';
+                        ctx.lineWidth = 1;
+                        ctx.fillRect(ax, ay, aw, ah);
+                        ctx.strokeRect(ax, ay, aw, ah);
+                    }
+                }
+                ctx.restore();
+            }
+        }
+
+        class NPC extends Entity {
+            constructor(x, y) {
+                super(x, y, TILE_SIZE * 0.7, TILE_SIZE * 0.7);
+                this.talkCooldown = 0;
+            }
+
+            update(player, isCameraTransitioning) {
+                if (isCameraTransitioning) return;
+                if (this.talkCooldown > 0) this.talkCooldown--;
+
+                let dx = player.x - this.x;
+                let dy = player.y - this.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                
+                if (dist < TILE_SIZE * 3 && this.talkCooldown <= 0) {
+                    let msg = "";
+                    if (style < 3) {
+                        const bad = ["Ew, cheap clothes.", "Look at those rags.", "Zero drip.", "Are you broke?"];
+                        msg = bad[Math.floor(Math.random() * bad.length)];
+                    } else if (style < 7) {
+                        const mid = ["Nice kicks.", "Looking fresh.", "Okay, I see you.", "Decent fit."];
+                        msg = mid[Math.floor(Math.random() * mid.length)];
+                    } else {
+                        const good = ["Incredible style!", "Flawless drip!", "A fashion icon!", "Wow, those shoes!"];
+                        msg = good[Math.floor(Math.random() * good.length)];
+                    }
+                    floatingTexts.push(new FloatingText(this.x + this.width/2, this.y - 10, msg, "#00f3ff"));
+                    this.talkCooldown = 240; // 4 seconds cooldown before speaking again
+                }
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                // Pedestrian look
+                ctx.fillStyle = '#555'; 
+                ctx.fillRect(0, 5, this.width, this.height - 5);
+                ctx.fillStyle = '#ffcc99'; 
+                ctx.fillRect(4, -5, this.width - 8, 14);
+                // Sunglasses
+                ctx.fillStyle = '#000';
+                ctx.fillRect(4, 0, this.width - 8, 4);
+
+                ctx.restore();
+            }
+        }
+
+        class Child extends Entity {
+            constructor(x, y) {
+                super(x, y + 10, TILE_SIZE * 0.6, TILE_SIZE * 0.6); 
+                this.saved = false;
+                this.bobOffset = Math.random() * Math.PI * 2;
+                this.deathTimer = 1800; // 30 seconds
+                this.dead = false;
+                this.deadTimer = 0;
+            }
+
+            update(isCameraTransitioning, player) {
+                if (this.saved || isCameraTransitioning) return;
+                
+                if (this.dead) {
+                    this.deadTimer--;
+                    if (this.deadTimer <= 0) {
+                        this.dead = false;
+                        this.deathTimer = 1800; // Reset death timer (Another child fell in)
+                    }
+                    return;
+                }
+
+                this.bobOffset += 0.05;
+                this.deathTimer--;
+                
+                if (this.deathTimer <= 0) {
+                    this.dead = true;
+                    this.deadTimer = 300; // Show skull for 5 seconds before a new child replaces them
+                    lostCount++;
+                    floatingTexts.push(new FloatingText(this.x + this.width/2, this.y, "LOST", "#ff0000"));
+                    // Guilt-trip alert right over the player
+                    floatingTexts.push(new FloatingText(player.x + player.width/2, player.y - 30, "A CHILD DROWNED!", "#ff0000"));
+                    updateUI();
+                }
+            }
+
+            draw(ctx) {
+                if (this.saved) return;
+                ctx.save();
+                ctx.translate(this.x, this.y);
+
+                if (this.dead) {
+                    ctx.fillStyle = '#ff0000';
+                    ctx.font = '24px Arial';
+                    ctx.fillText('☠', this.width/2 - 12, this.height/2 + 8);
+                    ctx.restore();
+                    return;
+                }
+                
+                let bob = Math.sin(this.bobOffset) * 2;
+                ctx.translate(0, bob);
+                
+                if (this.deathTimer < 300 && Math.floor(time * 15) % 2 === 0) {
+                    ctx.fillStyle = '#ff4500'; // Flash warning
+                } else {
+                    ctx.fillStyle = '#ffcc99';
+                }
+                ctx.beginPath(); 
+                ctx.arc(this.width/2, this.height/2, 10, 0, Math.PI*2); 
+                ctx.fill();
+                
+                ctx.strokeStyle = '#ffcc99'; 
+                ctx.lineWidth = 3;
+                ctx.beginPath(); 
+                ctx.moveTo(-5, this.height/2 - 5 + Math.sin(this.bobOffset * 2)*3); 
+                ctx.lineTo(5, this.height/2 + 5); 
+                ctx.stroke();
+                
+                ctx.beginPath(); 
+                ctx.moveTo(this.width + 5, this.height/2 - 5 + Math.cos(this.bobOffset * 2)*3); 
+                ctx.lineTo(this.width - 5, this.height/2 + 5); 
+                ctx.stroke();
+                
+                ctx.fillStyle = '#000';
+                ctx.fillRect(this.width/2 - 4, this.height/2 - 2, 2, 3); 
+                ctx.fillRect(this.width/2 + 2, this.height/2 - 2, 2, 3);
+                ctx.fillRect(this.width/2 - 2, this.height/2 + 4, 4, 3); 
+                
+                ctx.restore();
+            }
+        }
+
+        class Wooshie extends Entity {
+            constructor(x, y) {
+                super(x, y, TILE_SIZE * 0.8, TILE_SIZE * 0.8);
+                this.speed = 1.3; 
+                this.vx = this.speed; this.vy = 0;
+                this.changeDirTimer = 0;
+                this.stunTimer = 0;
+                this.speechCooldown = Math.floor(Math.random() * 120);
+            }
+
+            update(blocks, player, isCameraTransitioning) {
+                if (isCameraTransitioning) return; 
+
+                if (this.stunTimer > 0) {
+                    this.stunTimer--;
+                    return; 
+                }
+
+                this.speechCooldown--;
+                if (this.speechCooldown <= 0) {
+                    const phrases = ["Buy new shoes!", "Spend! Spend! Spend!", "Consume!", "Just buy it!", "You need drip!"];
+                    let msg = phrases[Math.floor(Math.random() * phrases.length)];
+                    floatingTexts.push(new FloatingText(this.x + this.width/2, this.y - 15, msg, "#eb5b25"));
+                    this.speechCooldown = 120 + Math.random() * 180; // Speak every 2-5 seconds
+                }
+
+                let dx = player.x - this.x;
+                let dy = player.y - this.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                
+                let sameScreen = Math.floor(this.x / 800) === Math.floor(player.x / 800) &&
+                                 Math.floor(this.y / 480) === Math.floor(player.y / 480);
+
+                if (dist < TILE_SIZE * 6 && sameScreen) {
+                    this.vx = (dx / dist) * this.speed;
+                    this.vy = (dy / dist) * this.speed;
+                } else {
+                    this.changeDirTimer--;
+                    if (this.changeDirTimer <= 0) {
+                        const dirs = [
+                            {vx: this.speed, vy: 0}, {vx: -this.speed, vy: 0},
+                            {vx: 0, vy: this.speed}, {vx: 0, vy: -this.speed}
+                        ];
+                        let dir = dirs[Math.floor(Math.random() * dirs.length)];
+                        this.vx = dir.vx; this.vy = dir.vy;
+                        this.changeDirTimer = 60 + Math.random() * 60; 
+                    }
+                }
+
+                this.x += this.vx;
+                if (this.handleCollisions(blocks, true)) {
+                    this.vx *= -1; this.changeDirTimer = 30;
+                }
+
+                this.y += this.vy;
+                if (this.handleCollisions(blocks, false)) {
+                    this.vy *= -1; this.changeDirTimer = 30;
+                }
+            }
+
+            handleCollisions(blocks, isX) {
+                let hit = false;
+                for (let b of blocks) {
+                    if (b.solid && this.checkCollision(b)) {
+                        hit = true;
+                        if (isX) {
+                            if (this.vx > 0) this.x = b.x - this.width; else if (this.vx < 0) this.x = b.x + b.width;
+                        } else {
+                            if (this.vy > 0) this.y = b.y - this.height; else if (this.vy < 0) this.y = b.y + b.height;
+                        }
+                    }
+                }
+                
+                let roomStartX = Math.floor(this.x / 800) * 800;
+                let roomStartY = Math.floor(this.y / 480) * 480;
+                
+                if (this.x < roomStartX) { this.x = roomStartX; hit = true; }
+                if (this.x > roomStartX + 800 - this.width) { this.x = roomStartX + 800 - this.width; hit = true; }
+                if (this.y < roomStartY) { this.y = roomStartY; hit = true; }
+                if (this.y > roomStartY + 480 - this.height) { this.y = roomStartY + 480 - this.height; hit = true; }
+                
+                return hit;
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                if (this.stunTimer > 0) {
+                    ctx.globalAlpha = 0.5;
+                    ctx.fillStyle = '#ffff00';
+                    ctx.font = 'bold 16px Courier New';
+                    ctx.fillText('Zzz', this.width/2 - 12, -5);
+                }
+
+                let bounce = this.stunTimer > 0 ? 0 : Math.sin(time * 5 + this.x) * 3;
+                ctx.translate(0, bounce);
+                
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.ellipse(this.width/2, this.height - 8, this.width/2 - 2, 8, 0, 0, Math.PI*2);
+                ctx.fill();
+                ctx.fillRect(8, 6, 16, this.height - 14);
+
+                ctx.strokeStyle = '#eb5b25'; 
+                ctx.lineWidth = 4;
+                ctx.lineCap = "round";
+                ctx.beginPath();
+                ctx.moveTo(6, this.height / 2 + 2);
+                ctx.quadraticCurveTo(this.width / 2, this.height - 4, this.width - 6, this.height / 2 + 5);
+                ctx.stroke();
+
+                ctx.fillStyle = '#ff0000';
+                ctx.fillRect(10, 10, 4, 3);
+                ctx.fillRect(18, 10, 4, 3);
+
+                ctx.restore();
+            }
+        }
+
+        class Block extends Entity {
+            constructor(x, y, type) {
+                super(x, y, TILE_SIZE, TILE_SIZE);
+                this.type = type;
+                this.solid = ['T', 'W', 'M', 'O'].includes(type);
+                this.collected = false;
+                this.respawnTimer = 0;
+            }
+
+            update() {
+                if (this.type === 'C' && this.collected) {
+                    this.respawnTimer--;
+                    if (this.respawnTimer <= 0) {
+                        this.collected = false;
+                    }
+                }
+            }
+
+            draw(ctx) {
+                switch(this.type) {
+                    case 'T': // Shoebox Tower
+                        // Base orange box
+                        ctx.fillStyle = '#eb5b25'; 
+                        ctx.fillRect(this.x + 4, this.y + 10, 32, 30);
+                        // White Lid
+                        ctx.fillStyle = '#fff';
+                        ctx.fillRect(this.x + 2, this.y + 10, 36, 6);
+                        // Little Swoosh on the box
+                        ctx.strokeStyle = '#fff'; 
+                        ctx.lineWidth = 2;
+                        ctx.lineCap = "round";
+                        ctx.beginPath();
+                        ctx.moveTo(this.x + 10, this.y + 26);
+                        ctx.quadraticCurveTo(this.x + 20, this.y + 20, this.x + 30, this.y + 28);
+                        ctx.stroke();
+                        break;
+                    case 'W': // Energy Sludge
+                        ctx.fillStyle = '#00f3ff'; // Neon Cyan
+                        ctx.fillRect(this.x, this.y, this.width, this.height);
+                        // Electric waves
+                        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        let waveOffset = Math.sin(time*5 + this.x) * 3;
+                        ctx.moveTo(this.x + 5, this.y + 20 + waveOffset); 
+                        ctx.lineTo(this.x + 15, this.y + 15 - waveOffset);
+                        ctx.lineTo(this.x + 25, this.y + 20 + waveOffset); 
+                        ctx.lineTo(this.x + 35, this.y + 15 - waveOffset); 
+                        ctx.stroke();
+                        break;
+                    case 'M': // Corporate Glass Wall
+                        ctx.fillStyle = '#111'; // Dark glass
+                        ctx.fillRect(this.x, this.y, this.width, this.height);
+                        ctx.fillStyle = '#eb5b25'; // Orange trim
+                        ctx.fillRect(this.x, this.y, this.width, 2);
+                        ctx.fillRect(this.x, this.y + this.height - 2, this.width, 2);
+                        // Window reflections
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                        ctx.beginPath(); 
+                        ctx.moveTo(this.x, this.y + this.height); 
+                        ctx.lineTo(this.x + this.width, this.y); 
+                        ctx.lineTo(this.x + this.width, this.y + this.height); 
+                        ctx.fill();
+                        break;
+                    case 'O': // Pop-up Door
+                        ctx.fillStyle = '#222'; 
+                        ctx.fillRect(this.x, this.y, this.width, this.height);
+                        ctx.strokeStyle = '#00f3ff'; ctx.lineWidth = 3; 
+                        ctx.strokeRect(this.x + 4, this.y + 4, this.width - 8, this.height - 4);
+                        ctx.fillStyle = '#00f3ff'; ctx.font = '10px Courier New'; 
+                        ctx.fillText("SHOP", this.x + 8, this.y - 5);
+                        break;
+                    case 'C': // Coin
+                        if (!this.collected) {
+                            let spin = Math.sin(time * 3 + this.x);
+                            let w = 14 * Math.abs(spin);
+                            ctx.fillStyle = '#ffb300'; ctx.beginPath(); ctx.ellipse(this.x + 20, this.y + 20, w, 14, 0, 0, Math.PI*2); ctx.fill();
+                            ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.stroke();
+                        }
+                        break;
+                }
+            }
+        }
+
+        class FloatingText {
+            constructor(x, y, text, color) {
+                this.x = x; this.y = y; this.text = text; this.color = color;
+                this.life = 60; this.vy = -1;
+            }
+            update() { this.y += this.vy; this.life--; }
+            draw(ctx) {
+                ctx.fillStyle = this.color; ctx.globalAlpha = this.life / 60;
+                ctx.font = 'bold 18px Courier New'; ctx.textAlign = 'center';
+                ctx.fillText(this.text, this.x, this.y); ctx.globalAlpha = 1.0;
+            }
+        }
+
+        // --- Game Logic ---
+        function parseLevel(levelIndex) {
+            blocks = []; coinsList = []; enemiesList = []; childrenList = []; npcsList = [];
+            
+            let mapData = level1Map;
+            if (levelIndex === 2) mapData = level2Map;
+            if (levelIndex === 3) mapData = level3Map;
+
+            for (let y = 0; y < mapData.length; y++) {
+                let row = mapData[y];
+                for (let x = 0; x < row.length; x++) {
+                    let char = row[x];
+                    if (char === 'S') {
+                        // Only spawn player if they don't exist, OR if we are forcing a reset to start
+                        if (!player) player = new Player(x * TILE_SIZE, y * TILE_SIZE);
+                        else {
+                            player.x = x * TILE_SIZE;
+                            player.y = y * TILE_SIZE;
+                        }
+                    } else if (char === 'N') {
+                        enemiesList.push(new Wooshie(x * TILE_SIZE, y * TILE_SIZE));
+                    } else if (char === 'D') {
+                        blocks.push(new Block(x * TILE_SIZE, y * TILE_SIZE, 'W')); 
+                        childrenList.push(new Child(x * TILE_SIZE, y * TILE_SIZE));
+                    } else if (char === 'P') {
+                        npcsList.push(new NPC(x * TILE_SIZE, y * TILE_SIZE));
+                    } else if (char !== '.') {
+                        let b = new Block(x * TILE_SIZE, y * TILE_SIZE, char);
+                        blocks.push(b);
+                        if (char === 'C') coinsList.push(b);
+                    }
+                }
+            }
+            if (!player) player = new Player(100, 100); 
+            
+            cameraX = Math.floor((player.x + player.width/2) / canvas.width) * canvas.width;
+            cameraY = Math.floor((player.y + player.height/2) / canvas.height) * canvas.height;
+            updateUI();
+        }
+
+        function initGame() {
+            currentLevel = 1;
+            karma = 0; coins = 0; style = 0; nets = 0; lostCount = 0;
+            player = null; // Force new player spawn
+            floatingTexts = []; time = 0;
+            parseLevel(currentLevel);
+            gameState = 'PLAYING';
+            overlay.classList.add('hidden');
+            shopOverlay.classList.add('hidden');
+            transitionOverlay.classList.add('hidden');
+            
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            gameLoop();
+        }
+
+        function levelComplete() {
+            gameState = 'TRANSITION';
+            keys.up = keys.down = keys.left = keys.right = keys.attack = false;
+            
+            document.querySelector('#transition-overlay h2').style.color = "#ffb300";
+            
+            let quoteText = "";
+            if (lostCount === 0) {
+                quoteText = `"You successfully prevented bad things from happening without sacrificing anything of moral worth."`;
+            } else {
+                quoteText = `"You saved ${karma}, but allowed ${lostCount} to perish while you prioritized amassing wealth and achieving a Style level of ${style}. Was your aesthetic upgrade worth the cost of a human life?"`;
+            }
+
+            document.querySelector('.quote-box').innerHTML = `${quoteText}<br><br><span style="color:#fff; font-size:18px; font-style:normal;">Level Summary: ${karma} Saved | ${lostCount} Lost</span>`;
+
+            if (currentLevel === MAX_LEVELS) {
+                // Game completely finished
+                document.querySelector('#transition-overlay h2').innerText = "Quest Complete!";
+                continueBtn.innerText = "PLAY AGAIN";
+            } else {
+                document.querySelector('#transition-overlay h2').innerText = `Level ${currentLevel} Complete`;
+                continueBtn.innerText = "PROCEED TO NEXT AREA";
+            }
+            
+            transitionOverlay.classList.remove('hidden');
+        }
+
+        function nextLevel() {
+            if (currentLevel >= MAX_LEVELS) {
+                initGame(); // Restart entirely
+                return;
+            }
+            
+            currentLevel++;
+            karma = 0; // Reset saved children for this level
+            lostCount = 0; // Reset lost children for this level
+            // Coins, Nets, and Style carry over!
+            
+            transitionOverlay.classList.add('hidden');
+            parseLevel(currentLevel);
+            gameState = 'PLAYING';
+        }
+
+        function openTutorial(title, text) {
+            gameState = 'TUTORIAL';
+            keys.up = keys.down = keys.left = keys.right = keys.attack = false;
+            tutorialTitle.innerText = title;
+            tutorialDesc.innerHTML = text;
+            tutorialOverlay.classList.remove('hidden');
+        }
+
+        function closeTutorial() {
+            gameState = 'PLAYING';
+            tutorialOverlay.classList.add('hidden');
+        }
+
+        function openShop() {
+            gameState = 'SHOP';
+            keys.up = keys.down = keys.left = keys.right = false; 
+            shopOverlay.classList.remove('hidden');
+            updateShopUI();
+        }
+
+        function closeShop() {
+            gameState = 'PLAYING';
+            shopOverlay.classList.add('hidden');
+            player.y += 20; 
+        }
+
+        function updateShopUI() {
+            if (coins >= DONATION_COST) {
+                shopMsg.innerHTML = `You have <b style="color:#ffb300">${coins} Wealth</b>.<br>What will you prioritize today?`;
+                btnBuyNet.disabled = false;
+                btnBuyShoes.disabled = false;
+            } else {
+                shopMsg.innerHTML = `You only have <b style="color:#ffb300">${coins} Wealth</b>.<br>Both Nets and Shoes cost ${DONATION_COST} Wealth.`;
+                btnBuyNet.disabled = true;
+                btnBuyShoes.disabled = true;
+            }
+        }
+
+        function processBuyNet() {
+            if (coins >= DONATION_COST) {
+                coins -= DONATION_COST;
+                nets++;
+                updateUI();
+                
+                shopMsg.innerHTML = `<span style="color:#00ffcc; font-weight:bold;">Net Acquired!</span><br><br>Go to the sludge to save a life! You can buy more if you have Wealth.`;
+                updateShopUI(); 
+            }
+        }
+
+        function processBuyShoes() {
+            if (coins >= DONATION_COST) {
+                coins -= DONATION_COST;
+                style += 2; // Noticeable style jump
+                updateUI();
+                
+                shopMsg.innerHTML = `<span style="color:#eb5b25; font-weight:bold;">New Shoes Acquired!</span><br><br>You look much more stylish... but at what cost?`;
+                updateShopUI(); 
+            }
+        }
+
+        function updateUI() {
+            let target = TARGETS[currentLevel - 1];
+            levelDisplay.innerText = currentLevel;
+            karmaDisplay.innerText = `${karma}/${target} SAVED`;
+            coinDisplay.innerText = coins.toString().padStart(2, '0');
+            netDisplay.innerText = nets.toString().padStart(2, '0');
+            styleDisplay.innerText = style.toString().padStart(2, '0');
+            lostDisplay.innerText = lostCount.toString().padStart(2, '0');
+            
+            let mX = Math.floor(cameraX / 800) + 1;
+            let mY = Math.floor(cameraY / 480) + 1;
+            mapDisplay.innerText = `${mX}-${mY}`;
+        }
+
+        // --- Game Loop ---
+        function update() {
+            time += 0.05;
+
+            if (gameState === 'PLAYING') {
+                let mapWidth = 800 * 2;
+                let mapHeight = 480 * 2;
+                
+                let screenX = Math.floor((player.x + player.width/2) / canvas.width);
+                let screenY = Math.floor((player.y + player.height/2) / canvas.height);
+                let targetCamX = screenX * canvas.width;
+                let targetCamY = screenY * canvas.height;
+
+                let isCameraTransitioning = false;
+                if (Math.abs(cameraX - targetCamX) > 2 || Math.abs(cameraY - targetCamY) > 2) {
+                    isCameraTransitioning = true;
+                    cameraX += (targetCamX - cameraX) * 0.1;
+                    cameraY += (targetCamY - cameraY) * 0.1;
+                } else {
+                    cameraX = targetCamX;
+                    cameraY = targetCamY;
+                }
+                updateUI();
+
+                player.update(blocks, isCameraTransitioning, mapWidth, mapHeight);
+                for (let b of blocks) b.update();
+                for (let npc of npcsList) npc.update(player, isCameraTransitioning);
+                for (let c of childrenList) c.update(isCameraTransitioning, player);
+
+                // Check for Drowning Child Encounter Tutorial
+                if (!seenChildTutorial && childrenList.length > 0) {
+                    for (let c of childrenList) {
+                        let sameScreen = Math.floor(c.x / 800) === Math.floor(player.x / 800) &&
+                                         Math.floor(c.y / 480) === Math.floor(player.y / 480);
+                        
+                        if (sameScreen) {
+                            seenChildTutorial = true;
+                            openTutorial("A CHILD IS DROWNING!", "A child is drowning in the toxic energy sludge! They will die if you do not help them soon.<br><br>You cannot reach them empty-handed. Find the <b>OxMarket Pop-up</b> and use your Wealth to buy a Rescue Net!");
+                            break;
+                        }
+                    }
+                }
+
+                // Check for Wooshie Encounter Tutorial
+                if (!seenWooshieTutorial && enemiesList.length > 0) {
+                    for (let e of enemiesList) {
+                        let dx = player.x - e.x; let dy = player.y - e.y;
+                        let sameScreen = Math.floor(e.x / 800) === Math.floor(player.x / 800) &&
+                                         Math.floor(e.y / 480) === Math.floor(player.y / 480);
+                                         
+                        if (sameScreen && Math.sqrt(dx*dx + dy*dy) < TILE_SIZE * 7) {
+                            seenWooshieTutorial = true;
+                            openTutorial("BEWARE THE WOOSHIES", "These corporate monsters roam the courts.<br><br>If they catch you, they will forcefully take your Wealth in exchange for giving you superficial <b>Style</b>.<br><br>Use SPACE to stun them, or avoid them so you can save your Wealth to help others!");
+                            break;
+                        }
+                    }
+                }
+
+                // Collect Coins
+                for (let c of coinsList) {
+                    if (!c.collected && player.checkCollision(c)) {
+                        c.collected = true;
+                        c.respawnTimer = 600; 
+                        coins++;
+                        floatingTexts.push(new FloatingText(c.x + 20, c.y, "+1 WEALTH", "#ffb300"));
+                        updateUI();
+                    }
+                }
+
+                for (let e of enemiesList) e.update(blocks, player, isCameraTransitioning);
+                
+                // Combat & Saving
+                if (player.attackTimer > 0 && player.hasSwung) {
+                    let attackBounds = player.getAttackBounds();
+                    let attackBox = new Entity(attackBounds.x, attackBounds.y, attackBounds.width, attackBounds.height);
+                    
+                    for (let e of enemiesList) {
+                        if (e.stunTimer <= 0 && attackBox.checkCollision(e)) {
+                            e.stunTimer = 180; 
+                            floatingTexts.push(new FloatingText(e.x + e.width/2, e.y - 10, "STUNNED!", "#ffff00"));
+                        }
+                    }
+
+                    for (let c of childrenList) {
+                        if (!c.saved && attackBox.checkCollision(c)) {
+                            if (nets > 0) {
+                                c.saved = true;
+                                nets--;
+                                karma++;
+                                floatingTexts.push(new FloatingText(c.x + 20, c.y, "SAVED!", "#00ffcc"));
+                                updateUI();
+                                
+                                let currentTarget = TARGETS[currentLevel - 1];
+                                if (karma >= currentTarget) {
+                                    setTimeout(levelComplete, 800); 
+                                }
+                            } else {
+                                floatingTexts.push(new FloatingText(c.x + 20, c.y, "NEED NET!", "#ff4500"));
+                            }
+                        }
+                    }
+                    player.hasSwung = false; 
+                }
+
+                // Wooshie Tax
+                for (let e of enemiesList) {
+                    if (player.invulnTimer === 0 && e.stunTimer <= 0 && player.checkCollision(e)) {
+                        let stolen = Math.min(WOOSHIE_TAX, coins); 
+                        coins -= stolen;
+                        style += 1; 
+                        
+                        let msg = stolen > 0 ? `-${stolen} WEALTH / +1 STYLE` : `NO WEALTH / +1 STYLE`;
+                        floatingTexts.push(new FloatingText(player.x + player.width/2, player.y - 15, msg, "#eb5b25"));
+                        updateUI();
+                        
+                        player.invulnTimer = 90; 
+                    }
+                }
+            }
+
+            for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                floatingTexts[i].update();
+                if (floatingTexts[i].life <= 0) floatingTexts.splice(i, 1);
+            }
+        }
+
+        function draw() {
+            ctx.fillStyle = '#1a1a1a'; // Dark athletic court background
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.translate(-Math.floor(cameraX), -Math.floor(cameraY));
+
+            // Grid - Athletic Court Lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.lineWidth = 2;
+            let startX = Math.floor(cameraX / TILE_SIZE) * TILE_SIZE;
+            let startY = Math.floor(cameraY / TILE_SIZE) * TILE_SIZE;
+            for(let x = startX; x < cameraX + canvas.width + TILE_SIZE; x += TILE_SIZE) {
+                ctx.beginPath(); ctx.moveTo(x, cameraY); ctx.lineTo(x, cameraY + canvas.height); ctx.stroke();
+            }
+            for(let y = startY; y < cameraY + canvas.height + TILE_SIZE; y += TILE_SIZE) {
+                ctx.beginPath(); ctx.moveTo(cameraX, y); ctx.lineTo(cameraX + canvas.width, y); ctx.stroke();
+            }
+
+            // Floor Blocks (Water)
+            for (let b of blocks) {
+                if (b.type === 'W' && b.x + b.width > cameraX && b.x < cameraX + canvas.width &&
+                    b.y + b.height > cameraY && b.y < cameraY + canvas.height) {
+                    b.draw(ctx);
+                }
+            }
+
+            // Coins
+            for (let b of coinsList) {
+                if (!b.collected && b.x + b.width > cameraX && b.x < cameraX + canvas.width &&
+                    b.y + b.height > cameraY && b.y < cameraY + canvas.height) {
+                    b.draw(ctx);
+                }
+            }
+
+            // Children
+            for (let c of childrenList) {
+                if (c.x + c.width > cameraX && c.x < cameraX + canvas.width &&
+                    c.y + c.height > cameraY && c.y < cameraY + canvas.height) {
+                    c.draw(ctx);
+                }
+            }
+
+            for (let npc of npcsList) {
+                if (npc.x + npc.width > cameraX && npc.x < cameraX + canvas.width &&
+                    npc.y + npc.height > cameraY && npc.y < cameraY + canvas.height) {
+                    npc.draw(ctx);
+                }
+            }
+
+            player.draw(ctx);
+
+            for (let e of enemiesList) {
+                if (e.x + e.width > cameraX && e.x < cameraX + canvas.width &&
+                    e.y + e.height > cameraY && e.y < cameraY + canvas.height) {
+                    e.draw(ctx);
+                }
+            }
+
+            // Solid blocks (Trees, Walls)
+            for (let b of blocks) {
+                if (b.type !== 'C' && b.type !== 'W' && b.x + b.width > cameraX && b.x < cameraX + canvas.width &&
+                    b.y + b.height > cameraY && b.y < cameraY + canvas.height) {
+                    b.draw(ctx);
+                }
+            }
+
+            for (let ft of floatingTexts) ft.draw(ctx);
+
+            ctx.restore();
+            
+            if (gameState === 'SHOP') {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        // --- Input Handling ---
+        function handleKeyDown(e) {
+            if (gameState !== 'PLAYING') return;
+            if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = true;
+            if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.down = true;
+            if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true;
+            if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true;
+            if (e.code === 'Space' || e.code === 'KeyF') keys.attack = true;
+            if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) e.preventDefault();
+        }
+
+        function handleKeyUp(e) {
+            if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = false;
+            if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.down = false;
+            if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false;
+            if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
+            if (e.code === 'Space' || e.code === 'KeyF') keys.attack = false;
+        }
+
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+
+        // Touch Controls
+        const setupTouch = (id, key) => {
+            const el = document.getElementById(id);
+            const trigger = (e, val) => { e.preventDefault(); keys[key] = val; };
+            el.addEventListener('touchstart', e => trigger(e, true));
+            el.addEventListener('touchend', e => trigger(e, false));
+            el.addEventListener('mousedown', e => trigger(e, true));
+            el.addEventListener('mouseup', e => trigger(e, false));
+            el.addEventListener('mouseleave', e => trigger(e, false));
+        };
+
+        setupTouch('btn-up', 'up'); setupTouch('btn-down', 'down');
+        setupTouch('btn-left', 'left'); setupTouch('btn-right', 'right');
+        setupTouch('btn-attack', 'attack');
+
+        startBtn.addEventListener('click', initGame);
+        continueBtn.addEventListener('click', nextLevel);
+        tutorialBtn.addEventListener('click', closeTutorial);
+        btnBuyNet.addEventListener('click', processBuyNet);
+        btnBuyShoes.addEventListener('click', processBuyShoes);
+        btnLeave.addEventListener('click', closeShop);
+
+        // Initial draw
+        ctx.fillStyle = '#1a1a1a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    </script>
+</body>
+</html>
