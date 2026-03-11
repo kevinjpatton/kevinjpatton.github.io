@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marginal Utility - The Game</title>
+    <title>Marginal Utility</title>
     <style>
         body {
             margin: 0;
@@ -257,7 +257,6 @@
             height: 70px;
             font-size: 28px;
         }
-
     </style>
 </head>
 <body>
@@ -272,12 +271,14 @@
                 <div>STYLE <br><span id="style-display" style="color:#eb5b25;">00</span></div>
                 <div>LOST <br><span id="lost-display" style="color:#ff4500;">00</span></div>
             </div>
-            <div>MAP <br><span id="map-display" style="color:#7f8c8d;">1-1</span></div>
+            <div style="text-align: right;">
+                MAP <br><span id="map-display" style="color:#7f8c8d;">1-1</span>
+            </div>
         </div>
         
         <div id="message-overlay" class="overlay">
             <h1 id="overlay-title">MARGINAL UTILITY</h1>
-            <p id="overlay-desc">You find yourself in distant land.<br><br>Corporate interests influence everything, and the acquisition of wealth is paramount. Explore this world and the values therein.</p>
+            <p id="overlay-desc">You find yourself in a distant land. Corporate interests influence everything, and the acquisition of wealth is paramount. Explore this world and the values therein.</p>
             <button id="start-btn" class="main-btn">BEGIN</button>
         </div>
 
@@ -304,6 +305,12 @@
             <button id="tutorial-btn" class="main-btn">UNDERSTOOD</button>
         </div>
 
+        <div id="pause-overlay" class="overlay hidden">
+            <h1 style="color:#fff;">PAUSED</h1>
+            <p style="color:#ccc;">Take a breath. The wasteland waits.</p>
+            <button id="resume-btn" class="main-btn">RESUME</button>
+        </div>
+
         <div id="shop-overlay" class="hidden">
             <h2>The OxMarket Pop-up</h2>
             <p id="shop-msg">Welcome, un-styled traveler! What will you prioritize today?</p>
@@ -328,7 +335,7 @@
     </div>
 
     <div class="controls-info">
-        Walk into the edges of the screen to explore new areas. Wealth respawns over time!
+        Walk into the edges of the screen to explore new areas. Wealth respawns over time! Press ESC or P to Pause.
     </div>
 
     <script>
@@ -338,6 +345,7 @@
         const transitionOverlay = document.getElementById('transition-overlay');
         const shopOverlay = document.getElementById('shop-overlay');
         const tutorialOverlay = document.getElementById('tutorial-overlay');
+        const pauseOverlay = document.getElementById('pause-overlay');
         
         const startBtn = document.getElementById('start-btn');
         const continueBtn = document.getElementById('continue-btn');
@@ -345,6 +353,7 @@
         const btnBuyNet = document.getElementById('btn-buy-net');
         const btnBuyShoes = document.getElementById('btn-buy-shoes');
         const btnLeave = document.getElementById('btn-leave');
+        const resumeBtn = document.getElementById('resume-btn');
         
         const overlayTitle = document.getElementById('overlay-title');
         const overlayDesc = document.getElementById('overlay-desc');
@@ -368,7 +377,7 @@
         const MAX_LEVELS = 3;
         
         // Game State
-        let gameState = 'START'; // START, PLAYING, SHOP, TRANSITION, WIN, TUTORIAL
+        let gameState = 'START'; // START, PLAYING, SHOP, TRANSITION, WIN, TUTORIAL, PAUSED
         let currentLevel = 1;
         let karma = 0;
         let coins = 0;
@@ -1109,6 +1118,17 @@
             tutorialOverlay.classList.add('hidden');
         }
 
+        function togglePause() {
+            if (gameState === 'PLAYING') {
+                gameState = 'PAUSED';
+                keys.up = keys.down = keys.left = keys.right = keys.attack = false;
+                pauseOverlay.classList.remove('hidden');
+            } else if (gameState === 'PAUSED') {
+                gameState = 'PLAYING';
+                pauseOverlay.classList.add('hidden');
+            }
+        }
+
         function openShop() {
             gameState = 'SHOP';
             keys.up = keys.down = keys.left = keys.right = false; 
@@ -1381,6 +1401,11 @@
 
         // --- Input Handling ---
         function handleKeyDown(e) {
+            if (e.code === 'KeyP' || e.code === 'Escape') {
+                togglePause();
+                e.preventDefault();
+                return;
+            }
             if (gameState !== 'PLAYING') return;
             if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = true;
             if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.down = true;
@@ -1422,6 +1447,7 @@
         btnBuyNet.addEventListener('click', processBuyNet);
         btnBuyShoes.addEventListener('click', processBuyShoes);
         btnLeave.addEventListener('click', closeShop);
+        resumeBtn.addEventListener('click', togglePause);
 
         // Initial draw
         ctx.fillStyle = '#1a1a1a';
