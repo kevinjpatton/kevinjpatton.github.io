@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hilbert's Infinite Hotel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Fira+Code:wght@500&display=swap');
+
+        :root {
+            --bg-color: #0f172a;
+            --panel-bg: #1e293b;
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --success: #10b981;
+            --error: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --room-bg: #334155;
+            --door-color: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header & Story Panel --- */
+        header {
+            padding: 20px 30px;
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, #a78bfa, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #story-panel {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 800px;
+            line-height: 1.5;
+        }
+
+        /* --- Main Game Area (The Hotel) --- */
+        #hotel-viewport {
+            flex-grow: 1;
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            background: linear-gradient(to bottom, #0f172a 0%, #1e293b 100%);
+            /* Custom scrollbar */
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--panel-bg);
+        }
+
+        #hotel-viewport::-webkit-scrollbar { height: 12px; }
+        #hotel-viewport::-webkit-scrollbar-track { background: var(--panel-bg); }
+        #hotel-viewport::-webkit-scrollbar-thumb { background-color: var(--primary); border-radius: 6px; }
+
+        #hallway {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 50px;
+            height: 200px;
+            display: flex;
+            /* Will be set dynamically based on number of rooms */
+        }
+
+        .room {
+            width: 100px;
+            height: 200px;
+            flex-shrink: 0;
+            border-right: 2px solid #0f172a;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .room-number {
+            font-family: 'Fira Code', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-top: 10px;
+            background: #0f172a;
+            padding: 2px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--primary);
+        }
+
+        .door {
+            margin-top: auto;
+            width: 60px;
+            height: 120px;
+            background: var(--door-color);
+            border: 2px solid #0f172a;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+        }
+
+        .doorknob {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            width: 8px;
+            height: 8px;
+            background: #94a3b8;
+            border-radius: 50%;
+        }
+
+        .guest {
+            position: absolute;
+            bottom: 0;
+            width: 40px;
+            height: 80px;
+            font-size: 40px;
+            line-height: 80px;
+            text-align: center;
+            transition: left 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s;
+            z-index: 5;
+            user-select: none;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+        }
+
+        /* --- New Guests Waiting Area --- */
+        #waiting-area {
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            background: rgba(30, 41, 59, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed var(--primary);
+            z-index: 10;
+        }
+
+        #waiting-title {
+            font-size: 14px;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .new-guest-cluster {
+            font-size: 30px;
+            letter-spacing: -5px;
+        }
+
+        /* --- Control Panel --- */
+        #control-panel {
+            padding: 25px 30px;
+            background: var(--panel-bg);
+            border-top: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .formula-box {
+            display: flex;
+            align-items: center;
+            background: #0f172a;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            flex-grow: 1;
+            max-width: 600px;
+        }
+
+        .formula-label {
+            font-size: 18px;
+            margin-right: 15px;
+            color: #e2e8f0;
+        }
+
+        .formula-input {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            font-family: 'Fira Code', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            outline: none;
+            width: 100%;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+            color: white;
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        button:active { transform: translateY(0); }
+        button:disabled { background: #475569; cursor: not-allowed; transform: none; }
+
+        .outline-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .outline-btn:hover {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        #hint-panel {
+            font-size: 16px;
+            color: #fbbf24;
+            margin-top: 10px;
+            font-style: italic;
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: 800px;
+            line-height: 1.5;
+            display: none;
+        }
+
+        #error-message {
+            color: var(--error);
+            font-weight: 600;
+            margin-left: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* --- Modals --- */
+        #overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .modal {
+            background: var(--panel-bg);
+            padding: 40px;
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .modal h2 { font-size: 32px; margin-bottom: 15px; color: var(--success); }
+        .modal p { font-size: 18px; margin-bottom: 25px; color: var(--text-main); line-height: 1.5;}
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Hilbert's Infinite Hotel</h1>
+        <div id="story-panel">Welcome, Manager. The hotel has infinitely many rooms (1, 2, 3...), and currently, every single room is full!</div>
+        <div id="hint-panel"></div>
+    </header>
+
+    <div id="hotel-viewport">
+        <div id="hallway">
+            <!-- Rooms generated by JS -->
+        </div>
+        
+        <div id="waiting-area">
+            <div id="waiting-title">Waiting Outside</div>
+            <div id="new-guests-visual" class="new-guest-cluster">🧍</div>
+        </div>
+    </div>
+
+    <div id="control-panel">
+        <div class="formula-box">
+            <span class="formula-label">Move guest in Room <strong>n</strong> to Room:</span>
+            <input type="text" id="formula-input" class="formula-input" value="n" placeholder="e.g. n + 1" autocomplete="off">
+        </div>
+        <button id="hint-btn" onclick="showHint()" class="outline-btn">Hint</button>
+        <button id="action-btn" onclick="executeMove()">Execute Move</button>
+        <div id="error-message">Error message here</div>
+    </div>
+
+    <div id="overlay">
+        <div class="modal">
+            <h2 id="modal-title">Level Complete!</h2>
+            <p id="modal-desc">You successfully made room for the new guests without kicking anyone out of the hotel!</p>
+            <button onclick="nextLevel()" id="modal-btn">Next Level</button>
+        </div>
+    </div>
+
+<script>
+    // --- Audio System ---
+    const AudioSys = {
+        ctx: null,
+        init() {
+            if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        },
+        playTone(freq, type, duration) {
+            if(!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+            gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + duration);
+        },
+        playMove() { this.playTone(300, 'sine', 0.2); setTimeout(()=>this.playTone(400, 'sine', 0.3), 100); },
+        playSuccess() { this.playTone(440, 'square', 0.1); setTimeout(()=>this.playTone(660, 'square', 0.3), 150); },
+        playError() { this.playTone(150, 'sawtooth', 0.3); }
+    };
+
+    // --- Game Configuration & State ---
+    const ROOM_WIDTH = 100; // pixels
+    const RENDERED_ROOMS = 40; // How many DOM rooms to draw
+    const SIMULATED_ROOMS = 100; // How many rooms to calculate for math validation
+
+    const LEVELS = [
+        {
+            id: 1,
+            story: "<strong>Level 1:</strong> One new guest has arrived at the front desk! But all infinitely many rooms are full. Find a mathematical rule to shift the current guests to new rooms, leaving Room 1 empty for the new arrival.",
+            hint: "Try adding a number to n. If everyone moves to room 'n + 1', what happens to Room 1?",
+            waitingVisual: "🧍",
+            targetEmpty: 1, // Needs 1 specific room empty
+            checkSuccess: (freedRooms) => freedRooms.includes(1)
+        },
+        {
+            id: 2,
+            story: "<strong>Level 2:</strong> Great job! But now, a family of 5 has arrived. You need to free up 5 rooms. Shift the guests so that Rooms 1, 2, 3, 4, and 5 become empty.",
+            hint: "If 'n + 1' freed up 1 room, what should you add to n to free up 5 rooms?",
+            waitingVisual: "🧍🧍🧍🧍🧍",
+            targetEmpty: 5,
+            checkSuccess: (freedRooms) => {
+                for(let i=1; i<=5; i++) if(!freedRooms.includes(i)) return false;
+                return true;
+            }
+        },
+        {
+            id: 3,
+            story: "<strong>Level 3 (The Paradox):</strong> Oh no... An infinitely long bus just pulled up, carrying an infinite number of new guests! Addition won't work anymore. You must find a rule that frees up an <em>infinite</em> number of rooms. (Hint: Try multiplication!)",
+            hint: "Addition just shifts people down, leaving a fixed number of rooms. Try multiplying 'n' by 2 (type '2 * n'). This will move all current guests into the even-numbered rooms, leaving all the infinite odd-numbered rooms empty!",
+            waitingVisual: "🚌 🧍🧍🧍🧍🧍...∞",
+            targetEmpty: 'infinite',
+            checkSuccess: (freedRooms, formulaFn) => {
+                // To prove it frees infinite rooms, the gap between f(n) and n must grow.
+                // e.g. f(n) = 2n -> f(50)-50 = 50, f(10)-10 = 10. (Grows!)
+                // e.g. f(n) = n+100 -> f(50)-50 = 100, f(10)-10 = 100. (Constant, not infinite)
+                try {
+                    const gap10 = formulaFn(10) - 10;
+                    const gap50 = formulaFn(50) - 50;
+                    return gap50 > gap10;
+                } catch(e) { return false; }
+            }
+        }
+    ];
+
+    let currentLevel = 0;
+    let guests = []; // DOM elements representing current guests
+
+    // --- DOM Elements ---
+    const hallwayEl = document.getElementById('hallway');
+    const inputEl = document.getElementById('formula-input');
+    const errorEl = document.getElementById('error-message');
+    const actionBtn = document.getElementById('action-btn');
+    const hintBtn = document.getElementById('hint-btn');
+    const storyEl = document.getElementById('story-panel');
+    const hintPanel = document.getElementById('hint-panel');
+    const waitingVisualEl = document.getElementById('new-guests-visual');
+    const overlay = document.getElementById('overlay');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+
+    // --- Initialization ---
+    function initHotel() {
+        hallwayEl.innerHTML = '';
+        hallwayEl.style.width = `${RENDERED_ROOMS * ROOM_WIDTH}px`;
+        guests = [];
+
+        // Build Physical Rooms
+        for (let i = 1; i <= RENDERED_ROOMS; i++) {
+            const room = document.createElement('div');
+            room.className = 'room';
+            room.innerHTML = `
+                <div class="room-number">${i}</div>
+                <div class="door"><div class="doorknob"></div></div>
+            `;
+            hallwayEl.appendChild(room);
+
+            // Add Guest to Room
+            const guest = document.createElement('div');
+            guest.className = 'guest';
+            guest.textContent = '🧍';
+            // Calculate absolute left position based on room index
+            guest.style.left = `${(i - 1) * ROOM_WIDTH + 30}px`; 
+            guest.dataset.originalRoom = i;
+            hallwayEl.appendChild(guest);
+            guests.push(guest);
+        }
+    }
+
+    function loadLevel(idx) {
+        currentLevel = idx;
+        const lvl = LEVELS[currentLevel];
+        
+        storyEl.innerHTML = lvl.story;
+        hintPanel.style.display = 'none';
+        hintPanel.style.opacity = 0;
+        waitingVisualEl.innerHTML = lvl.waitingVisual;
+        inputEl.value = 'n';
+        inputEl.disabled = false;
+        actionBtn.disabled = false;
+        errorEl.style.opacity = 0;
+        
+        // Scroll to start
+        document.getElementById('hotel-viewport').scrollTo({left: 0, behavior: 'smooth'});
+        initHotel();
+    }
+
+    function showHint() {
+        const lvl = LEVELS[currentLevel];
+        hintPanel.innerHTML = `<strong>💡 Hint:</strong> ${lvl.hint}`;
+        hintPanel.style.display = 'block';
+        // Small delay to allow display to apply before fading in
+        setTimeout(() => hintPanel.style.opacity = 1, 10);
+    }
+
+    // --- Core Math Parser & Validator ---
+
+    function parseFormula(rawStr) {
+        // Sanitize string (only allow n, digits, spaces, basic math operators)
+        let clean = rawStr.toLowerCase().replace(/[^n0-9+\-*/()\s]/g, '');
+        
+        // Handle implicit multiplication: e.g. "2n" -> "2*n"
+        clean = clean.replace(/(\d)\s*n/g, '$1*n');
+        
+        // Create an evaluator function
+        try {
+            // Test if the function compiles
+            const fn = new Function('n', `return ${clean};`);
+            fn(1); // Test execution
+            return fn;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function validateMove(formulaFn) {
+        let occupiedRooms = new Set();
+        let mapping = {}; // oldRoom -> newRoom
+
+        // Simulate behavior for the first N rooms to check for logic errors
+        for (let n = 1; n <= SIMULATED_ROOMS; n++) {
+            let newRoom;
+            try {
+                newRoom = formulaFn(n);
+            } catch(e) {
+                return { valid: false, msg: "Mathematical error in formula." };
+            }
+
+            if (!Number.isInteger(newRoom)) return { valid: false, msg: `Room numbers must be whole numbers. Guest ${n} evaluated to ${newRoom}.` };
+            if (newRoom < 1) return { valid: false, msg: `There is no Room ${newRoom}! Guests must stay in the hotel (Room ≥ 1).` };
+            
+            if (occupiedRooms.has(newRoom)) {
+                return { valid: false, msg: `COLLISION! Both Guest ${n} and someone else are trying to move into Room ${newRoom}.` };
+            }
+
+            occupiedRooms.add(newRoom);
+            mapping[n] = newRoom;
+        }
+
+        // Calculate freed rooms within the simulated block
+        let freedRooms = [];
+        for(let i=1; i<=SIMULATED_ROOMS; i++) {
+            if(!occupiedRooms.has(i)) freedRooms.push(i);
+        }
+
+        return { valid: true, mapping, freedRooms };
+    }
+
+    // --- Execution & Animation ---
+
+    function showError(msg) {
+        AudioSys.playError();
+        errorEl.textContent = msg;
+        errorEl.style.opacity = 1;
+        // Shake input
+        inputEl.style.transform = 'translateX(10px)';
+        setTimeout(()=> inputEl.style.transform = 'translateX(-10px)', 100);
+        setTimeout(()=> inputEl.style.transform = 'translateX(0)', 200);
+    }
+
+    function executeMove() {
+        AudioSys.init();
+        const formulaStr = inputEl.value;
+        const fn = parseFormula(formulaStr);
+
+        if (!fn) {
+            showError("Invalid formula syntax. Try something like 'n + 1' or '2 * n'.");
+            return;
+        }
+
+        const evaluation = validateMove(fn);
+
+        if (!evaluation.valid) {
+            showError(evaluation.msg);
+            return;
+        }
+
+        const lvl = LEVELS[currentLevel];
+        
+        // Check if formula solves the level requirements
+        if (!lvl.checkSuccess(evaluation.freedRooms, fn)) {
+            if (lvl.targetEmpty === 'infinite') {
+                showError("That formula doesn't free up an INFINITE number of rooms! Keep trying.");
+            } else {
+                showError(`That formula doesn't free up the specific rooms needed (Rooms 1 to ${lvl.targetEmpty}).`);
+            }
+            return;
+        }
+
+        // SUCCESS! Run animations
+        errorEl.style.opacity = 0;
+        inputEl.disabled = true;
+        actionBtn.disabled = true;
+        AudioSys.playMove();
+
+        // 1. Move existing guests visually
+        guests.forEach(guestEl => {
+            const oldN = parseInt(guestEl.dataset.originalRoom);
+            const newN = evaluation.mapping[oldN];
+            
+            if (newN <= RENDERED_ROOMS * 2) { // Only bother animating if somewhat close to view
+                const newLeft = (newN - 1) * ROOM_WIDTH + 30;
+                guestEl.style.left = `${newLeft}px`;
+            } else {
+                // Fly off into infinity
+                guestEl.style.left = '5000px';
+                guestEl.style.opacity = '0';
+            }
+        });
+
+        // 2. Animate New Guests arriving after current guests move
+        setTimeout(() => {
+            AudioSys.playMove();
+            waitingVisualEl.style.opacity = 0;
+
+            const maxNewGuestsToRender = lvl.targetEmpty === 'infinite' ? 20 : lvl.targetEmpty;
+            
+            for(let i=0; i<maxNewGuestsToRender && i < evaluation.freedRooms.length; i++) {
+                const targetRoom = evaluation.freedRooms[i];
+                if (targetRoom > RENDERED_ROOMS) continue;
+
+                const newGuest = document.createElement('div');
+                newGuest.className = 'guest';
+                newGuest.textContent = '🧍';
+                newGuest.style.color = '#34d399'; // Highlight new guests in green
+                
+                // Start at waiting area
+                newGuest.style.left = '30px'; 
+                newGuest.style.bottom = '-100px';
+                hallwayEl.appendChild(newGuest);
+
+                // Trigger reflow
+                void newGuest.offsetWidth;
+
+                // Move to new room
+                newGuest.style.bottom = '0';
+                newGuest.style.left = `${(targetRoom - 1) * ROOM_WIDTH + 30}px`;
+            }
+
+            // 3. Show Success Modal
+            setTimeout(() => {
+                AudioSys.playSuccess();
+                if (currentLevel < LEVELS.length - 1) {
+                    modalTitle.textContent = "Level Complete!";
+                    modalDesc.textContent = "You successfully managed infinity. Let's make it harder.";
+                    document.getElementById('modal-btn').textContent = "Next Level";
+                } else {
+                    modalTitle.textContent = "Paradox Solved!";
+                    modalDesc.textContent = "You accommodated an infinite bus into a full hotel. You are a Master of Infinity!";
+                    document.getElementById('modal-btn').textContent = "Play Again";
+                }
+                overlay.style.visibility = 'visible';
+                overlay.style.opacity = '1';
+
+            }, 2000);
+
+        }, 1500); // Wait for current guests to move
+    }
+
+    function nextLevel() {
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            overlay.style.visibility = 'hidden';
+            if (currentLevel < LEVELS.length - 1) {
+                loadLevel(currentLevel + 1);
+            } else {
+                loadLevel(0); // Restart game
+            }
+        }, 300);
+    }
+
+    // Allow Enter key to submit
+    inputEl.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter' && !actionBtn.disabled) {
+            executeMove();
+        }
+    });
+
+    // Boot the game
+    window.onload = () => loadLevel(0);
+
+</script>
+</body>
+</html>
