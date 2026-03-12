@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hume's Billiards: The Problem of Causation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Cinzel:wght@600;800&display=swap');
+
+        :root {
+            --baize: #2d6a4f; /* Billiard table green */
+            --wood: #5c3a21;
+            --wood-dark: #3e2723;
+            --parchment: #f4ecd8;
+            --ink: #2b2b2b;
+            --gold: #d4af37;
+            --highlight: #e9c46a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a;
+            color: var(--ink);
+            font-family: 'Crimson Text', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            width: 100%;
+            padding: 15px 40px;
+            background: var(--wood-dark);
+            border-bottom: 4px solid var(--gold);
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 32px;
+            color: var(--parchment);
+            letter-spacing: 2px;
+        }
+
+        /* --- Main Game Area --- */
+        #game-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* --- Story / Dialogue Panel --- */
+        #dialogue-panel {
+            background: var(--parchment);
+            border: 2px solid #c8b79b;
+            border-radius: 4px;
+            padding: 20px 30px;
+            font-size: 22px;
+            line-height: 1.5;
+            box-shadow: inset 0 0 40px rgba(139, 115, 85, 0.1), 0 4px 10px rgba(0,0,0,0.3);
+            position: relative;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #dialogue-panel::before {
+            content: "David Hume";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--wood);
+            color: var(--parchment);
+            padding: 2px 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            border-radius: 2px;
+            letter-spacing: 1px;
+        }
+
+        /* --- Billiard Table (Canvas) --- */
+        #table-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: var(--wood);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            background: var(--baize);
+            border-radius: 4px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+            cursor: crosshair;
+        }
+
+        /* --- Controls & Choices --- */
+        #controls-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            min-height: 80px;
+        }
+
+        .btn {
+            background: var(--wood);
+            color: var(--parchment);
+            border: 2px solid var(--gold);
+            padding: 12px 25px;
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--highlight);
+            color: var(--wood-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: #888;
+        }
+
+        /* --- Question Overlay --- */
+        #question-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            padding: 30px;
+            text-align: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        #question-text {
+            color: var(--parchment);
+            font-size: 26px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .choice-btn {
+            background: var(--parchment);
+            color: var(--ink);
+            border: 2px solid var(--wood);
+            padding: 15px 20px;
+            font-family: 'Crimson Text', serif;
+            font-size: 20px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .choice-btn:hover {
+            background: var(--highlight);
+            transform: scale(1.02);
+        }
+
+        #feedback-text {
+            color: var(--gold);
+            font-size: 22px;
+            font-style: italic;
+            margin-top: 20px;
+            min-height: 30px;
+        }
+
+        /* --- Custom Universe Controls (Level 3) --- */
+        #sandbox-controls {
+            display: none;
+            background: var(--parchment);
+            padding: 15px 20px;
+            border-radius: 4px;
+            border: 2px solid var(--wood);
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        select {
+            font-family: 'Crimson Text', serif;
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid var(--wood);
+            background: white;
+        }
+
+        /* --- Opening Parchment Modal --- */
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: var(--parchment);
+            padding: 40px;
+            border-radius: 4px;
+            max-width: 650px;
+            text-align: center;
+            border: 2px solid #c8b79b;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.15);
+        }
+
+        .modal-box h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 36px;
+            color: var(--wood-dark);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--wood);
+            padding-bottom: 10px;
+        }
+
+        .modal-box p {
+            font-size: 22px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Intro Modal -->
+    <div id="modal-overlay">
+        <div class="modal-box">
+            <h2 id="modal-title">A Treatise of Human Nature</h2>
+            <div id="modal-body">
+                <p>"Here is a billiard ball lying on the table, and another ball moving towards it with rapidity. They strike; and the ball which was formerly at rest now acquires a motion."</p>
+                <p>Welcome to my study. I am David Hume. I invite you to examine the most deeply ingrained habit of the human mind: our belief in Cause and Effect.</p>
+            </div>
+            <button class="btn" onclick="startGame()" id="modal-btn">Approach the Table</button>
+        </div>
+    </div>
+
+    <header>
+        <h1>Hume's Billiards</h1>
+    </header>
+
+    <div id="game-wrapper">
+        <div id="dialogue-panel">
+            Examine the table before you. When you are ready, strike the white cue ball.
+        </div>
+
+        <div id="table-container">
+            <canvas id="billiard-canvas" width="800" height="300"></canvas>
+            
+            <!-- Questions Overlay -->
+            <div id="question-overlay">
+                <div id="question-text">What did you just observe?</div>
+                <div id="choices-container"></div>
+                <div id="feedback-text"></div>
+                <button class="btn" id="next-phase-btn" style="display:none; margin-top:20px;" onclick="advanceLevel()">Continue</button>
+            </div>
+        </div>
+
+        <div id="controls-area">
+            <button class="btn" id="strike-btn" onclick="strikeBall()">Strike White Ball</button>
+            
+            <div id="sandbox-controls">
+                <span style="font-size: 20px; font-weight: 600;">When White hits Red, the Red ball shall:</span>
+                <select id="effect-selector">
+                    <option value="move">Move normally (Elastic Collision)</option>
+                    <option value="vanish">Vanish into thin air</option>
+                    <option value="explode">Explode into pieces</option>
+                    <option value="pass">Let the white ball pass through it</option>
+                </select>
+                <button class="btn" onclick="strikeBall()">Execute</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- Audio System ---
+    const AudioSys = {
+        ctx: null,
+        init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+        playClack() {
+            if(!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.05);
+            gain.gain.setValueAtTime(1, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
+            osc.connect(gain); gain.connect(this.ctx.destination);
+            osc.start(); osc.stop(this.ctx.currentTime + 0.05);
+        },
+        playPoof() {
+            if(!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(20, this.ctx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+            gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.3);
+            osc.connect(gain); gain.connect(this.ctx.destination);
+            osc.start(); osc.stop(this.ctx.currentTime + 0.3);
+        },
+        playExplosion() {
+            if(!this.ctx) return;
+            // Fake noise using an oscillator modulated rapidly
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+            osc.frequency.linearRampToValueAtTime(10, this.ctx.currentTime + 0.4);
+            gain.gain.setValueAtTime(0.8, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+            osc.connect(gain); gain.connect(this.ctx.destination);
+            osc.start(); osc.stop(this.ctx.currentTime + 0.4);
+        }
+    };
+
+    // --- Physics & Canvas Engine ---
+    const canvas = document.getElementById('billiard-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let animId = null;
+    let particles = [];
+
+    const balls = {
+        white: { x: 200, y: 150, vx: 0, r: 20, color: '#f0f0f0', active: true },
+        red: { x: 500, y: 150, vx: 0, r: 20, color: '#d32f2f', active: true }
+    };
+
+    function drawBall(b) {
+        if (!b.active) return;
+        
+        // Shadow
+        ctx.beginPath();
+        ctx.arc(b.x + 5, b.y + 5, b.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.fill();
+
+        // Ball
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        
+        // Gradient for 3D effect
+        const grad = ctx.createRadialGradient(b.x - 5, b.y - 5, 2, b.x, b.y, b.r);
+        grad.addColorStop(0, '#ffffff');
+        grad.addColorStop(1, b.color);
+        
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function drawParticles() {
+        for (let i = particles.length - 1; i >= 0; i--) {
+            let p = particles[i];
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.alpha;
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+            
+            p.x += p.vx;
+            p.y += p.vy;
+            p.alpha -= 0.02;
+            if (p.alpha <= 0) particles.splice(i, 1);
+        }
+    }
+
+    function createExplosion(x, y, color) {
+        for(let i=0; i<30; i++) {
+            particles.push({
+                x: x, y: y,
+                vx: (Math.random() - 0.5) * 10,
+                vy: (Math.random() - 0.5) * 10,
+                r: Math.random() * 5 + 2,
+                color: color,
+                alpha: 1.0
+            });
+        }
+    }
+
+    function createPoof(x, y) {
+        for(let i=0; i<15; i++) {
+            particles.push({
+                x: x, y: y,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * -4, // Float up
+                r: Math.random() * 8 + 4,
+                color: '#ffffff',
+                alpha: 0.8
+            });
+        }
+    }
+
+    function resetTable() {
+        balls.white.x = 200; balls.white.vx = 0; balls.white.active = true;
+        balls.red.x = 500; balls.red.vx = 0; balls.red.active = true;
+        particles = [];
+        render();
+    }
+
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall(balls.white);
+        drawBall(balls.red);
+        drawParticles();
+    }
+
+    // --- Game Logic ---
+    let currentLevel = 1;
+    let collisionEffect = 'move'; // move, vanish, explode, pass
+
+    const dialoguePanel = document.getElementById('dialogue-panel');
+    const strikeBtn = document.getElementById('strike-btn');
+    const questionOverlay = document.getElementById('question-overlay');
+    const choicesContainer = document.getElementById('choices-container');
+    const feedbackText = document.getElementById('feedback-text');
+    const nextPhaseBtn = document.getElementById('next-phase-btn');
+    const sandboxControls = document.getElementById('sandbox-controls');
+
+    function startGame() {
+        AudioSys.init();
+        document.getElementById('modal-overlay').style.display = 'none';
+        resetTable();
+    }
+
+    function setDialogue(text) {
+        dialoguePanel.innerHTML = text;
+    }
+
+    function strikeBall() {
+        AudioSys.init();
+        strikeBtn.disabled = true;
+        if(currentLevel === 3) {
+            collisionEffect = document.getElementById('effect-selector').value;
+            sandboxControls.style.display = 'none'; // hide while animating
+        }
+        
+        balls.white.vx = 8;
+        physicsLoop();
+    }
+
+    function physicsLoop() {
+        // Update positions
+        balls.white.x += balls.white.vx;
+        balls.red.x += balls.red.vx;
+
+        // Collision Check
+        if (balls.white.active && balls.red.active && 
+            Math.abs(balls.white.x - balls.red.x) <= (balls.white.r + balls.red.r)) {
+            
+            // Handle collision based on current rule
+            if (collisionEffect === 'move') {
+                AudioSys.playClack();
+                balls.red.vx = balls.white.vx;
+                balls.white.vx = 0;
+            } 
+            else if (collisionEffect === 'vanish') {
+                AudioSys.playPoof();
+                createPoof(balls.red.x, balls.red.y);
+                balls.red.active = false;
+                balls.white.vx = 0; // white stops abruptly
+            }
+            else if (collisionEffect === 'explode') {
+                AudioSys.playExplosion();
+                createExplosion(balls.red.x, balls.red.y, balls.red.color);
+                balls.red.active = false;
+                balls.white.vx = 0;
+            }
+            else if (collisionEffect === 'pass') {
+                // Ghost ball - no collision physics applied, white just keeps moving
+            }
+        }
+
+        // Friction / Stop conditions
+        if (balls.red.vx > 0) balls.red.vx -= 0.05;
+        if (balls.red.vx < 0) balls.red.vx = 0;
+        
+        if (balls.white.vx > 0 && collisionEffect === 'pass') balls.white.vx -= 0.05;
+
+        render();
+
+        // Check if animation is finished
+        if (balls.white.vx <= 0 && balls.red.vx <= 0 && particles.length === 0) {
+            cancelAnimationFrame(animId);
+            setTimeout(triggerQuestion, 500);
+            return;
+        }
+
+        animId = requestAnimationFrame(physicsLoop);
+    }
+
+    function triggerQuestion() {
+        questionOverlay.style.visibility = 'visible';
+        questionOverlay.style.opacity = '1';
+        choicesContainer.innerHTML = '';
+        feedbackText.innerHTML = '';
+        nextPhaseBtn.style.display = 'none';
+
+        if (currentLevel === 1) {
+            document.getElementById('question-text').innerText = "What did you just observe with your own eyes?";
+            addChoice("A) I saw the white ball CAUSE the red ball to move.", () => handleAnswer(1, 'A'));
+            addChoice("B) I saw the white ball move, touch the red ball, and then the red ball moved.", () => handleAnswer(1, 'B'));
+        } 
+        else if (currentLevel === 2) {
+            document.getElementById('question-text').innerText = "The white ball hit the red ball, but the red ball simply vanished! How is this possible?";
+            addChoice("A) It isn't. You tricked me with code. Physics demands the ball moves.", () => handleAnswer(2, 'A'));
+            addChoice("B) There is no logical contradiction. A 'cause' doesn't logically guarantee a specific 'effect'.", () => handleAnswer(2, 'B'));
+        }
+        else if (currentLevel === 3) {
+            document.getElementById('question-text').innerText = "You have manipulated cause and effect yourself.";
+            addChoice("A) Yes, and it proves Causation is an illusion, just a habit of my mind.", () => handleAnswer(3, 'A'));
+        }
+    }
+
+    function addChoice(text, onClick) {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerText = text;
+        btn.onclick = onClick;
+        choicesContainer.appendChild(btn);
+    }
+
+    function handleAnswer(level, choice) {
+        choicesContainer.innerHTML = ''; // Clear choices
+        
+        if (level === 1) {
+            if (choice === 'A') {
+                AudioSys.playPoof();
+                feedbackText.innerHTML = "Ah, but did you truly *see* the invisible force of causation? Or did your mind simply assume it because you've seen this happen before?";
+            } else {
+                AudioSys.playClack();
+                feedbackText.innerHTML = "Exactly! You observed sequence in time, and contact in space. You never actually perceived the hidden 'power' tying them together. We call this 'Constant Conjunction'.";
+            }
+        } 
+        else if (level === 2) {
+            if (choice === 'A') {
+                AudioSys.playPoof();
+                feedbackText.innerHTML = "You rely entirely on habit! You expect the red ball to move only because you've seen it happen many times in the past. But past experience cannot logically prove the future.";
+            } else {
+                AudioSys.playClack();
+                feedbackText.innerHTML = "Brilliant! As I wrote: 'Anything may produce anything.' There is no logical impossibility in a billiard ball turning into a pigeon upon impact. We only assume it won't due to habit.";
+            }
+        }
+        else if (level === 3) {
+            AudioSys.playClack();
+            feedbackText.innerHTML = "Precisely. Because we never perceive the hidden tie binding objects, we only develop a custom or 'habit of mind'. Causation is in our minds, not necessarily in the objects themselves.";
+        }
+
+        nextPhaseBtn.style.display = 'inline-block';
+    }
+
+    function advanceLevel() {
+        questionOverlay.style.opacity = '0';
+        setTimeout(() => {
+            questionOverlay.style.visibility = 'hidden';
+            
+            if (currentLevel === 1) {
+                currentLevel = 2;
+                collisionEffect = 'vanish'; // Secretly break the laws of physics
+                resetTable();
+                strikeBtn.disabled = false;
+                setDialogue("Interesting. Now, relying purely on Reason, tell me what will happen when you strike the ball a second time.");
+            } 
+            else if (currentLevel === 2) {
+                currentLevel = 3;
+                resetTable();
+                strikeBtn.style.display = 'none';
+                sandboxControls.style.display = 'flex';
+                setDialogue("Since there is no 'necessary connection' between objects, reason alone cannot dictate the outcome. You may now wire the universe yourself. Choose the 'Constant Conjunction'.");
+            }
+            else if (currentLevel === 3) {
+                // Show conclusion modal
+                document.getElementById('modal-title').innerText = "The Skeptic's Conclusion";
+                document.getElementById('modal-body').innerHTML = `
+                    <p>"All inferences from experience, therefore, are effects of custom, not of reasoning."</p>
+                    <p>You have successfully navigated the Problem of Induction. We cannot logically prove cause and effect; we merely rely on the habit of observing constant conjunctions.</p>
+                `;
+                document.getElementById('modal-btn').innerText = "Restart Experiment";
+                document.getElementById('modal-btn').onclick = () => {
+                    currentLevel = 1;
+                    collisionEffect = 'move';
+                    strikeBtn.style.display = 'block';
+                    strikeBtn.disabled = false;
+                    sandboxControls.style.display = 'none';
+                    setDialogue("Examine the table before you. When you are ready, strike the white cue ball.");
+                    startGame();
+                };
+                document.getElementById('modal-overlay').style.display = 'flex';
+            }
+        }, 400);
+    }
+
+    // Initialize Canvas render
+    resetTable();
+
+</script>
+</body>
+</html>
