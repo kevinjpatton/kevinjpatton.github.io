@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Barber Paradox</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Outfit:wght@400;600;800&display=swap');
+
+        :root {
+            --bg-color: #fcf9f2;
+            --text-main: #2c3e50;
+            --primary: #d32f2f;
+            --primary-hover: #b71c1c;
+            --secondary: #1976d2;
+            --accent: #d4af37;
+            --board-bg: #f4f1ea;
+            --card-bg: #ffffff;
+            --border: #e0d8c3;
+            --success: #2e7d32;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- Decree Opening Screen --- */
+        #decree-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(30, 20, 15, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            padding: 20px;
+            transition: opacity 0.8s, visibility 0.8s;
+        }
+
+        .parchment {
+            background: #f4eade;
+            background-image:
+                linear-gradient(90deg, transparent 0%, transparent 95%, rgba(0,0,0,0.02) 100%),
+                radial-gradient(circle, transparent 20%, rgba(0,0,0,0.03) 100%);
+            border: 1px solid #d4c4a8;
+            border-radius: 4px;
+            padding: 60px 50px 50px 50px;
+            max-width: 700px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 0 40px rgba(139, 115, 85, 0.15);
+            text-align: center;
+            position: relative;
+            color: #3e2723;
+        }
+
+        .parchment h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 46px;
+            font-weight: 800;
+            color: #4e342e;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #8d6e63;
+            padding-bottom: 10px;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .parchment p {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .decree-rule-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 800;
+            font-style: italic;
+            color: var(--primary);
+            margin: 35px 0;
+            line-height: 1.4;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 42px;
+            color: #3e2723;
+            text-align: right;
+            margin-top: 30px;
+            margin-bottom: 40px;
+            padding-right: 40px;
+        }
+
+        .seal {
+            position: absolute;
+            bottom: 40px;
+            left: 50px;
+            width: 80px;
+            height: 80px;
+            background: #b71c1c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 6px 10px rgba(0,0,0,0.3);
+            color: #ffc107;
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: 40px;
+            border: 3px solid #880e4f;
+            transform: rotate(-10deg);
+        }
+
+        .parchment-btn {
+            background: #4e342e;
+            color: #f4eade;
+            border: 2px solid #3e2723;
+            padding: 15px 40px;
+            font-size: 22px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .parchment-btn:hover {
+            background: #3e2723;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        /* --- Header & Narrative --- */
+        header {
+            padding: 20px 40px;
+            background: var(--card-bg);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 8px;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--primary), var(--primary) 20px,
+                #ffffff 20px, #ffffff 40px,
+                var(--secondary) 40px, var(--secondary) 60px,
+                #ffffff 60px, #ffffff 80px
+            );
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        #story-panel {
+            font-size: 18px;
+            max-width: 800px;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+
+        /* --- Rule Board --- */
+        #rule-board {
+            background: #212529;
+            color: #fdfbf7;
+            padding: 20px 30px;
+            margin: 25px auto;
+            border-radius: 4px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            max-width: 800px;
+            text-align: center;
+            border: 4px solid var(--accent);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .rule-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- Game Area & Zones --- */
+        #game-area {
+            flex-grow: 1;
+            padding: 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--bg-color);
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        #game-stage {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px auto 0;
+            gap: 20px;
+        }
+
+        .zone {
+            width: 220px;
+            height: 260px;
+            border: 3px dashed var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.4);
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            z-index: 5;
+        }
+
+        .zone.active {
+            border-style: solid;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .zone-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .zone-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .zone-subtitle {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        #bathroom-zone { border-color: var(--secondary); }
+        #bathroom-zone.active { background: #e3f2fd; }
+
+        #barbershop-zone { border-color: var(--primary); }
+        #barbershop-zone.active { background: #ffebee; }
+
+        .center-stage {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            min-width: 300px;
+            z-index: 10;
+        }
+
+        #town-square {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+        }
+
+        /* --- Paradox Visualizer (Level 5) --- */
+        #paradox-visualizer {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .loop-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            gap: 20px;
+            padding: 40px 0; /* Add vertical space for the arrows */
+        }
+
+        .loop-box {
+            background: var(--card-bg);
+            border: 4px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            width: 40%; /* Shrunk slightly to make more room in the center */
+            text-align: center;
+            z-index: 2;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .loop-box h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            font-size: 26px;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .loop-box p {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--secondary);
+            background: #e3f2fd;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .loop-arrow {
+            position: absolute;
+            left: 10%; /* Widen the arrow span */
+            width: 80%;
+            text-align: center;
+            z-index: 10; /* Bring above the pulsing boxes */
+            font-weight: 800;
+            font-size: 15px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center;     /* Center vertically */
+            height: 40px;
+        }
+
+        .arrow-line {
+            position: absolute;
+            width: 100%;
+            height: 0;
+            border-top: 4px dashed #cbd5e0;
+            top: 50%;
+            left: 0;
+            z-index: -1; /* Keep line strictly behind the text badge */
+        }
+
+        .arrow-text {
+            background: var(--bg-color); /* Match background to mask the dashed line */
+            padding: 4px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Pop off the page over the boxes */
+            white-space: nowrap; /* Prevent awkward wrapping */
+            z-index: 2;
+        }
+
+        .arrow-top { top: 0; }
+        .arrow-bottom { bottom: 0; }
+
+        /* Flowchart Animations */
+        .box-a { animation: highlightBoxA 4s infinite; }
+        .arrow-top { animation: highlightTextTop 4s infinite; }
+        .arrow-top .arrow-line { animation: highlightLineTop 4s infinite; }
+        .box-b { animation: highlightBoxB 4s infinite; }
+        .arrow-bottom { animation: highlightTextBottom 4s infinite; }
+        .arrow-bottom .arrow-line { animation: highlightLineBottom 4s infinite; }
+
+        @keyframes highlightBoxA {
+            0%, 15%, 85%, 100% { border-color: var(--primary); transform: scale(1.05); box-shadow: 0 10px 30px rgba(211,47,47,0.2); }
+            25%, 75% { border-color: var(--border); transform: scale(1); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        }
+        @keyframes highlightTextTop {
+            0%, 20%, 50%, 100% { color: #718096; }
+            25%, 45% { color: var(--primary); text-shadow: 0 0 10px rgba(211,47,47,0.2); }
+        }
+        @keyframes highlightLineTop {
+            0%, 20%, 50%, 100% { border-color: #cbd5e0; }
+            25%, 45% { border-color: var(--primary); }
+        }
+        @keyframes highlightBoxB {
+            0%, 35%, 85%, 100% { border-color: var(--border); transform: scale(1); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+            45%, 65% { border-color: var(--primary); transform: scale(1.05); box-shadow: 0 10px 30px rgba(211,47,47,0.2); }
+        }
+        @keyframes highlightTextBottom {
+            0%, 70%, 100% { color: #718096; }
+            75%, 95% { color: var(--primary); text-shadow: 0 0 10px rgba(211,47,47,0.2); }
+        }
+        @keyframes highlightLineBottom {
+            0%, 70%, 100% { border-color: #cbd5e0; }
+            75%, 95% { border-color: var(--primary); }
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 850px) {
+            #game-stage {
+                flex-direction: column;
+            }
+            .zone {
+                width: 100%;
+                height: 100px;
+                flex-direction: row;
+                gap: 20px;
+            }
+            .zone-icon { margin-bottom: 0; }
+            
+            /* Responsive Visualizer */
+            .loop-container { flex-direction: column; gap: 40px; padding: 20px 0; }
+            .loop-box { width: 100%; padding: 20px; }
+            .loop-arrow { 
+                position: relative; left: 0; width: 100%; top: auto; bottom: auto; 
+                height: 60px; /* Spacer height */
+            }
+            .arrow-line { 
+                width: 0; height: 100%; border-top: none; 
+                border-left: 4px dashed #cbd5e0; top: 0; left: 50%; 
+            }
+            .arrow-text {
+                white-space: normal; /* Allow wrap on small mobile screens */
+            }
+        }
+
+        /* --- Character Cards --- */
+        .character-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            width: 260px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .character-card.barber-card {
+            border: 4px solid transparent;
+            background-image: linear-gradient(var(--card-bg), var(--card-bg)), 
+                              repeating-linear-gradient(45deg, 
+                                  var(--primary) 0, var(--primary) 15px, 
+                                  #fff 15px, #fff 30px, 
+                                  var(--secondary) 30px, var(--secondary) 45px, 
+                                  #fff 45px, #fff 60px);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Entry Animation */
+        .card-enter {
+            animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(100px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .avatar {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        .char-name {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .char-desc {
+            font-size: 14px;
+            color: #718096;
+            text-align: center;
+            margin-bottom: 20px;
+            height: 40px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .choice-btn {
+            background: var(--board-bg);
+            border: 2px solid var(--border);
+            color: var(--text-main);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .choice-btn:hover {
+            background: #e2e8f0;
+            border-color: #a0aec0;
+        }
+
+        .choice-btn.selected-self {
+            background: #e3f2fd;
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .choice-btn.selected-barber {
+            background: #ffebee;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* --- Status & Controls --- */
+        #status-bar {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #action-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(56, 161, 105, 0.3);
+            transition: all 0.2s;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        #action-btn.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #action-btn.active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(56, 161, 105, 0.4);
+        }
+
+        #error-msg {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        /* --- Paradox Animations --- */
+        .glitch-active {
+            animation: bgGlitch 0.2s infinite;
+        }
+
+        .card-shake {
+            animation: shake 0.5s infinite;
+            border-color: red !important;
+            box-shadow: 0 0 20px red !important;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg) scale(1.05); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg) scale(1.05); }
+            20% { transform: translate(-3px, 0px) rotate(1deg) scale(1.05); }
+            30% { transform: translate(3px, 2px) rotate(0deg) scale(1.05); }
+            40% { transform: translate(1px, -1px) rotate(1deg) scale(1.05); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg) scale(1.05); }
+            60% { transform: translate(-3px, 1px) rotate(0deg) scale(1.05); }
+            70% { transform: translate(3px, 1px) rotate(-1deg) scale(1.05); }
+            80% { transform: translate(-1px, -1px) rotate(1deg) scale(1.05); }
+            90% { transform: translate(1px, 2px) rotate(0deg) scale(1.05); }
+            100% { transform: translate(1px, -2px) rotate(-1deg) scale(1.05); }
+        }
+
+        @keyframes bgGlitch {
+            0% { background-color: var(--board-bg); }
+            50% { background-color: #ffe6e6; }
+            100% { background-color: var(--board-bg); }
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 850px) {
+            #game-stage {
+                flex-direction: column;
+            }
+            .zone {
+                width: 100%;
+                height: 100px;
+                flex-direction: row;
+                gap: 20px;
+            }
+            .zone-icon { margin-bottom: 0; }
+        }
+
+        /* --- Modal --- */
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.4s;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 8px;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border-top: 8px solid var(--primary);
+        }
+
+        .modal-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .modal-box p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #4a5568;
+        }
+
+        .modal-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-btn:hover { background: #2c5282; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Decree Opening Screen -->
+    <div id="decree-screen">
+        <div class="parchment">
+            <div class="seal">S</div>
+            
+            <h2>Official Decree</h2>
+            <p>Hear ye, hear ye!</p>
+            <p>It is well known that the Mayor absolutely <strong>despises</strong> facial hair of any kind. To eradicate this menace and ensure a perfectly clean-shaven populace, a new absolute law has been established for our glorious town of Seville:</p>
+            <div class="decree-rule-text">"The Barber shaves all those, and strictly those, who do not shave themselves."</div>
+            <p>As the newly appointed Enforcer of Logic, it is your solemn duty to ensure every man is shaved, and this law is applied perfectly and without exception.</p>
+            <div class="signature">The Mayor of Seville</div>
+            
+            <button class="parchment-btn" onclick="acceptDecree()">I Accept This Duty</button>
+        </div>
+    </div>
+
+    <header>
+        <h1>The Paradox of Seville</h1>
+        <div id="story-panel"></div>
+    </header>
+
+    <div id="rule-board">
+        <div class="rule-text">"The Barber shaves all those, and strictly those, who do not shave themselves."</div>
+    </div>
+
+    <div id="game-area">
+        <div id="game-stage">
+            <div class="zone" id="bathroom-zone">
+                <div class="zone-icon">🛁</div>
+                <div class="zone-title">Washroom</div>
+                <div class="zone-subtitle">(Self-Shavers)</div>
+            </div>
+            
+            <div class="center-stage">
+                <div id="town-square">
+                    <!-- Cards rendered via JS -->
+                </div>
+            </div>
+
+            <div class="zone" id="barbershop-zone">
+                <div class="zone-icon">💈</div>
+                <div class="zone-title">Barbershop</div>
+                <div class="zone-subtitle">(Barber-Shaved)</div>
+            </div>
+        </div>
+
+        <div id="paradox-visualizer">
+            <div class="loop-container">
+                <div class="loop-box box-a">
+                    <h3>Bert Shaves Himself</h3>
+                    <p>Status: Self-Shaver</p>
+                </div>
+                
+                <div class="loop-arrow arrow-top">
+                    <div class="arrow-line"></div>
+                    <span class="arrow-text">Rule forbids shaving self-shavers! ➔</span>
+                </div>
+                
+                <div class="loop-box box-b">
+                    <h3>Bert Does NOT Shave Himself</h3>
+                    <p style="color: var(--primary); background: #ffebee;">Status: Non-Self-Shaver</p>
+                </div>
+                
+                <div class="loop-arrow arrow-bottom">
+                    <div class="arrow-line"></div>
+                    <span class="arrow-text">⬅ Rule demands shaving non-self-shavers!</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="status-bar">
+            <div id="error-msg">Error: Check your logic!</div>
+            <button id="action-btn" onclick="checkLogic()">Enforce Rule</button>
+        </div>
+    </div>
+
+    <div id="modal-overlay">
+        <div class="modal-box">
+            <h2 id="modal-title">Level Complete</h2>
+            <div id="modal-body"></div>
+            <button class="modal-btn" onclick="nextLevel()" id="modal-next-btn">Continue</button>
+        </div>
+    </div>
+
+<script>
+    // --- Audio System ---
+    const AudioSys = {
+        ctx: null,
+        init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+        playTone(freq, type, duration) {
+            if(!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = type; osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+            gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+            osc.connect(gain); gain.connect(this.ctx.destination);
+            osc.start(); osc.stop(this.ctx.currentTime + duration);
+        },
+        playClick() { this.playTone(600, 'sine', 0.1); },
+        playSuccess() { this.playTone(400, 'sine', 0.1); setTimeout(()=>this.playTone(600, 'sine', 0.3), 100); },
+        playError() { this.playTone(150, 'sawtooth', 0.3); },
+        playParadox() {
+            // Discordant glitch sound
+            this.playTone(100, 'sawtooth', 0.5);
+            setTimeout(()=>this.playTone(120, 'square', 0.4), 100);
+            setTimeout(()=>this.playTone(90, 'sawtooth', 0.5), 200);
+            setTimeout(()=>this.playTone(150, 'square', 0.6), 300);
+        }
+    };
+
+    // --- Game Logic Functions ---
+    function acceptDecree() {
+        AudioSys.init();
+        AudioSys.playSuccess();
+        const decreeScreen = document.getElementById('decree-screen');
+        decreeScreen.style.opacity = '0';
+        setTimeout(() => {
+            decreeScreen.style.visibility = 'hidden';
+            loadLevel(0); // Start the game proper
+        }, 800);
+    }
+
+    // --- Game Data ---
+    const LEVELS = [
+        {
+            id: 1,
+            story: "<strong>Level 1: The Mayor's Decree.</strong> You've read the decree. Now, let's practice enforcing this absolute law. Meet Arthur.",
+            characters: [
+                { id: 'arthur', name: 'Arthur', icon: '🧔', desc: 'Broken arm. Cannot hold a razor.', required: 'barber', errMsg: "Arthur can't shave himself! The Barber MUST shave him." }
+            ],
+            onCompleteTitle: "LOGIC SUCCESSFULLY APPLIED",
+            onCompleteText: "<p>Correct. Arthur doesn't shave himself, so the Barber shaves him.</p>"
+        },
+        {
+            id: 2,
+            story: "<strong>Level 2: The Self-Sufficient Man.</strong> The rule holds. Now, apply the exact same logic to Dave.",
+            characters: [
+                { id: 'dave', name: 'Dave', icon: '👨', desc: 'Loves shaving himself every morning.', required: 'self', errMsg: "Dave shaves himself! The Barber is forbidden from shaving him." }
+            ],
+            onCompleteTitle: "LOGIC SUCCESSFULLY APPLIED",
+            onCompleteText: "<p>Perfect. Dave shaves himself, so the Barber leaves him alone.</p>"
+        },
+        {
+            id: 3,
+            story: "<strong>Level 3: The Unwilling Client.</strong> You're getting the hang of this. Let's try one more to be absolutely sure. Meet Henry.",
+            characters: [
+                { id: 'henry', name: 'Henry', icon: '🧙‍♂️', desc: 'Wants to grow a wizard beard. Refuses to shave.', required: 'barber', errMsg: "Henry does NOT shave himself! The law is absolute: the Barber MUST shave him, even if Henry wants a beard!" }
+            ],
+            onCompleteTitle: "Absolute Law!",
+            onCompleteText: "<p>Exactly! Set theory rules are absolute. Since Henry does not shave himself, the Barber <strong>must</strong> shave him, ruining his wizard beard.</p><p>But wait... someone is missing from the square.</p>"
+        },
+        {
+            id: 4,
+            story: "<strong>Level 4: The Trap.</strong> Bert the Barber has entered the town square. He needs a shaving assignment just like everyone else. Apply the exact same absolute law to him. <strong>Who shaves Bert?</strong>",
+            characters: [
+                { id: 'bert', name: 'Bert (The Barber)', icon: '💈', desc: 'He is a man in the town. He must be assigned.', required: 'paradox' }
+            ],
+            onCompleteTitle: "LOGIC ENGINE CRITICAL FAILURE",
+            onCompleteText: "<p>You have discovered <strong>Russell's Paradox</strong>!</p><p>If Bert shaves himself, he is a self-shaver. But the rule forbids him from shaving self-shavers! So he <em>must not</em> shave himself.</p><p>But if he does <em>not</em> shave himself, the rule demands that he <em>must</em> shave himself!</p><p>It is a completely unbreakable logical loop.</p>"
+        },
+        {
+            id: 5,
+            story: "<strong>Level 5: The Infinite Loop.</strong> Look at the unbreakable logical cycle you've created. This is the Paradox of Seville.",
+            characters: [], // No game board for conclusion
+            isConclusion: true,
+            onCompleteTitle: "Set Theory & The Barber",
+            onCompleteText: "<p>Bertrand Russell invented this story in 1901 to explain a massive flaw in Mathematics.</p><p>Early mathematicians believed you could define a 'Set' (a collection of things) using any rule you wanted. Russell asked: <em>'What about the Set of all Sets that do not contain themselves?'</em></p><p>Just like our Barber, if that Set contains itself, it shouldn't. If it doesn't, it must! The mathematical conclusion? <strong>Such a rule is invalid. A barber like Bert mathematically cannot exist.</strong></p>"
+        }
+    ];
+
+    let currentLevel = 0;
+    let state = {}; // Stores { charId: 'self' | 'barber' }
+    let paradoxInterval = null;
+    let paradoxFirstChoice = null;
+
+    // --- DOM Elements ---
+    const townSquare = document.getElementById('town-square');
+    const actionBtn = document.getElementById('action-btn');
+    const errorMsg = document.getElementById('error-msg');
+    const ruleBoard = document.getElementById('rule-board');
+
+    // --- Engine ---
+    function loadLevel(index) {
+        currentLevel = index;
+        const level = LEVELS[currentLevel];
+        
+        document.getElementById('story-panel').innerHTML = level.story;
+        townSquare.innerHTML = '';
+        state = {};
+        paradoxFirstChoice = null;
+        errorMsg.style.opacity = 0;
+        actionBtn.style.display = 'block'; // Restore action button visibility
+        updateActionButton();
+
+        if (level.isConclusion) {
+            document.getElementById('rule-board').style.display = 'block';
+            document.getElementById('status-bar').style.display = 'flex';
+            document.getElementById('game-stage').style.display = 'none';
+            document.getElementById('paradox-visualizer').style.display = 'flex';
+            
+            actionBtn.textContent = "Understand the Math";
+            actionBtn.classList.add('active');
+            actionBtn.onclick = () => {
+                AudioSys.playClick();
+                showModal(level.onCompleteTitle, level.onCompleteText, "Play Again");
+            };
+            return;
+        } else {
+            document.getElementById('paradox-visualizer').style.display = 'none';
+            document.getElementById('game-stage').style.display = 'flex';
+            actionBtn.textContent = "Enforce Rule";
+            actionBtn.onclick = checkLogic;
+        }
+
+        document.getElementById('rule-board').style.display = 'block';
+        document.getElementById('status-bar').style.display = 'flex';
+        document.getElementById('game-stage').style.display = 'flex';
+
+        level.characters.forEach(char => {
+            const isBarber = char.id === 'bert';
+            const card = document.createElement('div');
+            card.className = `character-card card-enter ${isBarber ? 'barber-card' : ''}`;
+            card.id = `card-${char.id}`;
+            
+            card.innerHTML = `
+                <div class="avatar">${char.icon}</div>
+                <div class="char-name">${char.name}</div>
+                <div class="char-desc">${char.desc}</div>
+                <div class="btn-group">
+                    <button class="choice-btn" id="btn-${char.id}-self" onclick="makeChoice('${char.id}', 'self')">Shaves Themself</button>
+                    <button class="choice-btn" id="btn-${char.id}-barber" onclick="makeChoice('${char.id}', 'barber')">Shaved by Barber</button>
+                </div>
+            `;
+            townSquare.appendChild(card);
+        });
+    }
+
+    function makeChoice(charId, choice) {
+        AudioSys.init();
+        AudioSys.playClick();
+        
+        state[charId] = choice;
+
+        // Update UI
+        document.getElementById(`btn-${charId}-self`).classList.remove('selected-self');
+        document.getElementById(`btn-${charId}-barber`).classList.remove('selected-barber');
+        
+        if (choice === 'self') {
+            document.getElementById(`btn-${charId}-self`).classList.add('selected-self');
+        } else {
+            document.getElementById(`btn-${charId}-barber`).classList.add('selected-barber');
+        }
+
+        errorMsg.style.opacity = 0; // Clear previous errors
+        updateActionButton();
+
+        // Step-by-step logic for the paradox level
+        if (LEVELS[currentLevel].id === 4) {
+            handleParadoxChoice(choice);
+        }
+    }
+
+    function updateActionButton() {
+        const level = LEVELS[currentLevel];
+        if (!level || level.isConclusion) return;
+
+        // Check if all characters have a choice assigned
+        const allAssigned = level.characters.every(c => state[c.id]);
+        
+        if (allAssigned) {
+            actionBtn.classList.add('active');
+        } else {
+            actionBtn.classList.remove('active');
+        }
+    }
+
+    function checkLogic() {
+        const level = LEVELS[currentLevel];
+        let hasError = false;
+
+        for (let char of level.characters) {
+            const choice = state[char.id];
+            
+            if (char.required !== 'paradox' && choice !== char.required) {
+                showError(char.errMsg);
+                hasError = true;
+                break;
+            }
+        }
+
+        if (!hasError) {
+            AudioSys.playSuccess();
+            actionBtn.style.display = 'none'; // Hide button during animation
+            
+            // Get the active character card and target zone
+            const char = level.characters[0];
+            const choice = state[char.id];
+            const card = document.getElementById(`card-${char.id}`);
+            const targetZoneId = choice === 'self' ? 'bathroom-zone' : 'barbershop-zone';
+            const zone = document.getElementById(targetZoneId);
+            
+            // Highlight the destination zone
+            zone.classList.add('active');
+            
+            // Calculate exact translation distance
+            const cardRect = card.getBoundingClientRect();
+            const zoneRect = zone.getBoundingClientRect();
+            const deltaX = (zoneRect.left + zoneRect.width/2) - (cardRect.left + cardRect.width/2);
+            const deltaY = (zoneRect.top + zoneRect.height/2) - (cardRect.top + cardRect.height/2);
+            
+            // Animate card flying into the building
+            card.style.transition = 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s';
+            card.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.1)`;
+            card.style.opacity = '0';
+
+            // Wait for animation to finish before showing modal
+            setTimeout(() => {
+                zone.classList.remove('active');
+                showModal(level.onCompleteTitle, level.onCompleteText, "Next Level");
+            }, 1000);
+        }
+    }
+
+    function showError(msg) {
+        AudioSys.playError();
+        errorMsg.textContent = msg;
+        errorMsg.style.opacity = 1;
+        
+        ruleBoard.style.transform = 'scale(1.05)';
+        ruleBoard.style.borderColor = 'var(--primary)';
+        setTimeout(() => {
+            ruleBoard.style.transform = 'scale(1)';
+            ruleBoard.style.borderColor = 'var(--accent)';
+        }, 300);
+    }
+
+    // --- Paradox Sequence ---
+    function handleParadoxChoice(choice) {
+        actionBtn.style.display = 'none'; // Hide normal progression
+        
+        let msg = "";
+        if (choice === 'self') {
+            msg = "Wait! If Bert shaves himself, he is a self-shaver. But the rule says the Barber CANNOT shave self-shavers! <br><strong>He must STOP shaving himself.</strong>";
+        } else {
+            msg = "Wait! If Bert doesn't shave himself, the rule says the Barber MUST shave him. <br><strong>So he must START shaving himself.</strong>";
+        }
+
+        if (!paradoxFirstChoice) {
+            // First attempt
+            paradoxFirstChoice = choice;
+            errorMsg.innerHTML = msg + "<br><span style='color: var(--text-main); font-size: 16px; margin-top:10px; display:inline-block;'>That didn't work. Try the other option.</span>";
+            errorMsg.style.opacity = 1;
+            AudioSys.playError();
+            
+            // Shake the board to indicate rejection
+            ruleBoard.style.transform = 'scale(1.05)';
+            ruleBoard.style.borderColor = 'var(--primary)';
+            setTimeout(() => {
+                ruleBoard.style.transform = 'scale(1)';
+                ruleBoard.style.borderColor = 'var(--accent)';
+            }, 300);
+
+            // Disable the chosen button so they are forced to pick the other
+            const btnToDisable = document.getElementById(`btn-bert-${choice}`);
+            btnToDisable.style.opacity = 0.5;
+            btnToDisable.style.pointerEvents = 'none';
+
+        } else if (choice !== paradoxFirstChoice) {
+            // Second attempt
+            errorMsg.innerHTML = msg;
+            errorMsg.style.opacity = 1;
+            AudioSys.playError();
+            
+            // Disable both buttons
+            document.getElementById('btn-bert-self').style.pointerEvents = 'none';
+            document.getElementById('btn-bert-barber').style.pointerEvents = 'none';
+
+            // Give them time to read the second error, then trigger the visual crash
+            setTimeout(() => {
+                triggerParadoxGlitch(choice);
+            }, 3500);
+        }
+    }
+
+    function triggerParadoxGlitch(lastChoice) {
+        if (paradoxInterval) clearInterval(paradoxInterval);
+
+        const card = document.getElementById('card-bert');
+        const selfBtn = document.getElementById('btn-bert-self');
+        const barberBtn = document.getElementById('btn-bert-barber');
+
+        AudioSys.playParadox();
+
+        // Start the infinite UI loop
+        let currentToggle = lastChoice;
+        document.body.classList.add('glitch-active');
+        card.classList.add('card-shake');
+        ruleBoard.style.backgroundColor = '#742a2a';
+
+        let loopCount = 0;
+
+        paradoxInterval = setInterval(() => {
+            AudioSys.playClick();
+            loopCount++;
+
+            // Swap UI to show the forced logical switch
+            currentToggle = currentToggle === 'self' ? 'barber' : 'self';
+            
+            selfBtn.classList.remove('selected-self');
+            barberBtn.classList.remove('selected-barber');
+            
+            if (currentToggle === 'self') {
+                selfBtn.classList.add('selected-self');
+            } else {
+                barberBtn.classList.add('selected-barber');
+            }
+
+            // After a few loops, break it and show modal
+            if (loopCount > 10) {
+                clearInterval(paradoxInterval);
+                document.body.classList.remove('glitch-active');
+                card.classList.remove('card-shake');
+                ruleBoard.style.backgroundColor = '#2d3748';
+                
+                setTimeout(() => {
+                    AudioSys.playError();
+                    showModal(LEVELS[currentLevel].onCompleteTitle, LEVELS[currentLevel].onCompleteText, "See Conclusion");
+                }, 500);
+            }
+        }, 300); // Fast toggle
+    }
+
+
+    // --- Modal Logic ---
+    function showModal(title, bodyHTML, btnText) {
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-body').innerHTML = bodyHTML;
+        document.getElementById('modal-next-btn').textContent = btnText;
+        
+        const overlay = document.getElementById('modal-overlay');
+        overlay.style.visibility = 'visible';
+        overlay.style.opacity = 1;
+    }
+
+    function nextLevel() {
+        const overlay = document.getElementById('modal-overlay');
+        overlay.style.opacity = 0;
+        
+        setTimeout(() => {
+            overlay.style.visibility = 'hidden';
+            if (currentLevel < LEVELS.length - 1) {
+                loadLevel(currentLevel + 1);
+            } else {
+                // Restart from beginning if at conclusion
+                document.getElementById('decree-screen').style.visibility = 'visible';
+                document.getElementById('decree-screen').style.opacity = '1';
+                actionBtn.style.display = 'block'; // Restore action btn
+            }
+        }, 400);
+    }
+
+    // --- Boot ---
+    // Game initialization is now triggered by the "acceptDecree" button
+
+</script>
+</body>
+</html>
