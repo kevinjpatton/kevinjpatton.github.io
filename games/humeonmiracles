@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hume's Scales: The Argument Against Miracles</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Cinzel:wght@600;800&display=swap');
+
+        :root {
+            --wood: #5c3a21;
+            --wood-dark: #3e2723;
+            --wood-light: #8d6e63;
+            --parchment: #f4ecd8;
+            --ink: #2b2b2b;
+            --gold: #d4af37;
+            --gold-dark: #b8860b;
+            --brass: #b5a642;
+            --highlight: #e9c46a;
+            --danger: #d32f2f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a;
+            color: var(--ink);
+            font-family: 'Crimson Text', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at center, #2a2a2a 0%, #111 100%);
+        }
+
+        /* --- Header --- */
+        header {
+            width: 100%;
+            padding: 15px 40px;
+            background: var(--wood-dark);
+            border-bottom: 4px solid var(--gold);
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 30px;
+            color: var(--parchment);
+            letter-spacing: 2px;
+        }
+
+        /* --- Main Game Area --- */
+        #game-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* --- Story / Dialogue Panel --- */
+        #dialogue-panel {
+            background: var(--parchment);
+            border: 2px solid #c8b79b;
+            border-radius: 4px;
+            padding: 25px 30px;
+            font-size: 22px;
+            line-height: 1.5;
+            box-shadow: inset 0 0 40px rgba(139, 115, 85, 0.1), 0 4px 10px rgba(0,0,0,0.3);
+            position: relative;
+            text-align: center;
+            min-height: 120px;
+        }
+
+        #dialogue-panel::before {
+            content: "The Court of Reason";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--wood);
+            color: var(--parchment);
+            padding: 2px 15px;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            border-radius: 2px;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        /* --- The Scales of Evidence --- */
+        #scale-container {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        /* Scale Base */
+        #scale-base {
+            position: absolute;
+            bottom: 0;
+            width: 120px;
+            height: 250px;
+            background: linear-gradient(to right, var(--gold-dark), var(--gold), var(--gold-dark));
+            clip-path: polygon(40% 0%, 60% 0%, 80% 100%, 20% 100%);
+            z-index: 1;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* Scale Beam */
+        #scale-beam {
+            position: absolute;
+            top: 20%;
+            width: 500px;
+            height: 12px;
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+            border-radius: 6px;
+            z-index: 3;
+            transform-origin: center center;
+            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        /* Center Pivot */
+        #scale-pivot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            background: radial-gradient(circle, #fff, var(--gold-dark));
+            border-radius: 50%;
+            z-index: 4;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* Scale Pans */
+        .pan-wrapper {
+            position: absolute;
+            top: 6px; /* Attach to beam */
+            width: 160px;
+            height: 180px;
+            transform-origin: top center;
+            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #left-pan-wrapper { left: 0; transform: translateX(-50%); }
+        #right-pan-wrapper { right: 0; transform: translateX(50%); }
+
+        .pan-strings {
+            width: 100px;
+            height: 140px;
+            border-left: 2px solid var(--parchment);
+            border-right: 2px solid var(--parchment);
+            opacity: 0.6;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+        }
+
+        .pan-tray {
+            width: 140px;
+            height: 20px;
+            background: linear-gradient(to bottom, var(--brass), #8b7d3a);
+            border-radius: 0 0 50% 50%;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 5px;
+        }
+
+        .pan-label {
+            position: absolute;
+            bottom: -35px;
+            font-family: 'Cinzel', serif;
+            font-weight: 800;
+            color: var(--parchment);
+            font-size: 16px;
+            text-shadow: 0 2px 4px #000;
+            white-space: nowrap;
+        }
+
+        /* Weight Tokens placed on the pan */
+        .weight-token-on-pan {
+            width: 30px;
+            height: 30px;
+            background: #444;
+            border: 2px solid #888;
+            border-radius: 4px;
+            margin: 0 2px;
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .weight-token-on-pan.law { background: var(--wood-dark); border-color: var(--gold); }
+        .weight-token-on-pan.testimony { background: var(--secondary); border-color: #8bb4e7; }
+        
+        /* --- Inventory Area --- */
+        #inventory-area {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 10px;
+            min-height: 100px;
+        }
+
+        .evidence-token {
+            background: var(--parchment);
+            border: 2px solid var(--wood);
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 200px;
+            text-align: center;
+        }
+
+        .evidence-token:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+            background: white;
+        }
+
+        .evidence-token.used {
+            opacity: 0.3;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        .evidence-token .token-type {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            color: var(--wood-light);
+            margin-bottom: 5px;
+        }
+
+        /* --- Controls & Evaluation --- */
+        #action-area {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .btn {
+            background: var(--wood);
+            color: var(--parchment);
+            border: 2px solid var(--gold);
+            padding: 15px 40px;
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--highlight);
+            color: var(--wood-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: #888;
+        }
+
+        /* --- Modal Overlays --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .modal-box {
+            background: var(--parchment);
+            padding: 40px;
+            border-radius: 4px;
+            max-width: 650px;
+            text-align: center;
+            border: 2px solid #c8b79b;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(139, 115, 85, 0.15);
+        }
+
+        .modal-box h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 32px;
+            color: var(--wood-dark);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--wood);
+            padding-bottom: 10px;
+        }
+
+        .modal-box p {
+            font-size: 22px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .hume-quote {
+            font-style: italic;
+            color: var(--wood-dark);
+            font-weight: 600;
+            border-left: 4px solid var(--gold);
+            padding-left: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        /* Desktop specific tweaks */
+        @media (min-width: 768px) {
+            #scale-beam { width: 600px; }
+            #scale-base { height: 300px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Intro Modal -->
+    <div id="intro-modal" class="modal-overlay" style="visibility: visible; opacity: 1;">
+        <div class="modal-box">
+            <h2>An Enquiry Concerning Human Understanding</h2>
+            <div class="hume-quote">
+                "A wise man, therefore, proportions his belief to the evidence."
+            </div>
+            <p>Welcome. David Hume argues that a miracle is a violation of the laws of nature. But should we ever believe a report that a miracle has occurred?</p>
+            <p>To find out, we must place the evidence for the miracle (Testimony) on one side of the scale, and the evidence against it (Our uniform experience of Nature) on the other.</p>
+            <button class="btn" onclick="startGame()">Approach the Scales</button>
+        </div>
+    </div>
+
+    <!-- Evaluation Modal -->
+    <div id="eval-modal" class="modal-overlay">
+        <div class="modal-box">
+            <h2 id="eval-title">The Scales Tip</h2>
+            <div id="eval-body"></div>
+            <button class="btn" id="eval-btn" onclick="nextLevel()">Continue</button>
+        </div>
+    </div>
+
+    <header>
+        <h1>Hume's Scales of Evidence</h1>
+    </header>
+
+    <div id="game-wrapper">
+        <div id="dialogue-panel">
+            <!-- Story text goes here -->
+        </div>
+
+        <div id="scale-container">
+            <div id="scale-base"></div>
+            
+            <div id="scale-beam">
+                <div id="scale-pivot"></div>
+                
+                <div id="left-pan-wrapper" class="pan-wrapper">
+                    <div class="pan-strings"></div>
+                    <div class="pan-tray" id="left-tray"></div>
+                    <div class="pan-label">TESTIMONY (For)</div>
+                </div>
+
+                <div id="right-pan-wrapper" class="pan-wrapper">
+                    <div class="pan-strings"></div>
+                    <div class="pan-tray" id="right-tray"></div>
+                    <div class="pan-label">EXPERIENCE (Against)</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="inventory-area">
+            <!-- Tokens appear here -->
+        </div>
+
+        <div id="action-area">
+            <button class="btn" id="weigh-btn" onclick="evaluateScale()" disabled>Weigh Evidence</button>
+        </div>
+    </div>
+
+<script>
+    // --- Audio System ---
+    const AudioSys = {
+        ctx: null,
+        init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+        playClink() {
+            if(!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(this.ctx.destination);
+            osc.start(); osc.stop(this.ctx.currentTime + 0.1);
+        },
+        playCreak() {
+            if(!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(80, this.ctx.currentTime);
+            osc.frequency.linearRampToValueAtTime(50, this.ctx.currentTime + 1.0);
+            gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 1.0);
+            
+            // Add a lowpass filter for a wood creak sound
+            const filter = this.ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 400;
+
+            osc.connect(filter); filter.connect(gain); gain.connect(this.ctx.destination);
+            osc.start(); osc.stop(this.ctx.currentTime + 1.0);
+        }
+    };
+
+    // --- Game Data ---
+    const LEVELS = [
+        {
+            id: 1,
+            story: "<strong>Case I: The Flying Horse</strong><br>A man at the local tavern claims that yesterday, he saw a horse sprout wings and fly across the sky. You must weigh his testimony against your own experience.",
+            tokens: [
+                { id: 't1', type: 'testimony', name: 'Testimony of One Man', weight: 10, side: 'left' },
+                { id: 'e1', type: 'law', name: 'Law of Nature: Horses Cannot Fly', weight: 1000, side: 'right' }
+            ],
+            evalTitle: "Experience Triumphs",
+            evalBody: "<div class='hume-quote'>\"There must, therefore, be a uniform experience against every miraculous event, otherwise the event would not merit that appellation.\"</div><p>The testimony of a single man is easily outweighed by the firm and unalterable experience of all humanity that horses do not fly. Reason demands we reject the miracle.</p>"
+        },
+        {
+            id: 2,
+            story: "<strong>Case II: The Charismatic Healer</strong><br>A charismatic leader claims to have resurrected the dead. This time, he is supported by a massive crowd of 500 zealous, passionate followers who all swear they saw it happen.",
+            tokens: [
+                { id: 't2', type: 'testimony', name: 'Testimony of a Large Crowd', weight: 200, side: 'left' },
+                { id: 'p1', type: 'flaw', name: 'Human Passion & Love of Wonder', weight: 100, side: 'right' }, // Adds weight against the miracle
+                { id: 'e2', type: 'law', name: 'Law of Nature: The Dead Do Not Rise', weight: 1000, side: 'right' }
+            ],
+            evalTitle: "The Power of Wonder",
+            evalBody: "<div class='hume-quote'>\"The passion of surprise and wonder, arising from miracles, being an agreeable emotion, gives a sensible tendency towards the belief of those events...\"</div><p>Even though 500 people claim to have seen it, Hume notes that humans inherently love a good miracle story. Gossip, passion, and religious zeal severely weaken the weight of their testimony. Meanwhile, the Law of Nature remains immovable.</p>"
+        },
+        {
+            id: 3,
+            story: "<strong>Case III: Hume's Maxim</strong><br>Is it ever logically possible to believe a miracle? According to Hume, there is only ONE specific condition where testimony could ever outweigh a Law of Nature. Find the right weight.",
+            tokens: [
+                { id: 't3a', type: 'testimony', name: '10,000 Honest Witnesses', weight: 800, side: 'left' },
+                { id: 't3b', type: 'testimony', name: 'A Testimony whose falsehood would be a BIGGER miracle', weight: 1001, side: 'left' },
+                { id: 'e3', type: 'law', name: 'Law of Nature', weight: 1000, side: 'right' }
+            ],
+            evalTitle: "The Ultimate Maxim",
+            evalBody: "<div class='hume-quote'>\"No testimony is sufficient to establish a miracle, unless the testimony be of such a kind, that its falsehood would be more miraculous, than the fact, which it endeavors to establish.\"</div><p>You have found it! We should only believe a miracle if it would be <em>even more mathematically impossible</em> for the witnesses to be lying or mistaken than for the miracle to have actually occurred.</p><p>(Though Hume privately doubted such a testimony had ever existed in human history).</p>"
+        }
+    ];
+
+    let currentLevel = 0;
+    let weightLeft = 0;
+    let weightRight = 0;
+    let tokensPlaced = 0;
+
+    // --- DOM Elements ---
+    const scaleBeam = document.getElementById('scale-beam');
+    const leftPan = document.getElementById('left-pan-wrapper');
+    const rightPan = document.getElementById('right-pan-wrapper');
+    const leftTray = document.getElementById('left-tray');
+    const rightTray = document.getElementById('right-tray');
+    const inventoryArea = document.getElementById('inventory-area');
+    const weighBtn = document.getElementById('weigh-btn');
+    const dialoguePanel = document.getElementById('dialogue-panel');
+    const evalModal = document.getElementById('eval-modal');
+
+    // --- Engine ---
+    function startGame() {
+        AudioSys.init();
+        document.getElementById('intro-modal').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('intro-modal').style.visibility = 'hidden';
+            loadLevel(0);
+        }, 400);
+    }
+
+    function loadLevel(index) {
+        currentLevel = index;
+        const level = LEVELS[currentLevel];
+        
+        // Reset State
+        weightLeft = 0;
+        weightRight = 0;
+        tokensPlaced = 0;
+        updateScaleVisuals();
+        
+        leftTray.innerHTML = '';
+        rightTray.innerHTML = '';
+        inventoryArea.innerHTML = '';
+        weighBtn.disabled = true;
+
+        // Load Story
+        dialoguePanel.innerHTML = level.story;
+
+        // Load Tokens
+        level.tokens.forEach(token => {
+            const btn = document.createElement('div');
+            btn.className = 'evidence-token';
+            btn.id = `token-${token.id}`;
+            
+            let typeLabel = "LAW OF NATURE";
+            if (token.type === 'testimony') typeLabel = "TESTIMONY";
+            if (token.type === 'flaw') typeLabel = "FLAW IN TESTIMONY";
+
+            btn.innerHTML = `<span class="token-type">${typeLabel}</span><span>${token.name}</span>`;
+            
+            btn.onclick = () => placeToken(token, btn);
+            inventoryArea.appendChild(btn);
+        });
+    }
+
+    function placeToken(tokenData, btnElement) {
+        AudioSys.init();
+        AudioSys.playClink();
+        
+        // Disable inventory button
+        btnElement.classList.add('used');
+
+        // Add to abstract weight
+        if (tokenData.side === 'left') weightLeft += tokenData.weight;
+        if (tokenData.side === 'right') weightRight += tokenData.weight;
+
+        // Add visual block to pan
+        const block = document.createElement('div');
+        block.className = `weight-token-on-pan ${tokenData.type === 'law' ? 'law' : 'testimony'}`;
+        
+        // Randomize position slightly for stacking effect
+        const offset = (Math.random() - 0.5) * 60;
+        const stackHeight = (tokenData.side === 'left' ? leftTray.children.length : rightTray.children.length) * 5;
+        
+        block.style.transform = `translate(${offset}px, -${stackHeight}px)`;
+
+        if (tokenData.side === 'left') leftTray.appendChild(block);
+        if (tokenData.side === 'right') rightTray.appendChild(block);
+
+        // Update physics
+        updateScaleVisuals();
+
+        // Check if all tokens for this level are placed
+        tokensPlaced++;
+        // Level 3 is special, they don't have to place all tokens, they just have to find the combination that tips it left
+        if (currentLevel !== 2 && tokensPlaced === LEVELS[currentLevel].tokens.length) {
+            weighBtn.disabled = false;
+        } else if (currentLevel === 2) {
+            weighBtn.disabled = false; // Always allow weighing in level 3 to test combinations
+        }
+    }
+
+    function updateScaleVisuals() {
+        // Calculate tilt angle based on difference
+        const maxWeight = 1100; // Arbitrary max to limit angle
+        const difference = weightRight - weightLeft;
+        
+        // Cap the rotation at 25 degrees
+        let rotation = (difference / maxWeight) * 25;
+        if (rotation > 25) rotation = 25;
+        if (rotation < -25) rotation = -25;
+
+        // Rotate beam
+        scaleBeam.style.transform = `rotate(${rotation}deg)`;
+        
+        // Counter-rotate pans so they remain hanging straight down
+        leftPan.style.transform = `translateX(-50%) rotate(${-rotation}deg)`;
+        rightPan.style.transform = `translateX(50%) rotate(${-rotation}deg)`;
+
+        // Play sound if there's significant movement
+        if (Math.abs(difference) > 0) {
+            AudioSys.playCreak();
+        }
+    }
+
+    function evaluateScale() {
+        const level = LEVELS[currentLevel];
+        
+        // Special logic for Level 3
+        if (currentLevel === 2 && weightLeft < weightRight) {
+            // They didn't select the right testimony
+            document.getElementById('eval-title').innerText = "Experience Still Triumphs";
+            document.getElementById('eval-body').innerHTML = "<p>Even 10,000 honest witnesses are not enough. It is always more likely that humans are deceived or deceiving than that a fundamental Law of Nature was suspended. Resetting the scales. Try again.</p>";
+            document.getElementById('eval-btn').innerText = "Try Again";
+            document.getElementById('eval-btn').onclick = () => {
+                closeModal();
+                loadLevel(2);
+            };
+            showModal();
+            return;
+        }
+
+        // Standard Success
+        document.getElementById('eval-title').innerText = level.evalTitle;
+        document.getElementById('eval-body').innerHTML = level.evalBody;
+        
+        if (currentLevel === LEVELS.length - 1) {
+            document.getElementById('eval-btn').innerText = "Conclude Hearing";
+            document.getElementById('eval-btn').onclick = () => {
+                closeModal();
+                showConclusion();
+            };
+        } else {
+            document.getElementById('eval-btn').innerText = "Next Case";
+            document.getElementById('eval-btn').onclick = nextLevel;
+        }
+        
+        showModal();
+    }
+
+    function showModal() {
+        evalModal.style.visibility = 'visible';
+        evalModal.style.opacity = '1';
+    }
+
+    function closeModal() {
+        evalModal.style.opacity = '0';
+        setTimeout(() => {
+            evalModal.style.visibility = 'hidden';
+        }, 400);
+    }
+
+    function nextLevel() {
+        closeModal();
+        if (currentLevel < LEVELS.length - 1) {
+            loadLevel(currentLevel + 1);
+        }
+    }
+
+    function showConclusion() {
+        dialoguePanel.innerHTML = "<strong>Case Closed</strong><br>You have successfully applied Hume's razor to the claims of miracles. A wise person proportions their belief to the evidence.";
+        inventoryArea.innerHTML = '';
+        weighBtn.style.display = 'none';
+        
+        // Balance the scales out for aesthetic ending
+        weightLeft = 0;
+        weightRight = 0;
+        updateScaleVisuals();
+    }
+
+</script>
+</body>
+</html>
