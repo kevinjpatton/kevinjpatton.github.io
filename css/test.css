@@ -1,271 +1,338 @@
-/* Add a black background color to the top navigation */
-.topnav {
-  background-color: #333;
-  overflow: hidden;
-}
-/* Style the links inside the navigation bar */
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-/* Change the color of links on hover */
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-/* Add an active class to highlight the current page */
-.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
-}
-/* Hide the link that should open and close the topnav on small screens */
-.topnav .icon {
-  display: none;
-}
-.header {
-  padding: 20px;
-  text-align: center;
-  background: white;
-  color: #333;
-  font-size: 30px;
-}
-h1 {
-    margin: 60px auto;
-    width: 100%;
-    font-size: 2.5em;
-    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
-}
-h2 {
-    margin: 60px auto;
-    width: 100%;
-    font-size: 1.5em;
-    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
-}
-h3 {
-    margin: 60px auto;
-    width: 100%;
-    font-size: 1em;
-    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
-}
-p {
-    margin: 60px auto;
-    width: 100%;
-    font-size: 1em;
-    line-height: 2.0em;
-    color: #333;
-    font-family: 'Helvetica', 'Arial', 'Sans-Serif';
-    word-wrap: break-word;
-}
-footer {
-    text-align: center;
-    border-top: 1px solid #d5d5d5;
-    font-size: .8em;
-}
-/* Table Styles */
-table {
-  border-collapse: collapse; /* Make table borders touch */
-  width: 60%;                /* Set table width */
-  margin: 60px auto;         /* Center the table */
-}
-th, td {
-  border: 1px solid #ddd;   /* Light gray cell borders */
-  text-align: left;         
-  padding: 12px;            
-}
-th {
-  background-color: #f0f0f0; /* Light gray header background */
-}
-table, th, td {  /* This will apply the font to the entire table */
-  font-family: 'Helvetica', 'Arial', 'Sans-Serif'; /* Replace with your desired font */
-} 
-.standard-list { /* Styles applied to lists with the class 'standard-list' */
-    list-style-type: disc;
-    margin: 60px auto;
-    width: 90%;
-    font-family: 'Helvetica', 'Arial', 'Sans-Serif'; /* Example: Use a different font */
-}
-.standard-list li {
-    margin-bottom: 15px;
-}
-/* General Hero Image Styles */
-.hero-image {
-  height: 300px; /* Adjust as needed */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative; /* For text positioning */
-}
-.hero-text {
-  display: flex;          /* Enable flexbox for alignment */
-  flex-direction: column; /* Arrange items vertically */
-  align-items: center;    /* Center items horizontally */
-  justify-content: center; /* Center items vertically */
-  text-align: center;     /* Center text within each element */
-  color: white;           /* Set text color to white */
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);  /* Shadow properties */
-}
-/* Page-Specific Hero Image Styles */
-.home-page {
-  background-image: url("/images/heroimage-home-tilly-and-captain.jpg");
-}
-.cv-page {
-  background-image: url("/images/heroimage-cv-jonathan-kemper-.jpg");
-}
-.research-page {
-  background-image: url("/images/heroimage-research-annie-spratt.jpg");
-}
-.teaching-page {
-  background-image: url("/images/heroimage-teaching-nathan-dumlao.jpg");
-}
-.contact-page {
-  background-image: url("/images/heroimage-contact-me-sue-hughes.jpg");
-}
-.resources-page {
-  background-image: url("/images/heroimage-resources-desola-lanre-ologun.jpg");
-}
-.fourohfour-page {
-  background-image: url("/images/heroimage-404-gabriel-soto.jpg");
-}
-.phil_3230-page {
-  background-image: url("/teaching/phil_3230/hereoimage-3230-derek-story.jpg");
-}
-.phil_3050-page {
-  background-image: url("/teaching/phil_3050/heroimage-3050-andrea-de-santis.jpg");
-}
-.phil_2030-page {
-  background-image: url("/teaching/phil_2030/heroimage-2030-kelly-sikkema.jpg");
-}
-.phil_1010-page {
-  background-image: url("/teaching/phil_1010/heroimage-1010-pablo-stanic.jpg");
-}
-.pastcourses-page {
-  background-image: url("/teaching/pastcourses/heroimage-pastcourses-towfiqu-barbhuiya.jpg");
-}
-.pedagogy-page {
-  background-image: url("/pedagogy/heroimage-teachingtheory-alexander-grey.jpg");
-}
-.dissertation-page {
-  background-image: url("/images/heroimage-dissertation-crystal-jo.jpg");
-}
-.podcasts-page {
-  background-image: url("/images/heroimage-podcasts-szabo-viktor.jpg");
-}
-.phil_3700-page {
-  background-image: url("/teaching/phil_3700/heroimage-phil_3700-daniele-levis-pelusi.jpg");
-}
-.bookclub-page {
- background-image: url("/teaching/bookclub/heroimage-bookclub-s-o-c-i-a-l-c-u-t.jpg");
-}
+/* ==========================================================================
+   Kevin Patton - Professional Portfolio Stylesheet
+   ========================================================================== */
+
+/* --- CSS Variables (Design Tokens) --- */
+:root {
+  /* Color Palette - Academic Slate & Blue */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
   
-/* Content Image */
-.content-image {
-  width: 800px; 
-  height: auto; /* Maintain aspect ratio */
-}
-/* Thumbnail Image */
-img.thumbnail {
-    width: 50%; /* Adjust this percentage as needed */
-    max-width: 600px; /* Adjust this to your desired maximum width */
-    height: auto; /* Maintain aspect ratio */
-    object-fit: cover; /* Crop to fit the square container */
-}
-.text-block { /* Or the class of your text container */
-  text-align: center;
-}
-.thumbnail-container {
-  display: flex; /* Enable flexbox */
-  align-items: flex-start; /* Align items to the top of the container */
-}
-.thumbnail-text {
-  align-self: flex-end; /* Align the text to the bottom of itself (top right of the image) */
-  margin-left: auto; /* Push the text to the right */
-}
-footer {
-  margin: 0 auto; /* Top/bottom margin 0, left/right margin auto */
-  width: 80%; /* Adjust width as needed */
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+
+  /* Typography */
+  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-size-base: 16px;
+  
+  /* Layout */
+  --max-width-container: 1152px;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 4rem;
+  
+  /* Borders & Shadows */
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 1rem;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --transition-fast: 0.2s ease-in-out;
 }
 
-p span[onclick]:hover {
-  text-decoration: underline; /* or other hover styles */
+/* --- Base Reset & Typography --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-/* new code */
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  color: var(--color-slate-800);
+  background-color: var(--color-slate-50);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  color: var(--color-slate-900);
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-slate-600);
+}
+
+a {
+  color: var(--color-blue-600);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-blue-700);
+}
+
+/* --- Layout & Utilities --- */
 .container {
-    width: 70%;
-    margin: 0 auto;
-    padding: 20px;
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
 }
 
-.course {
-    border-bottom: 1px solid #ccc;
-    padding: 0px 0;
+.section {
+  padding: var(--spacing-xl) 0;
 }
 
-.course img {
-    float: left;
-    margin-right: 20px;
-    margin-bottom: 10px;
-    max-width: 200px;
+.bg-white { background-color: #ffffff; }
+.bg-slate { background-color: var(--color-slate-50); }
+.bg-dark { 
+  background-color: var(--color-slate-900); 
+  color: #ffffff;
+}
+.bg-dark h2, .bg-dark h3, .bg-dark p {
+  color: #ffffff;
 }
 
-.course h2 {
-    color: #333;
+.text-center { text-align: center; }
+.flex { display: flex; }
+.grid { display: grid; }
+
+/* --- Navigation --- */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-slate-200);
+  z-index: 1000;
+  padding: var(--spacing-md) 0;
 }
 
-.course p {
-    font-size: 1em;
-    line-height: 1.5;
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
 }
 
-.course a {
-    display: block;
-    margin-top: 10px;
-    color: #007BFF;
-    text-decoration: none;
+.nav-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-slate-900);
 }
 
-.course a:hover {
-    text-decoration: underline;
+.nav-links {
+  display: flex;
+  gap: var(--spacing-lg);
+  list-style: none;
 }
 
-/* new code */
-.container_blurb {
-    width: 70%;
-    margin: 0 auto;
-    padding: 20px;
+.nav-links a {
+  color: var(--color-slate-600);
+  font-weight: 500;
 }
 
-.text_blurb {
-    border-bottom: 0px solid #ccc;
-    padding: 0px 0;
+.nav-links a:hover, 
+.nav-links a.active {
+  color: var(--color-blue-600);
 }
 
-.text_blurb img {
-    float: left;
-    margin-right: 20px;
-    margin-bottom: 10px;
-    max-width: 200px;
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-slate-700);
 }
 
-.text_blurb h2 {
-    color: #333;
+/* --- Hero Section --- */
+.hero {
+  padding-top: 150px;
+  padding-bottom: 80px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
 }
 
-.text_blurb p {
-    font-size: 1em;
+.hero-content {
+  flex: 1;
 }
 
-.text_blurb a {
-    display: block;
-    margin-top: 10px;
-    color: #007BFF;
-    text-decoration: none;
+.hero-title {
+  font-size: 3.5rem;
+  letter-spacing: -0.02em;
 }
 
-.text_blurb a:hover {
-    text-decoration: underline;
+.hero-title span {
+  color: var(--color-blue-600);
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  max-width: 600px;
+}
+
+.hero-image {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.profile-circle {
+  width: 350px;
+  height: 350px;
+  background-color: var(--color-slate-200);
+  border-radius: 50%;
+  border: 8px solid #ffffff;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-slate-400);
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--color-blue-600);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-blue-700);
+  color: #ffffff;
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: var(--color-slate-700);
+  border: 1px solid var(--color-slate-200);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-slate-50);
+}
+
+.btn-group {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+/* --- Cards (Teaching / Research) --- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.card {
+  background-color: #ffffff;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-slate-200);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.card h3 {
+  font-size: 1.25rem;
+}
+
+.card p {
+  font-size: 0.9rem;
+}
+
+/* --- Footer --- */
+.site-footer {
+  background-color: #020617; /* Very dark slate */
+  color: var(--color-slate-400);
+  padding: var(--spacing-xl) 0;
+  border-top: 1px solid var(--color-slate-800);
+}
+
+.site-footer h2 {
+  color: #ffffff;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+.footer-links a {
+  color: var(--color-slate-400);
+  margin-right: var(--spacing-md);
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* Hide desktop links on mobile */
+  }
+  
+  .mobile-menu-btn {
+    display: block; /* Show hamburger menu */
+  }
+
+  .hero {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding-top: 100px;
+  }
+  
+  .hero-image {
+    justify-content: center;
+  }
+  
+  .profile-circle {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .btn-group {
+    justify-content: center;
+  }
+  
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
 }
