@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reality Check | Deepfake Identifier</title>
+    <title>The Deepfake Detective | Forensic Analysis</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700;800&family=Special+Elite&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #0f172a;
-            --panel-bg: #1e293b;
-            --accent-human: #10b981; /* Emerald */
-            --accent-ai: #ec4899; /* Pink */
+            --bg-color: #0a0a0c;
+            --panel-bg: #15161a;
+            --accent-human: #059669; /* Emerald/Safe */
+            --accent-ai: #dc2626; /* Crimson/Alert */
+            --accent-theme: #fbbf24; /* Amber/Detective */
             --text-main: #f8fafc;
         }
 
@@ -21,11 +22,16 @@
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             overflow: hidden;
-            touch-action: manipulation; /* Prevents double-tap zoom on mobile/kiosks */
+            touch-action: manipulation;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a24 0%, #0a0a0c 100%);
         }
 
         .font-mono {
             font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .font-typewriter {
+            font-family: 'Special Elite', cursive;
         }
 
         /* Bento Grid Layout */
@@ -43,9 +49,9 @@
 
         .bento-panel {
             background-color: var(--panel-bg);
-            border-radius: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 1rem;
+            border: 1px solid rgba(251, 191, 36, 0.15); /* Amber border */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -57,30 +63,61 @@
             cursor: pointer;
             user-select: none;
             transition: all 0.15s ease;
+            position: relative;
+            overflow: hidden;
         }
         
+        .game-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0,0,0,0.1) 10px,
+                rgba(0,0,0,0.1) 20px
+            );
+        }
+
         .game-btn:active {
             transform: scale(0.97);
         }
 
         .btn-human {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            border-bottom: 6px solid #047857;
+            background: linear-gradient(135deg, #064e3b 0%, #059669 100%);
+            border-bottom: 6px solid #022c22;
         }
 
         .btn-ai {
-            background: linear-gradient(135deg, #be185d 0%, #ec4899 100%);
-            border-bottom: 6px solid #9d174d;
+            background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 100%);
+            border-bottom: 6px solid #450a0a;
         }
 
         /* Media Display Area */
         .media-display {
             position: relative;
-            background: #000;
+            background: #050505;
             background-image: 
-                linear-gradient(rgba(20, 25, 40, 0.8) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(20, 25, 40, 0.8) 1px, transparent 1px);
-            background-size: 20px 20px;
+                linear-gradient(rgba(251, 191, 36, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(251, 191, 36, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            border: 2px solid rgba(251, 191, 36, 0.2);
+        }
+        
+        /* Scanline effect */
+        .media-display::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 20;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
         }
 
         /* Animations */
@@ -107,72 +144,75 @@
         .time-warning { animation: pulseTime 1s infinite; }
 
         /* Hide elements utility */
-        .hidden-screen { display: none !important; }
+        .hidden-screen {
+            display: none !important;
+        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
-
-    <div id="start-screen" class="bento-panel w-full max-w-3xl p-10 text-center flex items-center justify-center absolute z-50 h-[60vh]">
-        <h1 class="text-5xl font-black mb-4 tracking-tight">REALITY<span class="text-pink-500">CHECK</span></h1>
-        <p class="text-xl text-gray-400 mb-8 max-w-xl mx-auto">Your senses are about to be tested. Swipe or tap to identify whether the media presented is created by a HUMAN or generated by AI.</p>
+<body class="w-screen h-screen flex items-center justify-center relative">
+    <div id="start-screen" class="bento-panel w-full max-w-3xl p-10 text-center flex items-center justify-center absolute z-50 h-[60vh] border-t-4 border-t-amber-500">
+        <div class="absolute top-4 right-4 border-2 border-red-600 text-red-600 font-bold font-typewriter transform rotate-12 px-2 py-1 opacity-70">CONFIDENTIAL</div>
+        <p class="text-amber-500 font-mono text-sm tracking-widest mb-2 uppercase">Digital Forensics Division</p>
+        <h1 class="text-5xl font-black mb-4 tracking-tight font-typewriter">THE DEEPFAKE <span class="text-amber-500">DETECTIVE</span></h1>
+        <p class="text-lg text-gray-400 mb-8 max-w-xl mx-auto font-mono">Your investigative skills are required. Review the evidence files. Swipe or tap to classify the media as AUTHENTIC or a FORGERY.</p>
         
-        <div class="grid grid-cols-2 gap-4 mb-8 text-left max-w-lg mx-auto w-full">
-            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                <h3 class="font-bold text-emerald-400 mb-1">HUMAN</h3>
-                <p class="text-sm text-gray-400">Authentic, unedited reality.</p>
+        <div class="grid grid-cols-2 gap-4 mb-8 text-left max-w-lg mx-auto w-full font-mono">
+            <div class="bg-gray-900/80 p-4 rounded-xl border-l-4 border-emerald-500">
+                <h3 class="font-bold text-emerald-400 mb-1">AUTHENTIC (HUMAN)</h3>
+                <p class="text-xs text-gray-400">Unaltered, verified organic reality.</p>
             </div>
-            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                <h3 class="font-bold text-pink-400 mb-1">SYNTHETIC</h3>
-                <p class="text-sm text-gray-400">Generated, manipulated, deepfaked.</p>
+            <div class="bg-gray-900/80 p-4 rounded-xl border-l-4 border-red-500">
+                <h3 class="font-bold text-red-400 mb-1">FORGERY (AI)</h3>
+                <p class="text-xs text-gray-400">Synthetic, manipulated, deepfaked.</p>
             </div>
         </div>
 
-        <button onclick="startGame()" class="bg-white text-slate-900 font-black text-2xl py-4 px-12 rounded-full hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-            INITIATE DIAGNOSTIC
+        <button onclick="startGame()" class="bg-amber-500 text-black font-black font-mono text-2xl py-4 px-12 hover:bg-amber-400 transition-colors shadow-[0_0_20px_rgba(251,191,36,0.2)] border-2 border-amber-600">
+            > OPEN CASE FILE
         </button>
     </div>
 
     <div id="game-screen" class="bento-container hidden-screen">
         
         <!-- HUD: Streak/Score -->
-        <div class="bento-panel col-span-1 flex items-center justify-center p-4">
+        <div class="bento-panel col-span-1 flex items-center justify-center p-4 border-t-2 border-t-amber-500/50">
             <div class="text-center">
-                <p class="text-sm text-gray-400 font-bold tracking-wider uppercase mb-1">Confidence Score</p>
+                <p class="text-xs text-amber-500 font-bold tracking-widest uppercase mb-1 font-mono">Forensic Score</p>
                 <p id="score-display" class="text-4xl font-black font-mono text-white">000</p>
-                <p id="level-display" class="text-xs text-emerald-400 mt-1">LEVEL 1: OBVIOUS FLAWS</p>
+                <p id="level-display" class="text-xs text-emerald-400 mt-1 font-mono">CASE 1: THE ROOKIE MISTAKES</p>
             </div>
         </div>
 
         <!-- HUD: Timer -->
-        <div class="bento-panel col-span-1 flex items-center justify-center p-4">
+        <div class="bento-panel col-span-1 flex items-center justify-center p-4 border-t-2 border-t-amber-500/50">
             <div class="text-center">
-                <p class="text-sm text-gray-400 font-bold tracking-wider uppercase mb-1">Time Remaining</p>
+                <p class="text-xs text-amber-500 font-bold tracking-widest uppercase mb-1 font-mono">Time Until Auto-Close</p>
                 <p id="time-display" class="text-5xl font-black font-mono text-white">30.0</p>
             </div>
         </div>
 
         <!-- Main Media Display -->
         <div id="media-panel" class="bento-panel col-span-2 media-display flex flex-col items-center justify-center p-4 relative overflow-hidden">
-            <div class="absolute top-4 left-4 flex gap-2 z-10 bg-black/50 p-2 rounded-lg">
-                <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-                <span class="text-xs font-mono text-gray-400 uppercase">Analyzing Asset...</span>
+            <div class="absolute top-4 left-4 flex gap-2 z-30 bg-black/80 border border-amber-500/30 p-2 rounded">
+                <div class="w-3 h-3 rounded-full bg-amber-500 animate-pulse"></div>
+                <span class="text-xs font-mono text-amber-500 uppercase">Scanning Evidence...</span>
             </div>
             
             <!-- Simulated Media Content -->
-            <div id="media-content" class="w-full h-full flex flex-col items-center justify-center text-center">
+            <div id="media-content" class="w-full h-full flex flex-col items-center justify-center text-center z-10">
                 <!-- Media Container (Image/Video/Audio) -->
-                <div id="media-asset-container" class="w-full flex-grow flex items-center justify-center mb-4 relative rounded-xl overflow-hidden bg-slate-900/50 shadow-inner">
-                     <div id="media-icon" class="text-6xl absolute z-0 opacity-20">📸</div>
-                     <img id="media-image" src="" alt="Diagnostic Image" class="hidden max-h-[45vh] max-w-full object-contain relative z-10 rounded-lg shadow-lg" />
-                     <video id="media-video" src="" class="hidden max-h-[45vh] max-w-full object-contain relative z-10 rounded-lg shadow-lg" controls loop muted></video>
+                <div id="media-asset-container" class="w-full flex-grow flex items-center justify-center mb-4 relative overflow-hidden bg-black/60 shadow-inner border border-gray-800">
+                     <div id="media-icon" class="text-6xl absolute z-0 opacity-10">📸</div>
+                     <img id="media-image" src="" alt="Diagnostic Image" class="hidden max-h-[45vh] max-w-full object-contain relative z-10 shadow-2xl" />
+                     <video id="media-video" src="" class="hidden max-h-[45vh] max-w-full object-contain relative z-10 shadow-2xl" controls loop muted></video>
                      <audio id="media-audio" src="" class="hidden w-full max-w-md relative z-10" controls></audio>
                 </div>
 
-                <div class="bg-slate-800/90 w-full p-4 rounded-xl border border-slate-700 backdrop-blur-md">
-                    <h2 id="media-title" class="text-xl font-bold mb-2 text-white flex items-center justify-center gap-2">
+                <div class="bg-gray-900 w-full p-4 border-l-4 border-amber-500">
+                    <h2 id="media-title" class="text-xl font-bold mb-2 text-white flex items-center justify-center gap-2 font-mono">
                         <span id="title-icon">📸</span> Asset Loading...
                     </h2>
-                    <p id="media-desc" class="text-sm text-gray-300 font-mono">
+                    <p id="media-desc" class="text-sm text-gray-400 font-typewriter">
                         Connecting to database...
                     </p>
                 </div>
@@ -181,40 +221,43 @@
 
         <!-- Control Buttons -->
         <div class="col-span-2 grid grid-cols-2 gap-4">
-            <div onclick="handleChoice(false)" class="game-btn btn-human bento-panel flex flex-col items-center justify-center p-6 h-32">
-                <span class="text-3xl font-black text-white tracking-widest drop-shadow-md">HUMAN</span>
-                <span class="text-emerald-100 opacity-75 mt-1 font-mono text-sm">(Real)</span>
+            <div onclick="handleChoice(false)" class="game-btn btn-human bento-panel flex flex-col items-center justify-center p-6 h-32 rounded-lg">
+                <span class="text-3xl font-black text-white tracking-widest drop-shadow-md font-typewriter">AUTHENTIC</span>
+                <span class="text-emerald-200 opacity-90 mt-1 font-mono text-sm">[ Verified Human ]</span>
             </div>
-            <div onclick="handleChoice(true)" class="game-btn btn-ai bento-panel flex flex-col items-center justify-center p-6 h-32">
-                <span class="text-3xl font-black text-white tracking-widest drop-shadow-md">SYNTHETIC</span>
-                <span class="text-pink-100 opacity-75 mt-1 font-mono text-sm">(AI)</span>
+            <div onclick="handleChoice(true)" class="game-btn btn-ai bento-panel flex flex-col items-center justify-center p-6 h-32 rounded-lg">
+                <span class="text-3xl font-black text-white tracking-widest drop-shadow-md font-typewriter">FORGERY</span>
+                <span class="text-red-200 opacity-90 mt-1 font-mono text-sm">[ Deepfake AI ]</span>
             </div>
         </div>
     </div>
 
-    <div id="results-screen" class="bento-panel w-full max-w-3xl p-10 text-center flex-col items-center justify-center absolute z-50 h-[80vh] hidden-screen">
-        <h2 class="text-3xl font-bold text-gray-400 mb-2 uppercase tracking-widest">Diagnostic Complete</h2>
-        <h1 id="final-score" class="text-7xl font-black font-mono text-white mb-6">85%</h1>
+    <div id="results-screen" class="bento-panel w-full max-w-3xl p-10 text-center flex-col items-center justify-center absolute z-50 h-[80vh] hidden-screen border-t-4 border-t-amber-500">
+        <p class="text-amber-500 font-mono text-sm tracking-widest mb-2 uppercase">File Closed</p>
+        <h2 class="text-4xl font-bold text-white mb-2 font-typewriter uppercase tracking-widest">Investigation Concluded</h2>
+        <h1 id="final-score" class="text-7xl font-black font-mono text-amber-500 mb-6 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">85%</h1>
         
-        <div id="diagnostic-report" class="bg-slate-800 p-8 rounded-2xl border border-slate-600 mb-8 text-left w-full max-w-2xl">
-            <h3 class="text-2xl font-bold mb-4 text-white">Epistemological Analysis:</h3>
-            <p id="report-text" class="text-lg text-gray-300 leading-relaxed">
+        <div id="diagnostic-report" class="bg-gray-900/80 p-8 border border-gray-700 border-l-4 border-l-amber-500 mb-8 text-left w-full max-w-2xl relative">
+            <div class="absolute top-2 right-2 text-gray-600 font-mono text-xs">DOC-ID: #88392-A</div>
+            <h3 class="text-xl font-bold mb-4 text-amber-400 font-mono">> Chief's Forensic Summary:</h3>
+            <p id="report-text" class="text-lg text-gray-300 leading-relaxed font-typewriter">
                 Your senses are reliable for obvious truths, but vulnerable to sophisticated deception. You must rely on external verification—not just your eyes.
             </p>
         </div>
 
-        <div class="flex items-center gap-6 bg-slate-900 p-6 rounded-2xl border border-pink-500/30">
-            <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg transform rotate-45">
-                <div class="w-8 h-8 border-4 border-yellow-800 rounded-full transform -rotate-45"></div>
+        <div class="flex items-center gap-6 bg-black/50 p-6 border border-gray-700">
+            <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.4)] transform rotate-90 clip-path-hex">
+                <!-- Hexagon representation for the token -->
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#451a03" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
             </div>
             <div class="text-left">
-                <h4 class="font-bold text-xl text-white">Collect Your Token</h4>
-                <p class="text-gray-400">Take your alignment token to <strong class="text-emerald-400">Korsgaard</strong> in Zone 3 to discuss the limits of human perception.</p>
+                <h4 class="font-bold text-xl text-white font-mono">Secure Your Evidence Token</h4>
+                <p class="text-gray-400 text-sm mt-1">Take your encoded token to <strong class="text-amber-400">The Council</strong> in Zone 3 to debrief your findings.</p>
             </div>
         </div>
 
-        <button onclick="resetGame()" class="mt-8 text-gray-400 hover:text-white underline decoration-gray-600 underline-offset-4">
-            Play Again
+        <button onclick="resetGame()" class="mt-8 text-gray-500 hover:text-amber-400 transition-colors font-mono uppercase tracking-widest text-sm underline decoration-gray-700 underline-offset-4">
+            [ Start New Investigation ]
         </button>
     </div>
 
@@ -350,17 +393,17 @@
             }
             
             // Update Level Indicator
-            let levelText = "LEVEL 1: OBVIOUS FLAWS";
+            let levelText = "CASE 1: THE ROOKIE MISTAKES";
             let levelColor = "text-emerald-400";
             if(media.level === 2) {
-                levelText = "LEVEL 2: UNCANNY VALLEY";
-                levelColor = "text-yellow-400";
+                levelText = "CASE 2: THE UNCANNY VALLEY";
+                levelColor = "text-amber-400";
             } else if (media.level === 3) {
-                levelText = "LEVEL 3: SYSTEM CRISIS";
+                levelText = "CASE 3: FORENSIC NIGHTMARE";
                 levelColor = "text-red-400";
             }
             
-            displays.level.className = `text-xs mt-1 font-bold ${levelColor}`;
+            displays.level.className = `text-xs mt-1 font-bold font-mono ${levelColor}`;
             displays.level.innerText = levelText;
         }
 
@@ -411,16 +454,16 @@
             const maxPossibleScore = currentQueue.reduce((acc, curr) => acc + (100 * curr.level), 0);
             const accuracy = Math.round((score / maxPossibleScore) * 100) || 0;
             
-            document.getElementById('final-score').innerText = `${accuracy}% Confidence`;
+            document.getElementById('final-score').innerText = `${accuracy}% CLEARANCE`;
 
             // Generate Diagnostic Report based on performance
             const reportText = document.getElementById('report-text');
             if (accuracy >= 90) {
-                reportText.innerHTML = "Exceptional perception. You successfully identified synthetic artifacts even at the highest levels of generation. However, as AI improves, human intuition will eventually fail. <strong>When seeing is no longer believing, how do we establish truth?</strong>";
+                reportText.innerHTML = "Exceptional perception, Detective. You successfully identified synthetic artifacts even at the highest levels of generation. However, as AI improves, human intuition will eventually fail. <strong>When seeing is no longer believing, how do we establish truth?</strong>";
             } else if (accuracy >= 50) {
-                reportText.innerHTML = "Your senses are reliable for obvious flaws, but vulnerable to sophisticated deception in the 'Uncanny Valley.' You must learn to rely on external verification protocols, not just your organic senses.";
+                reportText.innerHTML = "Your senses are reliable for obvious forgeries, but vulnerable to sophisticated deception in the 'Uncanny Valley.' A good detective learns to rely on external verification protocols, not just their organic senses.";
             } else {
-                reportText.innerHTML = "Critical perception failure. You consistently mistook synthetic generation for organic reality. This demonstrates the fragility of human epistemology in the digital age. You are highly vulnerable to misinformation.";
+                reportText.innerHTML = "Critical perception failure. You consistently mistook synthetic generation for organic reality. This demonstrates the fragility of human epistemology in the digital age. Your case files have been flagged for review.";
             }
         }
 
